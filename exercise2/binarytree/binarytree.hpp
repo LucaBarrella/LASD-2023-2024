@@ -22,9 +22,9 @@ namespace lasd {
 
 template <typename Data>
 class BinaryTree : virtual public PreOrderTraversableContainer<Data>,
-                  virtual public PostOrderTraversableContainer<Data>,
-                  virtual public InOrderTraversableContainer<Data>,
-                  virtual public BreadthTraversableContainer<Data> {
+                   virtual public PostOrderTraversableContainer<Data>,
+                   virtual public InOrderTraversableContainer<Data>,
+                   virtual public BreadthTraversableContainer<Data> {
   // Must extend PreOrderTraversableContainer<Data>,
   //             PostOrderTraversableContainer<Data>,
   //             InOrderTraversableContainer<Data>,
@@ -36,17 +36,15 @@ private:
 
 protected:
 
-  // ...
-
-  //using BreadthMappableContainer<Data>::size;
   using Container::size;
+
 public:
 
   struct Node {
 
   protected:
 
-    Data value{}; //! Suppongo serva
+    // Data value{}; //! Suppongo non serva!
 
     // Comparison operators
     // type operator==(argument) specifiers; // Comparison of abstract types is possible, but is not visible.
@@ -60,27 +58,8 @@ public:
     // friend class BinaryTree<Data>; //todo verificare se va bene!
     friend class BinaryTree<Data>;
 
-    // Default constructor
-    Node() = default;
-
-    // Specific constructors 
-
-    // Copy Data constructor
-    Node(const Data& data);
-
-    // Move Data constructor
-    Node(Data&& data) noexcept;
-
-    //! NOT NECESSARY, PROBABLY.
-
-    // // Copy constructor    
-    Node(const Node& node);
-
-    // // Move constructor
-    // Node(Node&&) noexcept;
-
     // Destructor 
-    ~Node() = default;
+    virtual ~Node() = default;
 
     // Copy assignment
     // type operator=(argument); // Copy assignment of abstract types is not possible.
@@ -114,14 +93,6 @@ public:
 
   };
   /* ************************************************************************ */
-  // Constructors???
-  BinaryTree() = default;
-
-  //! Copy constructor
-  // BinaryTree(const BinaryTree&) = default;
-
-  //! Move constructor
-  // BinaryTree(BinaryTree&&) = default;
 
   // Destructor
   // ~BinaryTree() specifiers
@@ -141,17 +112,17 @@ public:
 
   // Comparison operators
   // type operator==(argument) specifiers; // Comparison of abstract binary tree is possible.
-  virtual bool operator!=(const BinaryTree<Data>& tree) const noexcept;
+  bool operator!=(const BinaryTree<Data>& tree) const noexcept;
 
   // type operator!=(argument) specifiers; // Comparison of abstract binary tree is possible.
-  virtual bool operator==(const BinaryTree<Data>& tree) const noexcept;
+  bool operator==(const BinaryTree<Data>& tree) const noexcept;
 
   /* ************************************************************************ */
 
   // Specific member functions
 
   // type Root() specifiers; // (concrete function must throw std::length_error when empty)
-  virtual const Node& Root() const = 0; //! Attento!
+  virtual const Node& Root() const = 0;
 
   /* ************************************************************************ */
 
@@ -159,7 +130,6 @@ public:
 
   // using typename TraversableContainer<Data>::TraverseFun;
   using typename TraversableContainer<Data>::TraverseFun;
-  //! CONTROLLARE!!!
 
   // type Traverse(arguments) specifiers; // Override TraversableContainer member
   inline void Traverse(TraverseFun function) const override;
@@ -197,16 +167,16 @@ protected:
   // Auxiliary functions, if necessary!
 
   // Auxiliary member functions for PreOrderTraversableContainer
-  void PreOrderTraverse(Node* node, TraverseFun function) const;
+  void PreOrderTraverse(const Node* node, TraverseFun function) const;
 
   // Auxiliary member functions for PostOrderTraversableContainer
-  void PostOrderTraverse(Node* node, TraverseFun function) const;
+  void PostOrderTraverse(const Node* node, TraverseFun function) const;
 
   // Auxiliary member functions for InOrderTraversableContainer
-  void InOrderTraverse(Node* node, TraverseFun function) const;
+  void InOrderTraverse(const Node* node, TraverseFun function) const;
 
   // Auxiliary member functions for BreadthTraversableContainer
-  void BreadthTraverse(Node* node, TraverseFun function) const;
+  void BreadthTraverse(const Node* node, TraverseFun function) const;
 
 };
 
@@ -232,11 +202,12 @@ private:
 
 protected:
 
-  // ...
+  using Container::size;
+  using typename BinaryTree<Data>::Node;
 
 public:
 
-  struct MutableNode : public BinaryTree<Data>::Node {
+  struct MutableNode : public Node { //! Vedi se è giusto metter public
     // Must extend Node
 
     // friend class MutableBinaryTree<Data>;
@@ -264,15 +235,12 @@ public:
     //! Vedi perchè sono virtuali
 
     // type Element() specifiers; // Mutable access to the element (concrete function should not throw exceptions)
-    using BinaryTree<Data>::Node::Element;
     virtual Data& Element() noexcept = 0;
 
     // type LeftChild() specifiers; // (concrete function must throw std::out_of_range when not existent)
-    using BinaryTree<Data>::Node::LeftChild;
     virtual MutableNode& LeftChild() = 0;
 
     // type RightChild() specifiers; // (concrete function must throw std::out_of_range when not existent)
-    using BinaryTree<Data>::Node::RightChild;
     virtual MutableNode& RightChild() = 0;
     
   };
@@ -299,8 +267,6 @@ public:
 
   // type Root() specifiers; // (concrete function must throw std::length_error when empty)
   
-  //! Vedi se è giusto metter solo using
-  using BinaryTree<Data>::Root;
   virtual MutableNode& Root() = 0;
 
   /* ************************************************************************ */
@@ -344,7 +310,6 @@ public:
 protected:
 
   // Auxiliary functions, if necessary!
-  //! CONTROLLARE!!! Chiedi a Fab domani!
 
   // Auxiliary member functions for PreOrderMappableContainer
   void PreOrderMap(MutableNode* node, MapFun functionmap);
@@ -357,30 +322,6 @@ protected:
 
   // Auxiliary member functions for BreadthMappableContainer
   void BreadthMap(MutableNode* node, MapFun functionmap);
-
-
-  //todo cancella sta monnezza nel caso:
-  // Auxiliary member functions for PreOrderMappableContainer
-  // virtual void PreOrderMap(MapFun functionmap, MutableNode& node) const;
-
-  // // Auxiliary member functions for PostOrderMappableContainer
-  // virtual void PostOrderMap(MapFun functionmap, MutableNode& node) const;
-
-  // // Auxiliary member functions for InOrderMappableContainer
-  // virtual void InOrderMap(MapFun functionmap, MutableNode& node) const;
-
-  // // Auxiliary member functions for BreadthMappableContainer
-  // virtual void BreadthMap(MapFun functionmap, MutableNode& node) const;
-
-  // using BinaryTree<Data>::PreOrderTraverse;
-  // using BinaryTree<Data>::PostOrderTraverse;
-  // using BinaryTree<Data>::InOrderTraverse;
-  // using BinaryTree<Data>::BreadthTraverse;
-
-  // void PreOrderTraverse(std::function<void(Data&)> function) override;
-  // void PostOrderTraverse(std::function<void(Data&)> function) override;
-  // void InOrderTraverse(std::function<void(Data&)> function) override;
-  // void BreadthTraverse(std::function<void(Data&)> function) override;
 
 };
 
@@ -399,8 +340,9 @@ private:
 protected:
 
   // ...
-  const typename BinaryTree<Data>::Node * root = nullptr; //! Devono essere const?
-  StackLst<const typename BinaryTree<Data>::Node *> stack; //! Devono essere const typename?
+  const typename BinaryTree<Data>::Node * root = nullptr;
+  //const typename BinaryTree<Data>::Node * current = nullptr; //! Non serve?
+  StackLst<const typename BinaryTree<Data>::Node *> stack; //! Perchè deve essere const typename?
 
 public:
 
@@ -422,7 +364,7 @@ public:
 
   // Destructor
   // ~BTPreOrderIterator() specifiers;
-  virtual ~BTPreOrderIterator();
+  virtual ~BTPreOrderIterator() = default;
 
   /* ************************************************************************ */
 
@@ -430,7 +372,6 @@ public:
   // type operator=(argument) specifiers;
   virtual BTPreOrderIterator& operator=(const BTPreOrderIterator& iterator);
   
-
   // Move assignment
   // type operator=(argument) specifiers;
   virtual BTPreOrderIterator& operator=(BTPreOrderIterator&& iterator) noexcept;
@@ -489,13 +430,13 @@ protected:
     //! typename BinaryTree<Data>::Node * root = nullptr;
     //! StackLst<typename BinaryTree<Data>::Node *> stack;
   using BTPreOrderIterator<Data>::stack;
+  //! usign BTPreOrderIterator<Data>::current;
 
 public:
 
   // Specific constructors
   // BTPreOrderMutableIterator(argument) specifiers; // An iterator over a given mutable binary tree
-  explicit BTPreOrderMutableIterator (BinaryTree<Data>& tree);
-
+  explicit BTPreOrderMutableIterator (MutableBinaryTree<Data>& tree);
 
   /* ************************************************************************ */
 
@@ -509,35 +450,35 @@ public:
 
   /* ************************************************************************ */
 
-  //! Destructor
+  // Destructor
   // ~BTPreOrderMutableIterator() specifiers;
-  virtual ~BTPreOrderMutableIterator() noexcept = default;
+  virtual ~BTPreOrderMutableIterator() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
   // type operator=(argument) specifiers;
-  virtual BTPreOrderMutableIterator& operator=(const BTPreOrderMutableIterator& iterator);
+  BTPreOrderMutableIterator& operator=(const BTPreOrderMutableIterator& iterator);
 
   // Move assignment
   // type operator=(argument) specifiers;
-  virtual BTPreOrderMutableIterator& operator=(BTPreOrderMutableIterator&& iterator) noexcept;
+  BTPreOrderMutableIterator& operator=(BTPreOrderMutableIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
   // Comparison operators
   // type operator==(argument) specifiers;
-  virtual bool operator==(const BTPreOrderMutableIterator& iterator) const noexcept;
+  bool operator==(const BTPreOrderMutableIterator& iterator) const noexcept = default;
 
   // type operator!=(argument) specifiers;
-  virtual bool operator!=(const BTPreOrderMutableIterator& iterator) const noexcept;
+  bool operator!=(const BTPreOrderMutableIterator& iterator) const noexcept = default;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from MutableIterator)
 
   // type operator*() specifiers; // (throw std::out_of_range when terminated)
-  virtual Data& operator*() const;
+  Data& operator*() const;
 };
 
 /* ************************************************************************** */
@@ -557,6 +498,7 @@ protected:
   // ...
   const typename BinaryTree<Data>::Node * root = nullptr;
   StackLst<const typename BinaryTree<Data>::Node *> stack;
+  //! typename BinaryTree<Data>::Node * current = nullptr; //! Non serve?
 
 public:
 
@@ -585,30 +527,31 @@ public:
 
   // Copy assignment
   // type operator=(argument) specifiers;
-  virtual BTPostOrderIterator& operator=(const BTPostOrderIterator& iterator);
+  BTPostOrderIterator& operator=(const BTPostOrderIterator& iterator);
 
   // Move assignment
   // type operator=(argument) specifiers;
-  virtual BTPostOrderIterator& operator=(BTPostOrderIterator&& iterator) noexcept;
+  BTPostOrderIterator& operator=(BTPostOrderIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
   // Comparison operators
   // type operator==(argument) specifiers;
-  virtual bool operator==(const BTPostOrderIterator& iterator) const noexcept;
+  bool operator==(const BTPostOrderIterator& iterator) const noexcept = default;
 
   // type operator!=(argument) specifiers;
-  virtual bool operator!=(const BTPostOrderIterator& iterator) const noexcept;
+  bool operator!=(const BTPostOrderIterator& iterator) const noexcept = default;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from Iterator)
 
   // type operator*() specifiers; // (throw std::out_of_range when terminated)
-  virtual Data& operator*() const;
+  Data& operator*() const;
 
   // type Terminated() specifiers; // (should not throw exceptions)
   //! virtual bool Terminated() const noexcept;
+  //FIXME: virtual bool Terminated() return stack.Empty(); oppure quando current è nullptr
   using BTPreOrderIterator<Data>::Terminated;
 
   /* ************************************************************************ */
@@ -624,6 +567,10 @@ public:
 
   // type Reset() specifiers; // (should not throw exceptions)
   virtual void Reset() noexcept;
+
+
+  // Auxiliary functions, if necessary!
+  void getLeftMostLeaf(const typename BinaryTree<Data>::Node* node);
 
 /* ************************************************************************** */
   

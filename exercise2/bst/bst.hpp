@@ -26,6 +26,9 @@ private:
 protected:
 
   // using BinaryTreeLnk<Data>::???;
+  // using typename BinaryTree<Data>::Node;
+  // using typename BinaryTreeLnk<Data>::NodeLnk;
+  // using BinaryTree<Data>::size;
 
   // ...
 
@@ -33,6 +36,7 @@ public:
 
   // Default constructor
   // BST() specifiers;
+  //! BST() = default;
 
   /* ************************************************************************ */
 

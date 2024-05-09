@@ -126,7 +126,7 @@ BinaryTreeVec<Data>::BinaryTreeVec(const TraversableContainer<Data>& container) 
     container.Traverse(
         [this, &i](const Data &currData) { 
             //! Si poteva fare un costruttore e fare tutto in una riga e ignorare l'indice.
-            treeVector[i] = new NodeVec(currData);
+            treeVector[i] = new NodeVec(currData); //FIXME
             treeVector[i]->index = i;
             treeVector[i]->left = i*2+1;
             treeVector[i]->right = i*2+2;

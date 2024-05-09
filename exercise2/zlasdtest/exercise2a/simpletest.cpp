@@ -1,6 +1,6 @@
 
 #include <iostream>
-
+//! ATTENZIONE: TEST NON NON CHIAMATI!
 /* ************************************************************************** */
 
 #include "../container/container.hpp"
@@ -68,14 +68,14 @@ void stestBinaryTreeInt(uint & testnum, uint & testerr) {
     lasd::BinaryTreeVec<int> copbtvec(btvec);
     EqualBT(loctestnum, loctesterr, copbtvec, btvec);
     btvec.Clear();
-    btvec =  std::move(copbtvec);
+    btvec = std::move(copbtvec);
     NonEqualBT(loctestnum, loctesterr, copbtvec, btvec);
     Empty(loctestnum, loctesterr, copbtvec, true);
 
     lasd::BinaryTreeLnk<int> copbtlnk(btlnk);
     EqualBT(loctestnum, loctesterr, copbtlnk, btlnk);
     btlnk.Clear();
-    btlnk =  std::move(copbtlnk);
+    btlnk =std::move(copbtlnk);
     NonEqualBT(loctestnum, loctesterr, copbtlnk, btlnk);
     Empty(loctestnum, loctesterr, copbtlnk, true);
   }
@@ -106,7 +106,7 @@ void stestBinaryTreeFloat(lasd::MutableBinaryTree<double> & bt, uint & testnum, 
     ++itr1;
     GetItrValue(loctestnum, loctesterr, itr1, true, 0.3);
     itr1.Reset();
-    lasd::BTPreOrderIterator<double> newitr1(std::move(itr1));
+    lasd::BTPreOrderIterator<double> newitr1(move(itr1));
     itr1.Reset();
 
     lasd::BTBreadthIterator<double> itr2(bt);
@@ -124,7 +124,7 @@ void stestBinaryTreeFloat(lasd::MutableBinaryTree<double> & bt, uint & testnum, 
     ++itr2;
     GetItrValue(loctestnum, loctesterr, itr2, true, 0.3);
     itr2.Reset();
-    lasd::BTBreadthIterator<double> newitr2(std::move(itr2));
+    lasd::BTBreadthIterator<double> newitr2(move(itr2));
     itr2.Reset();
 
     lasd::BTInOrderIterator<double> itr3(bt);
@@ -142,7 +142,7 @@ void stestBinaryTreeFloat(lasd::MutableBinaryTree<double> & bt, uint & testnum, 
     ++itr3;
     GetItrValue(loctestnum, loctesterr, itr3, true, 0.3);
     itr3.Reset();
-    lasd::BTInOrderIterator<double> newitr3(std::move(itr3));
+    lasd::BTInOrderIterator<double> newitr3(move(itr3));
     itr3.Reset();
 
     lasd::BTPostOrderIterator<double> itr4(bt);
@@ -160,7 +160,7 @@ void stestBinaryTreeFloat(lasd::MutableBinaryTree<double> & bt, uint & testnum, 
     ++itr4;
     GetItrValue(loctestnum, loctesterr, itr4, true, 0.3);
     itr4.Reset();
-    lasd::BTPostOrderIterator<double> newitr4(std::move(itr4));
+    lasd::BTPostOrderIterator<double> newitr4(move(itr4));
     itr4.Reset();
   }
   catch (...) {
@@ -190,13 +190,13 @@ void stestBinaryTreeFloat(uint & testnum, uint & testerr) {
     stestBinaryTreeFloat(btlnk, loctestnum, loctesterr);
     cout << "\n";
 
-    lasd::BinaryTreeVec<double> copbtvec(std::move(btvec));
+    lasd::BinaryTreeVec<double> copbtvec(move(btvec));
     Empty(loctestnum, loctesterr, btvec, true);
     NonEqualBT(loctestnum, loctesterr, copbtvec, btvec);
     btvec = copbtvec;
     EqualBT(loctestnum, loctesterr, copbtvec, btvec);
 
-    lasd::BinaryTreeLnk<double> copbtlnk(std::move(btlnk));
+    lasd::BinaryTreeLnk<double> copbtlnk(move(btlnk));
     Empty(loctestnum, loctesterr, btlnk, true);
     NonEqualBT(loctestnum, loctesterr, copbtlnk, btlnk);
     btlnk = copbtlnk;

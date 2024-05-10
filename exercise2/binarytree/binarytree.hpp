@@ -596,6 +596,7 @@ public:
   // Specific constructors
   // BTPostOrderMutableIterator(argument) specifiers; // An iterator over a given mutable binary tree
   explicit BTPostOrderMutableIterator (BinaryTree<Data>& tree);
+  
 
   /* ************************************************************************ */
 

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <utility>
 #include "list.hpp"
+#include <stdexcept>
 
 namespace lasd {
 
@@ -15,10 +16,7 @@ namespace lasd {
 
     // Move constructor
     template <typename Data>
-    //List<Data>::Node::Node(Data&& data) noexcept : value{std::move(data)} {}
-    List<Data>::Node::Node(Data &&d) noexcept {
-        std::swap(d, value);
-    }
+    List<Data>::Node::Node(Data&& data) noexcept : value{std::move(data)} {}
 
     // Copy constructor
     template <typename Data>
@@ -26,11 +24,7 @@ namespace lasd {
 
     // Move constructor
     template <typename Data>
-//    List<Data>::Node::Node(Node&& node) noexcept : value{std::move(node.value)} {}
-    List<Data>::Node::Node(Node &&other) noexcept {
-        std::swap(other.value, value);
-        std::swap(other.next, next);
-    }
+   List<Data>::Node::Node(Node&& node) noexcept : value{std::move(node.value)} {}
 
     // Destructor
     template <typename Data>
@@ -108,21 +102,8 @@ namespace lasd {
         size = 0;
     }
 
-    //Copy assignment todo improve it cause it's not efficient
+    // Copy assignment
     template <typename Data>
-//    List<Data>& List<Data>::operator=(const List<Data>& otherList) {
-//        if (this != &otherList) {
-//            if (otherList.size == 0) {
-//                Clear();
-//            } else {
-//                List<Data> tempCopy(otherList);
-//                std::swap(size, tempCopy.size);
-//                std::swap(head, tempCopy.head);
-//                std::swap(tail, tempCopy.tail);
-//            }
-//        }
-//        return *this;
-//    }
     List<Data>& List<Data>::operator=(const List<Data>& otherList) {
         if (this != &otherList) {
             Clear(); // Clear the current list first
@@ -210,10 +191,9 @@ namespace lasd {
     }
 
     //RemoveFromFront
-
     template <typename Data>
     void List<Data>::RemoveFromFront() {
-        if (!size) {
+        if (Empty()) {
             throw std::length_error("List is empty");
         }
         Node* temp {head};
@@ -227,17 +207,16 @@ namespace lasd {
     }
 
     //FrontNRemove
-
     template <typename Data>
     Data List<Data>::FrontNRemove() {
-        if (!size) {
+        if (Empty()) {
             throw std::length_error("List is empty");
-        }
-
-        Data tempData = std::move(head->value);
-        head->value = Data{};
+        }= head;
+       
+        Node* temp = head;
+        Data data = std::move(temp->data);
         RemoveFromFront();
-        return tempData;
+        return data;
     }
 
     //InsertAtBack
@@ -267,6 +246,7 @@ namespace lasd {
         size++;
     }
 
+    //Todo controllare da qui!
     //Insert
     template <typename Data>
     inline bool List<Data>::Insert(const Data &data){
@@ -384,6 +364,12 @@ namespace lasd {
     //Clear
     template <typename Data>
     inline void List<Data>::Clear() {
+        // Node* currNode = head;
+        // while (currNode != nullptr) {
+        //     Node* nextNode = currNode->next;
+        //     delete currNode;
+        //     currNode = nextNode;
+        // }
         delete head;
         head = nullptr;
         tail = nullptr;

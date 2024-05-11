@@ -1,4 +1,4 @@
-
+#include <stdexcept>
 namespace lasd {
 
 
@@ -39,9 +39,6 @@ namespace lasd {
         }
         return operator[](0);
     }
-
-    leng
-
 
 
     template <typename Data>

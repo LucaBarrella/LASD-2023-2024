@@ -1,6 +1,7 @@
 #include <iostream>
 #include <utility>
 #include "binarytree.hpp"
+#include <stdexcept>
 
 namespace lasd {
 
@@ -487,7 +488,9 @@ bool BTPreOrderMutableIterator<Data>::operator!=(const BTPreOrderMutableIterator
 template <typename Data>
 Data& BTPreOrderMutableIterator<Data>::operator*() const {
     if (!Terminated()) {
-        return stack.Top()->Element();
+        // return stack.Top()->Element();
+        return const_cast<Data&>(stack.Top()->Element());
+
         // return const_cast<Data&>(curr->Element());
     }else {
         throw std::out_of_range("Iterator is terminated");
@@ -568,6 +571,8 @@ Data& BTPostOrderIterator<Data>::operator*() const {
 
 // Operator++
 // todo da implementare e attualmente impossibile da fare senza l'uso di un current!
+// todo Da provare quello che aveva detto mari, sulla function fillStack
+
 //FIXME Check, it's probably wrong!
 template <typename Data>
 BTPostOrderIterator<Data>& BTPostOrderIterator<Data>::operator++() {
@@ -575,47 +580,61 @@ BTPostOrderIterator<Data>& BTPostOrderIterator<Data>::operator++() {
         throw std::out_of_range("Iterator is terminated!");
     }
 
-    const typename BinaryTree<Data>::Node* current = stack.TopNPop();
-    const typename BinaryTree<Data>::Node* parent = nullptr;
+    const BinaryTree<Data>::Node* current = stack.TopNPop();
 
-    if (!stack.Empty()) {
-        current = stack.Top();
-    }
+    // Se salgo da sinistra, si suppone che il sottoalbero sinistro sia già stato visitato, ergo io dovrò trovare il minimo del sottoalbero destro
 
-    if (parent != nullptr) {
-        if (current == parent->LeftChild() && parent->HasRightChild()) {
-            getLeftMostLeaf(&(parent->RightChild()));
-            //! Mari usa una stackFill function
+
+    // Riempo lo stack con figli padri con figli del sotto albero sinistro!
+
+    // Riempo lo stack con figli del sottoalbero destro
+
+    // Scendo e riempo lo stack con i figli del sottoalbero sinistro
+
+    // Scendo e riempo lo stack con i figli del sottoalbero destro
+
+    if (!stack.Empty() && stack.Top()->HasRightChild() && stack.Top()->RightChild() != current) {
+        current = stack.TopNPop()->RightChild();
+        while (current != nullptr) {
+            stack.Push(current);
+            if (current->HasLeftChild()) {
+                current = current->LeftChild();
+            } else if (current->HasRightChild()) {
+                current = current->RightChild();
+            } else {
+                break;
+            }
         }
-    }
-
-    if (!stack.Empty()) {
-        current = stack.Top();
     }
 
     return *this;
 }
 
-// Reset //! Check
+// Reset //! Check, it's probably ok!
 template <typename Data>
 void BTPostOrderIterator<Data>::Reset() noexcept {
     if (stack != nullptr) {
         stack.Clear();
         const typename BinaryTree<Data>::Node* current = root;
-        while (current != nullptr) {
-            stack.Push(current);
-            if (current->HasLeftChild()) {
-                current = current->LeftChild();
-            } else {
-                current = current->RightChild();
-            }
-        }
+        
+        //! Check this part of code:
+        getLeftMostLeaf(current);
+
+        //! Either too:
+        // while (current != nullptr) {
+        //     stack.Push(current);
+        //     if (current->HasLeftChild()) {
+        //         current = current->LeftChild();
+        //     } else {
+        //         current = current->RightChild();
+        //     }
+        // }
     }
 }
 
 // Auxiliary function
 
-// getLeftMostLeaf
+// getLeftMostLeaf //! Check!
 template <typename Data>
 void BTPostOrderIterator<Data>::getLeftMostLeaf(const typename BinaryTree<Data>::Node* node) {
     if (node == nullptr) {
@@ -632,9 +651,10 @@ void BTPostOrderIterator<Data>::getLeftMostLeaf(const typename BinaryTree<Data>:
         getLeftMostLeaf(&(node->RightChild()));
     }
 }
+
 /* ************************************************************************** */
 
-// BTPostOrderMutableIterator
+// BTPostOrderMutableIterator //FIXME TUTTO DA RIFARE!
 
 // Default constructor
 template <typename Data>
@@ -676,7 +696,7 @@ bool BTPostOrderMutableIterator<Data>::operator!=(const BTPostOrderMutableIterat
     return BTPostOrderIterator<Data>::operator!=(iterator);
 }
 
-// Operator*
+// Operator* //!  Check!!
 template <typename Data>
 Data& BTPostOrderMutableIterator<Data>::operator*() const {
     return const_cast<Data&>(BTPostOrderIterator<Data>::operator*());
@@ -689,11 +709,13 @@ Data& BTPostOrderMutableIterator<Data>::operator*() const {
 // Specific Constructors
 template <typename Data>
 BTInOrderIterator<Data>::BTInOrderIterator(const BinaryTree<Data>& tree) {
-    if (tree.size != 0) {
+    if (!Empty()) {
         const typename BinaryTree<Data>::Node* current = &tree.Root();
-        while (current != nullptr) {
+
+        while (current != nullptr) { //! Necesaria tale condizione: current->HasLeftChild()?
             stack.Push(current);
-            current = current->LeftChild();
+            current = &(current->LeftChild());
+            //! getLeftMostNode(current);
         }
     }
 }
@@ -745,7 +767,7 @@ bool BTInOrderIterator<Data>::operator!=(const BTInOrderIterator<Data>& iterator
 
 // Operator*
 template <typename Data>
-Data& BTInOrderIterator<Data>::operator*() const {
+const Data& BTInOrderIterator<Data>::operator*() const {
     if (!stack.Empty()) {
         return stack.Top()->Element();
     }else {
@@ -788,7 +810,7 @@ void BTInOrderIterator<Data>::Reset() noexcept {
 
 // Default constructor
 template <typename Data>
-BTInOrderMutableIterator<Data>::BTInOrderMutableIterator(BinaryTree<Data>& tree) : BTInOrderIterator<Data>(tree) {};
+BTInOrderMutableIterator<Data>::BTInOrderMutableIterator(MutableBinaryTree<Data>& tree) : BTInOrderIterator<Data>(tree) {};
 
 // Copy constructor
 template <typename Data>

@@ -3,8 +3,6 @@
 #define TESTABLETEST_HPP
 
 #include "../../container/testable.hpp"
-using uint = unsigned int;
-using ulong = unsigned long;
 
 /* ************************************************************************** */
 

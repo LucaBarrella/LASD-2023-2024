@@ -4,9 +4,6 @@
 
 #include "../../stack/stack.hpp"
 
-using uint = unsigned int;
-using ulong = unsigned long;
-
 /* ************************************************************************** */
 
 template <typename Data>

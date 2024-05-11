@@ -3,8 +3,6 @@
 #define DICTIONARYTEST_HPP
 
 #include "../../container/dictionary.hpp"
-using uint = unsigned int;
-using ulong = unsigned long;
 
 /* ************************************************************************** */
 

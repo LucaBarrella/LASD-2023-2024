@@ -3,8 +3,6 @@
 #define TRAVERSABLETEST_HPP
 
 #include "../../container/traversable.hpp"
-using uint = unsigned int;
-using ulong = unsigned long;
 
 /* ************************************************************************** */
 
@@ -26,7 +24,7 @@ void Traverse(uint & testnum, uint & testerr, const lasd::TraversableContainer<D
 }
 
 template <typename Data, typename Value>
-void Fold(uint & testnum, uint & testerr, const lasd::TraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::template FoldFun<Value> fun, const Value & inival, const Value & finval) {
+void Fold(uint & testnum, uint & testerr, const lasd::TraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::FoldFun<Value> fun, const Value & inival, const Value & finval) {
   bool tst;
   testnum++;
   try {
@@ -80,7 +78,7 @@ void TraversePreOrder(uint & testnum, uint & testerr, const lasd::PreOrderTraver
 }
 
 template <typename Data, typename Value>
-void FoldPreOrder(uint & testnum, uint & testerr, const lasd::PreOrderTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::template FoldFun<Value> fun, const Value & inival, const Value & finval) {
+void FoldPreOrder(uint & testnum, uint & testerr, const lasd::PreOrderTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::FoldFun<Value> fun, const Value & inival, const Value & finval) {
   bool tst;
   testnum++;
   try {
@@ -115,7 +113,7 @@ void TraversePostOrder(uint & testnum, uint & testerr, const lasd::PostOrderTrav
 }
 
 template <typename Data, typename Value>
-void FoldPostOrder(uint & testnum, uint & testerr, const lasd::PostOrderTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::template FoldFun<Value> fun, const Value & inival, const Value & finval) {
+void FoldPostOrder(uint & testnum, uint & testerr, const lasd::PostOrderTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::FoldFun<Value> fun, const Value & inival, const Value & finval) {
   bool tst;
   testnum++;
   try {
@@ -150,7 +148,7 @@ void TraverseInOrder(uint & testnum, uint & testerr, const lasd::InOrderTraversa
 }
 
 template <typename Data, typename Value>
-void FoldInOrder(uint & testnum, uint & testerr, const lasd::InOrderTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::template FoldFun<Value> fun, const Value & inival, const Value & finval) {
+void FoldInOrder(uint & testnum, uint & testerr, const lasd::InOrderTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::FoldFun<Value> fun, const Value & inival, const Value & finval) {
   bool tst;
   testnum++;
   try {
@@ -185,7 +183,7 @@ void TraverseBreadth(uint & testnum, uint & testerr, const lasd::BreadthTraversa
 }
 
 template <typename Data, typename Value>
-void FoldBreadth(uint & testnum, uint & testerr, const lasd::BreadthTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::template FoldFun<Value> fun, const Value & inival, const Value & finval) {
+void FoldBreadth(uint & testnum, uint & testerr, const lasd::BreadthTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::FoldFun<Value> fun, const Value & inival, const Value & finval) {
   bool tst;
   testnum++;
   try {

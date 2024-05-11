@@ -3,8 +3,6 @@
 #define LINEARTEST_HPP
 
 #include "../../container/linear.hpp"
-using uint = unsigned int;
-using ulong = unsigned long;
 
 /* ************************************************************************** */
 

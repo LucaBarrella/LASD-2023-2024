@@ -20,9 +20,6 @@
 
 #include "../bst/bst.hpp"
 
-using uint = unsigned int;
-using ulong = unsigned long;
-
 /* ************************************************************************** */
 
 using namespace std;

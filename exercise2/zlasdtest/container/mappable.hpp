@@ -3,8 +3,6 @@
 #define MAPPABLETEST_HPP
 
 #include "../../container/mappable.hpp"
-using uint = unsigned int;
-using ulong = unsigned long;
 
 /* ************************************************************************** */
 

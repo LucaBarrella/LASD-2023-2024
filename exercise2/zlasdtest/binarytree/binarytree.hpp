@@ -3,8 +3,6 @@
 #define BINARYTREETEST_HPP
 
 #include "../../binarytree/binarytree.hpp"
-using uint = unsigned int;
-using ulong = unsigned long;
 
 /* ************************************************************************** */
 

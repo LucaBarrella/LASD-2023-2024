@@ -14,9 +14,6 @@
 #include "../../queue/vec/queuevec.hpp"
 #include "../../queue/lst/queuelst.hpp"
 
-using uint = unsigned int;
-using ulong = unsigned long;
-
 /* ************************************************************************** */
 
 using namespace std;
@@ -57,12 +54,12 @@ void stestStackInt(Stk & stk, uint & testnum, uint & testerr) {
     NonEqualStack(loctestnum, loctesterr, stk, copstk, true);
 
     Top(loctestnum, loctesterr, copstk, true, 6);
-    copstk = std::move(stk);
+    copstk = move(stk);
     TopNPop(loctestnum, loctesterr, copstk, true, 5);
     Pop(loctestnum, loctesterr, copstk, true);
     Top(loctestnum, loctesterr, copstk, true, 3);
 
-    Stk movstk(std::move(stk));
+    Stk movstk(move(stk));
     Top(loctestnum, loctesterr, stk, false, 0);
 
     movstk.Clear();
@@ -228,12 +225,12 @@ void stestQueueInt(Que & que, uint & testnum, uint & testerr) {
     NonEqualQueue(loctestnum, loctesterr, que, copque, true);
 
     Head(loctestnum, loctesterr, copque, true, 0);
-    copque = std::move(que);
+    copque = move(que);
     HeadNDequeue(loctestnum, loctesterr, copque, true, 0);
     Dequeue(loctestnum, loctesterr, copque, true);
     Head(loctestnum, loctesterr, copque, true, 1);
 
-    Que movque(std::move(que));
+    Que movque(move(que));
     Head(loctestnum, loctesterr, que, false, 0);
 
     movque.Clear();

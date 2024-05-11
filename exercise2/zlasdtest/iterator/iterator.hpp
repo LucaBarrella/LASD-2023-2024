@@ -4,9 +4,6 @@
 
 #include "../../iterator/iterator.hpp"
 
-using uint = unsigned int;
-using ulong = unsigned long;
-
 /* ************************************************************************** */
 
 template <typename Data>

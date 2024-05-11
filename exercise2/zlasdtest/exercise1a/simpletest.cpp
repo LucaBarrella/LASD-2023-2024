@@ -14,9 +14,6 @@
 
 #include "../list/list.hpp"
 
-using uint = unsigned int;
-using ulong = unsigned long;
-
 /* ************************************************************************** */
 
 using namespace std;
@@ -142,10 +139,10 @@ void stestVectorString(uint & testnum, uint & testerr) {
     MapPreOrder(loctestnum, loctesterr, vec, true, [](string & str) { MapStringAppend(str, string("!")); });
     NonEqualVector(loctestnum, loctesterr, vec, copvec, true);
 
-    copvec = std::move(vec);
+    copvec = move(vec);
     FoldPreOrder(loctestnum, loctesterr, copvec, true, &FoldStringConcatenate, string("?"), string("?A !B !"));
 
-    lasd::SortableVector<string> movvec(std::move(vec));
+    lasd::SortableVector<string> movvec(move(vec));
     FoldPreOrder(loctestnum, loctesterr, movvec, true, &FoldStringConcatenate, string("?"), string("?A B "));
     movvec.Sort();
     FoldPreOrder(loctestnum, loctesterr, movvec, true, &FoldStringConcatenate, string("?"), string("?A B "));
@@ -236,11 +233,11 @@ void stestListInt(uint & testnum, uint & testerr) {
 
     RemoveFromFront(loctestnum, loctesterr, coplst, true);
     FrontNRemove(loctestnum, loctesterr, coplst, true, 6);
-    coplst = std::move(lst);
+    coplst = move(lst);
     FoldPreOrder(loctestnum, loctesterr, lst, true, &FoldAdd<int>, 0, 11);
     FoldPreOrder(loctestnum, loctesterr, coplst, true, &FoldAdd<int>, 0, 17);
 
-    lasd::List<int> movlst(std::move(lst));
+    lasd::List<int> movlst(move(lst));
     MapPreOrder(loctestnum, loctesterr, movlst, true, &MapIncrement<int>);
     FoldPreOrder(loctestnum, loctesterr, movlst, true, &FoldAdd<int>, 0, 14);
 
@@ -334,7 +331,7 @@ void stestListString(uint & testnum, uint & testerr) {
     InsertAtFront(loctestnum, loctesterr, lst, true, string("C"));
     NonEqualList(loctestnum, loctesterr, lst, coplst, true);
 
-    coplst = std::move(lst);
+    coplst = move(lst);
     FoldPreOrder(loctestnum, loctesterr, coplst, true, &FoldStringConcatenate, string("?"), string("?CB A"));
   }
   catch (...) {
@@ -454,12 +451,28 @@ void stestVectorListString(uint & testnum, uint & testerr) {
     lasd::List<string> coplstx(lst);
     EqualList(loctestnum, loctesterr, coplstx, coplst, true);
 
-    lasd::List<string> coplsty(std::move(vec));
+    Size(loctestnum, loctesterr, vec, true, 3);
+    TraversePreOrder(loctestnum, loctesterr, vec, true, &TraversePrint<string>);
+    Size(loctestnum, loctesterr, copvec, true, 3);
+    TraversePreOrder(loctestnum, loctesterr, copvec, true, &TraversePrint<string>);
+
+    lasd::List<string> coplsty(move(vec));
     EqualList(loctestnum, loctesterr, coplst, coplsty, true);
+    Size(loctestnum, loctesterr, vec, true, 3);
+    TraversePreOrder(loctestnum, loctesterr, vec, true, &TraversePrint<string>);
+    TraversePreOrder(loctestnum, loctesterr, copvec, true, &TraversePrint<string>);
     EqualVector(loctestnum, loctesterr, vec, copvec, false);
 
-    lasd::SortableVector<string> copvecy(std::move(lst));
+    Size(loctestnum, loctesterr, lst, true, 3);
+    TraversePreOrder(loctestnum, loctesterr, lst, true, &TraversePrint<string>);
+    Size(loctestnum, loctesterr, coplst, true, 3);
+    TraversePreOrder(loctestnum, loctesterr, coplst, true, &TraversePrint<string>);
+
+    lasd::SortableVector<string> copvecy(move(lst));
     EqualVector(loctestnum, loctesterr, copvec, copvecy, true);
+    Size(loctestnum, loctesterr, lst, true, 3);
+    TraversePreOrder(loctestnum, loctesterr, lst, true, &TraversePrint<string>);
+    TraversePreOrder(loctestnum, loctesterr, coplst, true, &TraversePrint<string>);
     EqualList(loctestnum, loctesterr, lst, coplst, false);
   }
   catch (...) {

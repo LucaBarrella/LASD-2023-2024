@@ -3,8 +3,6 @@
 #define QUEUETEST_HPP
 
 #include "../../queue/queue.hpp"
-using uint = unsigned int;
-using ulong = unsigned long;
 
 /* ************************************************************************** */
 

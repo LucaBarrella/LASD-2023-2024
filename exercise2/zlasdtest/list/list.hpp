@@ -3,8 +3,6 @@
 #define LISTTEST_HPP
 
 #include "../../list/list.hpp"
-using uint = unsigned int;
-using ulong = unsigned long;
 
 /* ************************************************************************** */
 

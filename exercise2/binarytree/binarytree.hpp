@@ -21,6 +21,10 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
+
+// todo rimuovere tutti gli explicit!
+// todo Inserire in ogni iteratore un puntatore al nodo corrente
+
 class BinaryTree : virtual public PreOrderTraversableContainer<Data>,
                    virtual public PostOrderTraversableContainer<Data>,
                    virtual public InOrderTraversableContainer<Data>,
@@ -394,7 +398,7 @@ public:
   //!devi solo fare l’override nella succ: operatore* con una const_cast
 
   // type Terminated() specifiers; // (should not throw exceptions)
-  virtual bool Terminated() const noexcept override;
+  virtual bool Terminated() const noexcept override; //! ATTENTO!!!
 
   /* ************************************************************************ */
 
@@ -595,42 +599,47 @@ public:
 
   // Specific constructors
   // BTPostOrderMutableIterator(argument) specifiers; // An iterator over a given mutable binary tree
-  explicit BTPostOrderMutableIterator (BinaryTree<Data>& tree);
+  // ! explicit BTPostOrderMutableIterator (MutableBinaryTree<Data>& tree);
+  // BTPostOrderMutableIterator(BinaryTree<Data>& tree) : BTPostOrderIterator<Data>(tree) {}; 
+  BTPostOrderMutableIterator(BinaryTree<Data> & tree);
+
 
   /* ************************************************************************ */
 
   // Copy constructor
   // BTPostOrderMutableIterator(argument) specifiers;
-  explicit BTPostOrderMutableIterator(const BTPostOrderMutableIterator& iterator);
+  // explicit BTPostOrderMutableIterator(const BTPostOrderMutableIterator& iterator);
+  BTPostOrderMutableIterator(const BTPostOrderMutableIterator& iterator);
 
   // Move constructor
   // BTPostOrderMutableIterator(argument) specifiers;
-  explicit BTPostOrderMutableIterator(BTPostOrderMutableIterator&& iterator) noexcept;
+  // explicit BTPostOrderMutableIterator(BTPostOrderMutableIterator&& iterator) noexcept;
+  BTPostOrderMutableIterator(BTPostOrderMutableIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
   // Destructor
   // ~BTPostOrderMutableIterator() specifiers;
-  virtual ~BTPostOrderMutableIterator() noexcept;
+  virtual ~BTPostOrderMutableIterator() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
   // type operator=(argument) specifiers;
-  virtual BTPostOrderMutableIterator& operator=(const BTPostOrderMutableIterator& iterator);
+  BTPostOrderMutableIterator& operator=(const BTPostOrderMutableIterator& iterator);
 
   // Move assignment
   // type operator=(argument) specifiers;
-  virtual BTPostOrderMutableIterator& operator=(BTPostOrderMutableIterator&& iterator) noexcept;
+  BTPostOrderMutableIterator& operator=(BTPostOrderMutableIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
   // Comparison operators
   // type operator==(argument) specifiers;
-  virtual bool operator==(const BTPostOrderMutableIterator& iterator) const noexcept;
+  inline bool operator==(const BTPostOrderMutableIterator& iterator) const noexcept;
 
   // type operator!=(argument) specifiers;
-  virtual bool operator!=(const BTPostOrderMutableIterator& iterator) const noexcept;
+  inline bool operator!=(const BTPostOrderMutableIterator& iterator) const noexcept;
 
   /* ************************************************************************ */
 
@@ -664,33 +673,33 @@ public:
 
   // Specific constructors
   // BTInOrderIterator(argument) specifiers; // An iterator over a given binary tree
-  explicit BTInOrderIterator (const BinaryTree<Data>& tree);
+  BTInOrderIterator (const BinaryTree<Data>& tree);
 
   /* ************************************************************************ */
 
   // Copy constructor
   // BTInOrderIterator(argument) specifiers;
-  explicit BTInOrderIterator(const BTInOrderIterator& iterator);
+  BTInOrderIterator(const BTInOrderIterator& iterator);
 
   // Move constructor
   // BTInOrderIterator(argument) specifiers;
-  explicit BTInOrderIterator(BTInOrderIterator&& iterator) noexcept;
+  BTInOrderIterator(BTInOrderIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
   // Destructor
   // ~BTInOrderIterator() specifiers;
-  virtual ~BTInOrderIterator() noexcept;
+  virtual ~BTInOrderIterator() noexcept = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
   // type operator=(argument) specifiers;
-  virtual BTInOrderIterator& operator=(const BTInOrderIterator& iterator);
+  BTInOrderIterator& operator=(const BTInOrderIterator& iterator);
 
   // Move assignment
   // type operator=(argument) specifiers;
-  virtual BTInOrderIterator& operator=(BTInOrderIterator&& iterator) noexcept;
+  BTInOrderIterator& operator=(BTInOrderIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
@@ -706,24 +715,24 @@ public:
   // Specific member functions (inherited from Iterator)
 
   // type operator*() specifiers; // (throw std::out_of_range when terminated)
-  virtual Data& operator*() const;
+  const Data& operator*() const override;
 
   // type Terminated() specifiers; // (should not throw exceptions)
-  virtual bool Terminated() const noexcept;
+  inline bool Terminated() const noexcept;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from ForwardIterator)
 
   // type operator++() specifiers; // (throw std::out_of_range when terminated)
-  virtual BTInOrderIterator& operator++();
+  BTInOrderIterator& operator++() override;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from ResettableIterator)
 
   // type Reset() specifiers; // (should not throw exceptions)
-  virtual void Reset() noexcept;
+  void Reset() noexcept override;
 
 };
 
@@ -747,49 +756,49 @@ public:
 
   // Specific constructors
   // BTInOrderMutableIterator(argument) specifiers; // An iterator over a given mutable binary tree
-  explicit BTInOrderMutableIterator (BinaryTree<Data>& tree);
+  BTInOrderMutableIterator(MutableBinaryTree<Data>& tree);
 
   /* ************************************************************************ */
 
   // Copy constructor
   // BTInOrderMutableIterator(argument) specifiers;
-  explicit BTInOrderMutableIterator(const BTInOrderMutableIterator& iterator);
+  BTInOrderMutableIterator(const BTInOrderMutableIterator& iterator);
 
   // Move constructor
   // BTInOrderMutableIterator(argument) specifiers;
-  explicit BTInOrderMutableIterator(BTInOrderMutableIterator&& iterator) noexcept;
+  BTInOrderMutableIterator(BTInOrderMutableIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
   // Destructor
   // ~BTInOrderMutableIterator() specifiers;
-  virtual ~BTInOrderMutableIterator() noexcept;
+  virtual ~BTInOrderMutableIterator() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
   // type operator=(argument) specifiers;
-  virtual BTInOrderMutableIterator& operator=(const BTInOrderMutableIterator& iterator);
+  BTInOrderMutableIterator& operator=(const BTInOrderMutableIterator& iterator);
 
   // Move assignment
   // type operator=(argument) specifiers;
-  virtual BTInOrderMutableIterator& operator=(BTInOrderMutableIterator&& iterator) noexcept;
+  BTInOrderMutableIterator& operator=(BTInOrderMutableIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
   // Comparison operators
   // type operator==(argument) specifiers;
-  virtual bool operator==(const BTInOrderMutableIterator& iterator) const noexcept;
+  inline bool operator==(const BTInOrderMutableIterator& iterator) const noexcept;
 
   // type operator!=(argument) specifiers;
-  virtual bool operator!=(const BTInOrderMutableIterator& iterator) const noexcept;
+  inline bool operator!=(const BTInOrderMutableIterator& iterator) const noexcept;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from MutableIterator)
 
   // type operator*() specifiers; // (throw std::out_of_range when terminated)
-  virtual Data& operator*() const;
+  Data& operator*() const;
 
 };
 

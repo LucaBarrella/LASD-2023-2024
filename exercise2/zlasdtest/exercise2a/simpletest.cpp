@@ -1,6 +1,6 @@
 
 #include <iostream>
-//! ATTENZIONE: TEST NON NON CHIAMATI!
+
 /* ************************************************************************** */
 
 #include "../container/container.hpp"
@@ -17,9 +17,6 @@
 #include "../binarytree/binarytree.hpp"
 #include "../../binarytree/lnk/binarytreelnk.hpp"
 #include "../../binarytree/vec/binarytreevec.hpp"
-
-using uint = unsigned int;
-using ulong = unsigned long;
 
 /* ************************************************************************** */
 
@@ -68,14 +65,14 @@ void stestBinaryTreeInt(uint & testnum, uint & testerr) {
     lasd::BinaryTreeVec<int> copbtvec(btvec);
     EqualBT(loctestnum, loctesterr, copbtvec, btvec);
     btvec.Clear();
-    btvec = std::move(copbtvec);
+    btvec = move(copbtvec);
     NonEqualBT(loctestnum, loctesterr, copbtvec, btvec);
     Empty(loctestnum, loctesterr, copbtvec, true);
 
     lasd::BinaryTreeLnk<int> copbtlnk(btlnk);
     EqualBT(loctestnum, loctesterr, copbtlnk, btlnk);
     btlnk.Clear();
-    btlnk =std::move(copbtlnk);
+    btlnk = move(copbtlnk);
     NonEqualBT(loctestnum, loctesterr, copbtlnk, btlnk);
     Empty(loctestnum, loctesterr, copbtlnk, true);
   }

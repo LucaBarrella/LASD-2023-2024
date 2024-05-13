@@ -319,7 +319,9 @@ void MutableBinaryTree<Data>::BreadthMap(MutableNode* node, MapFun function) {
 template <typename Data>
 BTPreOrderIterator<Data>::BTPreOrderIterator(const BinaryTree<Data>& tree) {
     if (tree.size != 0) {
-        root = &tree.Root();
+        //todo Fab suggerisce di fare Root() che ritorna un puntatore a Node e poi fare il push del puntatore su stack
+        stack.Push(root = &tree.Root()); //! Attenzione potrebbe causare problemi
+        // root = &tree.Root();
     }   
 }
 
@@ -334,26 +336,12 @@ BTPreOrderIterator<Data>::BTPreOrderIterator(BTPreOrderIterator<Data>&& iterator
     std::swap(stack, iterator.stack);
 }
 
-// Specific Constructors
-template <typename Data>
-BTPreOrderIterator<Data>::BTPreOrderIterator(const BinaryTree<Data>& tree) {
-    if (tree.size != 0) {
-        //! Fab suggerisce di fare Root() che ritorna un puntatore a Node e poi fare il push del puntatore su stack
-        stack.Push(root = &tree.Root());
-    }
-}
-
 // Copy assignment
 template <typename Data>
 BTPreOrderIterator<Data>& BTPreOrderIterator<Data>::operator=(const BTPreOrderIterator<Data>& iterator) {
     if (this != &iterator) {
         root = iterator.root;
         stack = iterator.stack;
-
-        //! Check if this is better
-        // BTPreOrderIterator<Data> *tmp = new BTPreOrderIterator<Data>(iterator);
-        // std::swap(*tmp, *this);
-        // delete tmp;
     }
     return *this;
 }
@@ -363,7 +351,7 @@ template <typename Data>
 BTPreOrderIterator<Data>& BTPreOrderIterator<Data>::operator=(BTPreOrderIterator<Data>&& iterator) noexcept {
     if (this != &iterator) {
         std::swap(root, iterator.root);
-        std::swap(stack, iterator.stack);//! Check
+        std::swap(stack, iterator.stack);
     }
     return *this;
 }
@@ -382,12 +370,12 @@ bool BTPreOrderIterator<Data>::operator!=(const BTPreOrderIterator<Data>& iterat
     return !(*this == iterator);
 }
 
-// Operator* //! Check
+// Operator*
 template <typename Data>
 Data& BTPreOrderIterator<Data>::operator*() const {
     if (!stack.Empty()) {
         return stack.Top()->Element();
-        //! return current->Element(); ipotetico current?
+        //! return current->Element(); ipotetico current? Che in questa implementazione dovrebbe essere il top dello stack
     }else {
         throw std::out_of_range("Iterator is terminated");
     }
@@ -400,7 +388,6 @@ bool BTPreOrderIterator<Data>::Terminated() const noexcept {
 }
 
 // Operator++
-//! Check
 template <typename Data>
 BTPreOrderIterator<Data>& BTPreOrderIterator<Data>::operator++() {
 
@@ -421,22 +408,20 @@ BTPreOrderIterator<Data>& BTPreOrderIterator<Data>::operator++() {
         stack.Push(&(current->LeftChild()));
     }
 
-    //! Check if it's necessary! but i think current is needed.
-    // if(stack.Empty()) {
-    //     current = nullptr;
-    // } else {
-    //     current = stack.TopNPop();
-    // }
+    //! Check this:
+    if (stack.Empty()) { //current is a leaf
+        throw std::out_of_range("Iterator is terminated!");
+    }
    
     return *this;
 }
 
-// Reset //! Check
+// Reset
 template <typename Data>
 void BTPreOrderIterator<Data>::Reset() noexcept {
-    if (stack != nullptr) {
+    if (!stack.Empty()) {
         stack.Clear();
-        stack.Push(root);
+        stack.Push(root); //Consider the top of the stack as the current node.
     }
 }
 
@@ -484,7 +469,7 @@ bool BTPreOrderMutableIterator<Data>::operator!=(const BTPreOrderMutableIterator
     return BTPreOrderIterator<Data>::operator!=(iterator);
 }
 
-//! Operator*
+// Operator*
 template <typename Data>
 Data& BTPreOrderMutableIterator<Data>::operator*() const {
     if (!Terminated()) {
@@ -506,10 +491,9 @@ Data& BTPreOrderMutableIterator<Data>::operator*() const {
 template <typename Data>
 BTPostOrderIterator<Data>::BTPostOrderIterator(const BinaryTree<Data>& tree) {
     if(tree.Size()!= 0) {
-        root = &tree.Root();
-        const typename BinaryTree<Data>::Node* current = root;
-        // funzione che arriva alla foglia più a sinistra
-        getLeftMostLeaf(current);
+        stack.Push(root = &tree.Root());
+        //! root = &tree.Root();
+        getLeftMostLeaf();  
     }
 }
 
@@ -563,10 +547,16 @@ template <typename Data>
 Data& BTPostOrderIterator<Data>::operator*() const {
     if (!Terminated()) {
         return stack.Top()->Element();
-        //! return current->Element(); ipotetico current?
+        //! return current->Element(); Il top è il current node?
     }else {
         throw std::out_of_range("Iterator is terminated");
     }
+}
+
+// Terminated
+template <typename Data>
+bool BTPostOrderIterator<Data>::Terminated() const noexcept {
+    return stack.Empty();
 }
 
 // Operator++
@@ -574,81 +564,128 @@ Data& BTPostOrderIterator<Data>::operator*() const {
 // todo Da provare quello che aveva detto mari, sulla function fillStack
 
 //FIXME Check, it's probably wrong!
+// template <typename Data>
+// BTPostOrderIterator<Data>& BTPostOrderIterator<Data>::operator++() {
+//     if (Terminated()) {
+//         throw std::out_of_range("Iterator is terminated!");
+//     }
+
+//     const BinaryTree<Data>::Node* current = stack.TopNPop();
+
+//     if (current == nullptr) {
+//         throw std::runtime_error("Iterator is terminated!");
+//     }
+
+//     // Se salgo da sinistra, si suppone che il sottoalbero sinistro sia già stato visitato, ergo io dovrò trovare il minimo del sottoalbero destro
+
+
+//     // Riempo lo stack con figli padri con figli del sotto albero sinistro!
+
+//     // Riempo lo stack con figli del sottoalbero destro
+
+//     // Scendo e riempo lo stack con i figli del sottoalbero sinistro
+
+//     // Scendo e riempo lo stack con i figli del sottoalbero destro
+
+//     if (!stack.Empty() && stack.Top()->HasRightChild() && stack.Top()->RightChild() != current) {
+//         current = stack.TopNPop()->RightChild();
+
+//         //todo Chiamo una funzione ausiliaria che riempie lo stack con i figli del sottoalbero destro
+        
+//         //! Giuseppe Castaldo: FindLastLeftLeaf(&(stack.Top()->RightChild()));
+
+//         //! Check if getLeftMostLeaf is correct!
+//         // getLeftMostLeaf();
+
+
+//         while (current != nullptr) {
+//             stack.Push(current);
+//             if (current->HasLeftChild()) {
+//                 current = current->LeftChild();
+//             } else if (current->HasRightChild()) {
+//                 current = current->RightChild();
+//             }else {
+//                break;
+//             }
+//         }
+
+//         if (current != nullptr && current->HasRightChild()) {
+//             current = current->RightChild();
+//             stack.Push(current);
+//         }
+//     }
+    
+//     return *this;
+// }
+
 template <typename Data>
 BTPostOrderIterator<Data>& BTPostOrderIterator<Data>::operator++() {
     if (Terminated()) {
-        throw std::out_of_range("Iterator is terminated!");
+        throw std::out_of_range("Out of range exception.");
     }
 
     const BinaryTree<Data>::Node* current = stack.TopNPop();
 
-    // Se salgo da sinistra, si suppone che il sottoalbero sinistro sia già stato visitato, ergo io dovrò trovare il minimo del sottoalbero destro
-
-
-    // Riempo lo stack con figli padri con figli del sotto albero sinistro!
-
-    // Riempo lo stack con figli del sottoalbero destro
-
-    // Scendo e riempo lo stack con i figli del sottoalbero sinistro
-
-    // Scendo e riempo lo stack con i figli del sottoalbero destro
-
-    if (!stack.Empty() && stack.Top()->HasRightChild() && stack.Top()->RightChild() != current) {
-        current = stack.TopNPop()->RightChild();
-        while (current != nullptr) {
-            stack.Push(current);
-            if (current->HasLeftChild()) {
-                current = current->LeftChild();
-            } else if (current->HasRightChild()) {
-                current = current->RightChild();
-            } else {
-                break;
-            }
+    if (current == nullptr) {
+        throw std::runtime_error("Iterator is terminated!");
+    }
+    
+    if (!stack.Empty()){
+        if (stack.Top()->HasLeftChild() && current == &(stack.Top()->LeftChild()) && (stack.Top()->HasRightChild())) {
+            //! FindLastLeftLeaf(&(stack.Top()->RightChild()));
+            getLeftMostLeaf();
         }
     }
-
+    
     return *this;
 }
+
+// template <typename Data>
+// BTPostOrderIterator<Data>& BTPostOrderIterator<Data>::operator++() {
+//     if (Terminated()) {
+//         throw std::out_of_range("Out of range exception.");
+//     }
+    
+//     if (!stack.Empty()) {
+//         if (stack.Top()->HasLeftChild()) {
+//             if (current == &(stack.Top()->LeftChild())) {
+//                 if (stack.Top()->HasRightChild()) {
+//                     FindLastLeftLeaf(&(stack.Top()->RightChild()));
+//                 }
+//             }
+//         }
+        
+//         current = stack.TopNPop();
+//     } else {
+//         current = nullptr;
+//     }
+    
+//     return *this;
+// }
+
+
 
 // Reset //! Check, it's probably ok!
 template <typename Data>
 void BTPostOrderIterator<Data>::Reset() noexcept {
-    if (stack != nullptr) {
+    if (!stack.Empty()) {
         stack.Clear();
-        const typename BinaryTree<Data>::Node* current = root;
-        
-        //! Check this part of code:
-        getLeftMostLeaf(current);
-
-        //! Either too:
-        // while (current != nullptr) {
-        //     stack.Push(current);
-        //     if (current->HasLeftChild()) {
-        //         current = current->LeftChild();
-        //     } else {
-        //         current = current->RightChild();
-        //     }
-        // }
     }
+    getLeftMostLeaf();
 }
 
 // Auxiliary function
 
-// getLeftMostLeaf //! Check!
 template <typename Data>
-void BTPostOrderIterator<Data>::getLeftMostLeaf(const typename BinaryTree<Data>::Node* node) {
-    if (node == nullptr) {
-        return;
-    }
-
-    stack.Push(node);
-
-    if (node->HasLeftChild()) {
-        getLeftMostLeaf(&(node->LeftChild()));
-    }
-
-    if (node->HasRightChild()) {
-        getLeftMostLeaf(&(node->RightChild()));
+void BTPostOrderIterator<Data>::getLeftMostLeaf() {
+    const typename BinaryTree<Data>::Node* current = stack.Top();
+    while (current != nullptr && (current->HasLeftChild() || current->HasRightChild())) {  
+        if (current->HasLeftChild()) {
+            current = &(current->LeftChild());
+        } else {
+            current = &(current->RightChild());
+        }
+        stack.Push(current);
     }
 }
 
@@ -696,10 +733,14 @@ bool BTPostOrderMutableIterator<Data>::operator!=(const BTPostOrderMutableIterat
     return BTPostOrderIterator<Data>::operator!=(iterator);
 }
 
-// Operator* //!  Check!!
+// Operator*
 template <typename Data>
 Data& BTPostOrderMutableIterator<Data>::operator*() const {
-    return const_cast<Data&>(BTPostOrderIterator<Data>::operator*());
+    if (!Terminated()) {
+        return const_cast<Data&>(stack.Top()->Element());
+    }else {
+        throw std::out_of_range("Iterator is terminated");
+    }
 }
 
 /* ************************************************************************** */
@@ -710,14 +751,16 @@ Data& BTPostOrderMutableIterator<Data>::operator*() const {
 template <typename Data>
 BTInOrderIterator<Data>::BTInOrderIterator(const BinaryTree<Data>& tree) {
     if (!Empty()) {
-        const typename BinaryTree<Data>::Node* current = &tree.Root();
-
-        while (current != nullptr) { //! Necesaria tale condizione: current->HasLeftChild()?
-            stack.Push(current);
-            current = &(current->LeftChild());
-            //! getLeftMostNode(current);
-        }
+        stack.Push(root = &tree.Root());
+        getLeftMostNode();
     }
+        // const typename BinaryTree<Data>::Node* current = &tree.Root();
+
+        // while (current != nullptr) { //! Necesaria tale condizione: current->HasLeftChild()?
+        //     stack.Push(current);
+        //     current = &(current->LeftChild());
+        //     //! getLeftMostNode(current);
+        // }
 }
 
 // Copy constructor
@@ -794,16 +837,38 @@ BTInOrderIterator<Data>& BTInOrderIterator<Data>::operator++() {
 // Reset
 template <typename Data>
 void BTInOrderIterator<Data>::Reset() noexcept {
-    if (stack != nullptr) {
+    if (!stack.Empty()) {
         stack.Clear();
         const typename BinaryTree<Data>::Node* current = root;
         while (current != nullptr) {
             stack.Push(current);
-            current = current->LeftChild();
+            current = &(current->LeftChild());
         }
     }
 }
 
+// Terminated
+template <typename Data>
+bool BTInOrderIterator<Data>::Terminated() const noexcept {
+    return stack.Empty();
+}
+
+// Auxiliary function
+
+//! getLeftMostNode change name
+template <typename Data>
+void BTInOrderIterator<Data>::getLeftMostNode() {
+    const typename BinaryTree<Data>::Node* current = stack.Top();
+
+     while (current != nullptr) {
+            stack.Push(node);
+        if (current->HasLeftChild()) {
+            current = &(current->LeftChild());
+        } else {
+            current = nullptr;
+        }
+     }
+}
 /* ************************************************************************** */
 
 // BTInOrderMutableIterator
@@ -861,8 +926,9 @@ Data& BTInOrderMutableIterator<Data>::operator*() const {
 // Specific Constructors
 template <typename Data>
 BTBreadthIterator<Data>::BTBreadthIterator(const BinaryTree<Data>& tree) {
-    if (tree.size != 0) {
-        queue.Enqueue(root = &tree.Root());
+    if (!tree.Empty()) {
+        root = &tree.Root();
+        queue.Enqueue(root);
     }
 }
 
@@ -883,7 +949,7 @@ BTBreadthIterator<Data>& BTBreadthIterator<Data>::operator=(const BTBreadthItera
     if (this != &iterator) {
         root = iterator.root;
         queue = iterator.queue;
-    }
+    } 
     return *this;
 }
 
@@ -943,6 +1009,12 @@ void BTBreadthIterator<Data>::Reset() noexcept {
         queue.Clear();
         queue.Enqueue(root);
     }
+}
+
+// Terminated
+template <typename Data>
+bool BTBreadthIterator<Data>::Terminated() const noexcept {
+    return queue.Empty();
 }
 
 /* ************************************************************************** */

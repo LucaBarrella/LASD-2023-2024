@@ -24,6 +24,7 @@ template <typename Data>
 
 // todo rimuovere tutti gli explicit!
 // todo Inserire in ogni iteratore un puntatore al nodo corrente
+// todo Cambiare nome alle funzioni ausiliarie  (es. getLeftMostLeaf)
 
 class BinaryTree : virtual public PreOrderTraversableContainer<Data>,
                    virtual public PostOrderTraversableContainer<Data>,
@@ -398,7 +399,7 @@ public:
   //!devi solo fare l’override nella succ: operatore* con una const_cast
 
   // type Terminated() specifiers; // (should not throw exceptions)
-  virtual bool Terminated() const noexcept override; //! ATTENTO!!!
+  inline bool Terminated() const noexcept override; //! ATTENTO!!!
 
   /* ************************************************************************ */
 
@@ -554,9 +555,8 @@ public:
   Data& operator*() const;
 
   // type Terminated() specifiers; // (should not throw exceptions)
-  //! virtual bool Terminated() const noexcept;
   //FIXME: virtual bool Terminated() return stack.Empty(); oppure quando current è nullptr
-  using BTPreOrderIterator<Data>::Terminated;
+  inline bool Terminated() const noexcept override;
 
   /* ************************************************************************ */
 
@@ -574,7 +574,8 @@ public:
 
 
   // Auxiliary functions, if necessary!
-  void getLeftMostLeaf(const typename BinaryTree<Data>::Node* node);
+  protected:
+  void getLeftMostLeaf();
 
 /* ************************************************************************** */
   
@@ -602,7 +603,6 @@ public:
   // ! explicit BTPostOrderMutableIterator (MutableBinaryTree<Data>& tree);
   // BTPostOrderMutableIterator(BinaryTree<Data>& tree) : BTPostOrderIterator<Data>(tree) {}; 
   BTPostOrderMutableIterator(BinaryTree<Data> & tree);
-
 
   /* ************************************************************************ */
 
@@ -718,7 +718,7 @@ public:
   const Data& operator*() const override;
 
   // type Terminated() specifiers; // (should not throw exceptions)
-  inline bool Terminated() const noexcept;
+  inline bool Terminated() const noexcept override;
 
   /* ************************************************************************ */
 
@@ -733,6 +733,10 @@ public:
 
   // type Reset() specifiers; // (should not throw exceptions)
   void Reset() noexcept override;
+
+  // Auxiliary functions, if necessary!
+  protected:
+  void getLeftMostNode();
 
 };
 
@@ -871,7 +875,7 @@ public:
   virtual Data& operator*() const;
 
   // type Terminated() specifiers; // (should not throw exceptions)
-  virtual bool Terminated() const noexcept;
+  inline bool Terminated() const noexcept override;
 
   /* ************************************************************************ */
 

@@ -359,11 +359,11 @@ public:
 
   // Copy constructor
   // BTPreOrderIterator(argument) specifiers;
-  explicit BTPreOrderIterator(const BTPreOrderIterator& iterator);
+  BTPreOrderIterator(const BTPreOrderIterator& iterator);
 
   // Move constructor
   // BTPreOrderIterator(argument) specifiers;
-  explicit BTPreOrderIterator(BTPreOrderIterator&& iterator) noexcept;
+  BTPreOrderIterator(BTPreOrderIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
@@ -375,45 +375,44 @@ public:
 
   // Copy assignment
   // type operator=(argument) specifiers;
-  virtual BTPreOrderIterator& operator=(const BTPreOrderIterator& iterator);
+  BTPreOrderIterator& operator=(const BTPreOrderIterator& iterator);
   
   // Move assignment
   // type operator=(argument) specifiers;
-  virtual BTPreOrderIterator& operator=(BTPreOrderIterator&& iterator) noexcept;
+  BTPreOrderIterator& operator=(BTPreOrderIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
   // Comparison operators
   // type operator==(argument) specifiers;
-  virtual bool operator==(const BTPreOrderIterator& iterator) const noexcept;
+  inline bool operator==(const BTPreOrderIterator& iterator) const noexcept;
 
   // type operator!=(argument) specifiers;
-  virtual bool operator!=(const BTPreOrderIterator& iterator) const noexcept;
+  inline bool operator!=(const BTPreOrderIterator& iterator) const noexcept;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from Iterator)
 
   // type operator*() specifiers; // (throw std::out_of_range when terminated)
-  virtual Data& operator*() const override; //! Should be overrided method?
-  //!devi solo fare l’override nella succ: operatore* con una const_cast
+  const Data& operator*() const override;
 
   // type Terminated() specifiers; // (should not throw exceptions)
-  inline bool Terminated() const noexcept override; //! ATTENTO!!!
+  inline bool Terminated() const noexcept override;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from ForwardIterator)
 
   // type operator++() specifiers; // (throw std::out_of_range when terminated)
-  virtual BTPreOrderIterator& operator++() override;
+  BTPreOrderIterator& operator++() override;
  
   /* ************************************************************************ */
 
   // Specific member functions (inherited from ResettableIterator)
 
   // type Reset() specifiers; // (should not throw exceptions)
-  virtual void Reset() noexcept override;
+  void Reset() noexcept override;
 
 };
 
@@ -421,7 +420,7 @@ public:
 
 template <typename Data>
 class BTPreOrderMutableIterator : public MutableIterator<Data>,
-                                  public BTPreOrderIterator<Data>{
+                                  public BTPreOrderIterator<Data> {
   // Must extend MutableIterator<Data>,
   //             BTPreOrderIterator<Data>
 
@@ -432,10 +431,8 @@ private:
 protected:
 
   // ...
-    //! typename BinaryTree<Data>::Node * root = nullptr;
-    //! StackLst<typename BinaryTree<Data>::Node *> stack;
+  //! Ha senso usare lo stack???
   using BTPreOrderIterator<Data>::stack;
-  //! usign BTPreOrderIterator<Data>::current;
 
 public:
 
@@ -473,17 +470,18 @@ public:
 
   // Comparison operators
   // type operator==(argument) specifiers;
-  bool operator==(const BTPreOrderMutableIterator& iterator) const noexcept = default;
+  bool operator==(const BTPreOrderMutableIterator& iterator) const noexcept;
 
   // type operator!=(argument) specifiers;
-  bool operator!=(const BTPreOrderMutableIterator& iterator) const noexcept = default;
+  bool operator!=(const BTPreOrderMutableIterator& iterator) const noexcept;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from MutableIterator)
 
   // type operator*() specifiers; // (throw std::out_of_range when terminated)
-  Data& operator*() const;
+  Data& operator*() override;
+
 };
 
 /* ************************************************************************** */
@@ -525,7 +523,6 @@ public:
 
   // Destructor
   // ~BTPostOrderIterator() specifiers;
-  // virtual ~BTPostOrderIterator() noexcept;
   virtual ~BTPostOrderIterator() = default;
 
   /* ************************************************************************ */
@@ -542,20 +539,19 @@ public:
 
   // Comparison operators
   // type operator==(argument) specifiers;
-  bool operator==(const BTPostOrderIterator& iterator) const noexcept = default;
+  bool operator==(const BTPostOrderIterator& iterator) const noexcept;
 
   // type operator!=(argument) specifiers;
-  bool operator!=(const BTPostOrderIterator& iterator) const noexcept = default;
+  bool operator!=(const BTPostOrderIterator& iterator) const noexcept;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from Iterator)
 
   // type operator*() specifiers; // (throw std::out_of_range when terminated)
-  Data& operator*() const;
+  const Data& operator*() const;
 
   // type Terminated() specifiers; // (should not throw exceptions)
-  //FIXME: virtual bool Terminated() return stack.Empty(); oppure quando current è nullptr
   inline bool Terminated() const noexcept override;
 
   /* ************************************************************************ */
@@ -563,14 +559,14 @@ public:
   // Specific member functions (inherited from ForwardIterator)
 
   // type operator++() specifiers; // (throw std::out_of_range when terminated)
-  virtual BTPostOrderIterator& operator++();
+  BTPostOrderIterator &operator++() override;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from ResettableIterator)
 
   // type Reset() specifiers; // (should not throw exceptions)
-  virtual void Reset() noexcept;
+  void Reset() noexcept;
 
 
   // Auxiliary functions, if necessary!
@@ -593,16 +589,15 @@ private:
 
 protected:
 
-  // ...
+  //! Ha senso usare lo stack???
   using BTPostOrderIterator<Data>::stack;
+
+  // ...
 
 public:
 
   // Specific constructors
-  // BTPostOrderMutableIterator(argument) specifiers; // An iterator over a given mutable binary tree
-  // ! explicit BTPostOrderMutableIterator (MutableBinaryTree<Data>& tree);
-  // BTPostOrderMutableIterator(BinaryTree<Data>& tree) : BTPostOrderIterator<Data>(tree) {}; 
-  BTPostOrderMutableIterator(BinaryTree<Data> & tree);
+  BTPostOrderMutableIterator(MutableBinaryTree<Data>& tree);
 
   /* ************************************************************************ */
 
@@ -646,7 +641,7 @@ public:
   // Specific member functions (inherited from MutableIterator)
 
   // type operator*() specifiers; // (throw std::out_of_range when terminated)
-  virtual Data& operator*() const;
+  Data& operator*() override;
 
 };
 
@@ -705,10 +700,10 @@ public:
 
   // Comparison operators
   // type operator==(argument) specifiers;
-  virtual bool operator==(const BTInOrderIterator& iterator) const noexcept;
+  inline bool operator==(const BTInOrderIterator& iterator) const noexcept;
 
   // type operator!=(argument) specifiers;
-  virtual bool operator!=(const BTInOrderIterator& iterator) const noexcept;
+  inline bool operator!=(const BTInOrderIterator& iterator) const noexcept;
 
   /* ************************************************************************ */
 
@@ -753,6 +748,9 @@ private:
   // ...
 
 protected:
+
+  //! Ha senso usare lo stack???
+  using BTInOrderIterator<Data>::stack;
 
   // ...
 
@@ -802,7 +800,7 @@ public:
   // Specific member functions (inherited from MutableIterator)
 
   // type operator*() specifiers; // (throw std::out_of_range when terminated)
-  Data& operator*() const;
+  Data& operator*() override;
 
 };
 
@@ -846,33 +844,33 @@ public:
 
   // Destructor
   // ~BTBreadthIterator() specifiers;
-  virtual ~BTBreadthIterator() noexcept;
+  virtual ~BTBreadthIterator() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
   // type operator=(argument) specifiers;
-  virtual BTBreadthIterator& operator=(const BTBreadthIterator& iterator);
+  BTBreadthIterator& operator=(const BTBreadthIterator& iterator);
 
   // Move assignment
   // type operator=(argument) specifiers;
-  virtual BTBreadthIterator& operator=(BTBreadthIterator&& iterator) noexcept;
+  BTBreadthIterator& operator=(BTBreadthIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
   // Comparison operators
   // type operator==(argument) specifiers;
-  virtual bool operator==(const BTBreadthIterator& iterator) const noexcept;
+  inline bool operator==(const BTBreadthIterator& iterator) const noexcept;
 
   // type operator!=(argument) specifiers;
-  virtual bool operator!=(const BTBreadthIterator& iterator) const noexcept;
+  inline bool operator!=(const BTBreadthIterator& iterator) const noexcept;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from Iterator)
 
   // type operator*() specifiers; // (throw std::out_of_range when terminated)
-  virtual Data& operator*() const;
+  const Data& operator*() const override;
 
   // type Terminated() specifiers; // (should not throw exceptions)
   inline bool Terminated() const noexcept override;
@@ -882,14 +880,14 @@ public:
   // Specific member functions (inherited from ForwardIterator)
 
   // type operator++() specifiers; // (throw std::out_of_range when terminated)
-  virtual BTBreadthIterator& operator++();
+  BTBreadthIterator& operator++() override;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from ResettableIterator)
 
   // type Reset() specifiers; // (should not throw exceptions)
-  virtual void Reset() noexcept;
+  void Reset() noexcept override;
 
 };
 
@@ -907,13 +905,16 @@ private:
 
 protected:
 
+  //! Ha senso usare la coda???
+  using BTBreadthIterator<Data>::queue;
+
   // ...
 
 public:
 
   // Specific constructors
   // BTBreadthMutableIterator(argument) specifiers; // An iterator over a given mutable binary tree
-  explicit BTBreadthMutableIterator (BinaryTree<Data>& tree);
+  explicit BTBreadthMutableIterator(MutableBinaryTree<Data>& tree);
 
   /* ************************************************************************ */
 
@@ -929,33 +930,33 @@ public:
 
   // Destructor
   // ~BTBreadthMutableIterator() specifiers;
-  virtual ~BTBreadthMutableIterator() noexcept;
+  virtual ~BTBreadthMutableIterator() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
   // type operator=(argument) specifiers;
-  virtual BTBreadthMutableIterator& operator=(const BTBreadthMutableIterator& iterator);
+  BTBreadthMutableIterator& operator=(const BTBreadthMutableIterator& iterator);
 
   // Move assignment
   // type operator=(argument) specifiers;
-  virtual BTBreadthMutableIterator& operator=(BTBreadthMutableIterator&& iterator) noexcept;
+  BTBreadthMutableIterator& operator=(BTBreadthMutableIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
   // Comparison operators
   // type operator==(argument) specifiers;
-  virtual bool operator==(const BTBreadthMutableIterator& iterator) const noexcept;
+  inline bool operator==(const BTBreadthMutableIterator& iterator) const noexcept;
 
   // type operator!=(argument) specifiers;
-  virtual bool operator!=(const BTBreadthMutableIterator& iterator) const noexcept;
+  inline bool operator!=(const BTBreadthMutableIterator& iterator) const noexcept;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from MutableIterator)
 
   // type operator*() specifiers; // (throw std::out_of_range when terminated)
-  virtual Data& operator*() const;
+  Data& operator*() override;
 
 };
 

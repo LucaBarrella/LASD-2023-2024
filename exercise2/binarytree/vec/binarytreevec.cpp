@@ -16,25 +16,54 @@ BinaryTreeVec<Data>::NodeVec::NodeVec(const Data& value) : value(value) {}
 template <typename Data>
 BinaryTreeVec<Data>::NodeVec::NodeVec(Data&& value) : value(std::move(value)) {}
 
+// Copy Assignment
+template <typename Data>
+BinaryTreeVec<Data>::NodeVec& BinaryTreeVec<Data>::NodeVec::operator=(const NodeVec& node){
+    if (this != &node){
+        value = node.value;
+    }
+    return *this;
+}
+
+// Move Assignment
+template <typename Data>
+BinaryTreeVec<Data>::NodeVec& BinaryTreeVec<Data>::NodeVec::operator=(NodeVec&& node) noexcept{
+    if (this != &node){
+        value = std::move(node.value);
+    }
+    return *this;
+}
+
+// Comparison operators
+
+// Equalilty operator
+template <typename Data>
+bool BinaryTreeVec<Data>::NodeVec::operator==(const NodeVec& node) const noexcept{
+    return value == node.value;
+}
+
+// Inequality operator
+template <typename Data>
+bool BinaryTreeVec<Data>::NodeVec::operator!=(const NodeVec& node) const noexcept{
+    return value != node.value;
+}
+
 // Element const
 template <typename Data>
 const Data& BinaryTreeVec<Data>::NodeVec::Element() const noexcept {
-  return value;
+    return value;
 }
 
 // Element
 template <typename Data>
 Data& BinaryTreeVec<Data>::NodeVec::Element() noexcept {
-  return value;
+    return value;
 }
 
 // HasLeftChild
 template <typename Data>
 bool BinaryTreeVec<Data>::NodeVec::HasLeftChild() const noexcept {
-  if (left < tree->treeVector.Size()){
-    return (tree->treeVector[left] != nullptr);
-  }
-    return false;
+    return left(index()) < tree->size;
 }
 
 // HasRightChild

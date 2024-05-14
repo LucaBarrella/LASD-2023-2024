@@ -42,7 +42,7 @@ protected:
   using Vector<Data>::data;
 
 
-  struct NodeVec : virtual public MutableNode{ // Must extend MutableNode
+  struct NodeVec : virtual public MutableNode { // Must extend MutableNode
 
   private:
 
@@ -53,6 +53,7 @@ protected:
     // ...
     Data value{};
     BinaryTreeVec *tree = nullptr;
+    bool isDummy = false;
 
   public:
 
@@ -60,8 +61,11 @@ protected:
     NodeVec() = default;
 
     // Specific constructor
-    NodeVec(const Data&);
-    NodeVec(Data&&);
+    NodeVec(const Data&, BinaryTreeVec *tree);
+    NodeVec(Data&&, BinaryTreeVec *tree);
+
+    // Constructor for Dummy Nodes
+    NodeVec(BinaryTreeVec *tree); //???? Probly for dummy nodes
 
     // Copy Assignment
     NodeVec& operator=(const NodeVec&);

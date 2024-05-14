@@ -4,10 +4,12 @@ namespace lasd {
 // Specific member functions (DictionaryContainer)
     template<typename Data>
     inline bool DictionaryContainer<Data>::InsertAll(const TraversableContainer<Data>& container) {
+        std::cout << "BlaBlaBlaCar" << std::endl;
         bool result = true;
         container.Traverse(
                 //this è un puntatore all'oggetto DictionaryContainer
             [this, &result](const Data & currData) {
+                std::cout << "ITERAZIONE" << std::endl;
                 result &= this->Insert(currData);
             }
         );

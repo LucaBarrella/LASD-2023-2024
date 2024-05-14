@@ -196,14 +196,18 @@ namespace lasd {
         if (Empty()) {
             throw std::length_error("List is empty");
         }
-        Node* temp {head};
+
+        Node* nodePtr = head;
         head = head->next;
-        if (head == nullptr) {
-            tail = nullptr;
-        }
-        temp->next = nullptr;
-        delete temp;
+
+        nodePtr-> next = nullptr;
+        delete nodePtr;
+        nodePtr = nullptr;
+
         size--;
+        if (size == 0) {
+            tail = head = nullptr;
+        }
     }
 
     //FrontNRemove
@@ -211,12 +215,11 @@ namespace lasd {
     Data List<Data>::FrontNRemove() {
         if (Empty()) {
             throw std::length_error("List is empty");
-        }= head;
-       
-        Node* temp = head;
-        Data data = std::move(temp->data);
+        }
+
+        Data tempData{head->value};
         RemoveFromFront();
-        return data;
+        return tempData;
     }
 
     //InsertAtBack
@@ -270,12 +273,16 @@ namespace lasd {
     //Remove
     template <typename Data>
     inline bool List<Data>::Remove(const Data &data){
-        if (size == 0 || head == nullptr) {
+        std:: cout << "Removing... " << data << std::endl;
+        if (Empty() || head == nullptr) {
+            std::cout << "List is empty" << std::endl;
             return false;
         }
 
+
         if (head->value == data) {
             RemoveFromFront();
+            std::cout << "Removed from front" << std::endl;
             return true;
         }
 
@@ -294,8 +301,10 @@ namespace lasd {
             }
             delete currNode;
             size--;
+            std::cout << "Removed ok" << std::endl;
             return true;
         }
+        std::cout << "Not found" << std::endl;
         return false;
     }
 

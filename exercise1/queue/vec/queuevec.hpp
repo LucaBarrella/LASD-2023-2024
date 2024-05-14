@@ -53,11 +53,11 @@ public:
 
   // Copy constructor
   // QueueVec(argument);
-    explicit QueueVec(const QueueVec<Data>&);
+    QueueVec(const QueueVec<Data>&);
 
   // Move constructor
   // QueueVec(argument);
-    explicit QueueVec(QueueVec<Data>&&) noexcept;
+    QueueVec(QueueVec<Data>&&) noexcept;
 
   /* ************************************************************************ */
 

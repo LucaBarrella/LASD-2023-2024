@@ -125,10 +125,10 @@ namespace lasd {
         /* ************************************************************************ */
 
         // Copy constructor
-        inline explicit SortableVector(const SortableVector<Data> &container);
+        inline SortableVector(const SortableVector<Data> &container);
 
         // Move constructor
-        inline explicit SortableVector(SortableVector<Data> &&container) noexcept;
+        inline SortableVector(SortableVector<Data> &&container) noexcept;
 
         /* ************************************************************************ */
 

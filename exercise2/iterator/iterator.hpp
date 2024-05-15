@@ -34,7 +34,7 @@ public:
 
   // Move assignment
   // type operator=(argument); // Move assignment of abstract types is not possible.
-  Iterator& operator=(Iterator&&) = delete;
+  Iterator& operator=(Iterator&&) noexcept = delete;
 
   /* ************************************************************************ */
 
@@ -84,7 +84,7 @@ public:
 
   // Move assignment
   // type operator=(argument); // Move assignment of abstract types is not possible.
-  MutableIterator& operator=(MutableIterator&&) = delete;
+  MutableIterator& operator=(MutableIterator&&) noexcept = delete;
 
   /* ************************************************************************ */
 
@@ -132,7 +132,7 @@ public:
 
   // Move assignment
   // type operator=(argument); // Move assignment of abstract types is not possible.
-  ForwardIterator& operator=(ForwardIterator&&) = delete;
+  ForwardIterator& operator=(ForwardIterator&&) noexcept = delete;
 
   /* ************************************************************************ */
 
@@ -179,7 +179,7 @@ public:
 
   // Move assignment
   // type operator=(argument); // Move assignment of abstract types is not possible.
-  ResettableIterator& operator=(ResettableIterator&&) = delete;
+  ResettableIterator& operator=(ResettableIterator&&) noexcept = delete;
 
   /* ************************************************************************ */
 

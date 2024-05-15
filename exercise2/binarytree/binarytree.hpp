@@ -189,11 +189,11 @@ protected:
 
 template <typename Data>
 class MutableBinaryTree : virtual public BinaryTree<Data>,
-                          //! Serve? virtual public MappableContainer<Data>,
                           virtual public PreOrderMappableContainer<Data>,
                           virtual public PostOrderMappableContainer<Data>,
                           virtual public InOrderMappableContainer<Data>,
-                          virtual public BreadthMappableContainer<Data>{
+                          virtual public BreadthMappableContainer<Data>,
+                          virtual public ClearableContainer {
   // Must extend ClearableContainer,
   //             BinaryTree<Data>,
   //             PreOrderMappableContainer<Data>,
@@ -237,7 +237,6 @@ public:
     /* ********************************************************************** */
 
     // Specific member functions
-    //! Vedi perchè sono virtuali
 
     // type Element() specifiers; // Mutable access to the element (concrete function should not throw exceptions)
     virtual Data& Element() noexcept = 0;

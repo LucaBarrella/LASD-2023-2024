@@ -82,8 +82,6 @@ bool BinaryTree<Data>::operator!=(const BinaryTree<Data>& tree) const noexcept {
 // Traverse
 template <typename Data>
 inline void BinaryTree<Data>::Traverse(TraverseFun function) const {
-    // todo chiedere a Mogavero se è giusto fare così
-    // PostOrderTraverse(Root(), function);
     PreOrderTraverse(function);
 }
 
@@ -124,11 +122,11 @@ void BinaryTree<Data>::PreOrderTraverse(const Node* node, TraverseFun function) 
 
     function(node->Element());
 
-    if (node->HasRightChild()) {
-        PreOrderTraverse(&(node->RightChild()), function); //!Vedi se è giusto fare così usando l'operatore & per passare il puntatore
-    }
     if (node->HasLeftChild()) {
         PreOrderTraverse(&(node->LeftChild()), function);
+    }
+    if (node->HasRightChild()) {
+        PreOrderTraverse(&(node->RightChild()), function);
     }
 }
 
@@ -150,7 +148,7 @@ void BinaryTree<Data>::PostOrderTraverse(const Node* node, TraverseFun function)
     function(node->Element());
 }
 
-// InOrderTraversal
+// InOrderTraverse
 template <typename Data>
 void BinaryTree<Data>::InOrderTraverse(const Node* node, TraverseFun function) const {
     if (node == nullptr) {
@@ -179,8 +177,7 @@ void BinaryTree<Data>::BreadthTraverse(const Node* node, TraverseFun function) c
     queue.Enqueue(node);
 
     while (!queue.Empty()) {
-        Node* current = queue.Head();
-        queue.Dequeue();
+        const Node* current = queue.HeadNDequeue();
 
         function(current->Element());
 
@@ -405,11 +402,6 @@ BTPreOrderIterator<Data>& BTPreOrderIterator<Data>::operator++() {
     if (current->HasLeftChild()) {
         stack.Push(&(current->LeftChild()));
     }
-
-    //! Check this:
-    if (stack.Empty()) { //current is a leaf
-        throw std::out_of_range("Iterator is terminated!");
-    }
    
     return *this;
 }
@@ -419,8 +411,8 @@ template <typename Data>
 void BTPreOrderIterator<Data>::Reset() noexcept {
     if (!stack.Empty()) {
         stack.Clear();
-        stack.Push(root); //Consider the top of the stack as the current node.
     }
+    stack.Push(root);
 }
 
 /* ************************************************************************** */
@@ -487,8 +479,8 @@ Data& BTPreOrderMutableIterator<Data>::operator*() {
 template <typename Data>
 BTPostOrderIterator<Data>::BTPostOrderIterator(const BinaryTree<Data>& tree) {
     if(!tree.Empty()){
-        stack.Push(root = &tree.Root());
-        //! root = &tree.Root();
+        root = &tree.Root();
+        stack.Push(root);
         getLeftMostLeaf();  
     }
 }
@@ -627,8 +619,9 @@ BTPostOrderIterator<Data>& BTPostOrderIterator<Data>::operator++() {
     }
     
     if (!stack.Empty()){
-        if (stack.Top()->HasLeftChild() && current == &(stack.Top()->LeftChild()) && (stack.Top()->HasRightChild())) {
-            //! FindLastLeftLeaf(&(stack.Top()->RightChild()));
+        const typename BinaryTree<Data>::Node* parent = stack.Top();
+        if (parent->HasLeftChild() && current == &(parent->LeftChild()) && parent->HasRightChild()) {
+            stack.Push(&(parent->RightChild()));
             getLeftMostLeaf();
         }
     }
@@ -667,6 +660,7 @@ void BTPostOrderIterator<Data>::Reset() noexcept {
     if (!stack.Empty()) {
         stack.Clear();
     }
+    stack.Push(root);
     getLeftMostLeaf();
 }
 
@@ -678,7 +672,7 @@ void BTPostOrderIterator<Data>::getLeftMostLeaf() {
     while (current != nullptr && (current->HasLeftChild() || current->HasRightChild())) {  
         if (current->HasLeftChild()) {
             current = &(current->LeftChild());
-        } else {
+        } else if (current->HasRightChild()) {
             current = &(current->RightChild());
         }
         stack.Push(current);
@@ -749,14 +743,8 @@ BTInOrderIterator<Data>::BTInOrderIterator(const BinaryTree<Data>& tree) {
     if (!tree.Empty()) {
         root = &tree.Root();
         stack.Push(root);
+        getLeftMostNode();
     }
-        // const typename BinaryTree<Data>::Node* current = &tree.Root();
-
-        // while (current != nullptr) { //! Necesaria tale condizione: current->HasLeftChild()?
-        //     stack.Push(current);
-        //     current = &(current->LeftChild());
-        //     //! getLeftMostNode(current);
-        // }
 }
 
 // Copy constructor

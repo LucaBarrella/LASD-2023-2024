@@ -31,8 +31,9 @@ public:
 
 using typename BinaryTree<Data>::Node;
 using typename MutableBinaryTree<Data>::MutableNode;
-using typename BinaryTree<Data>::BinaryTree;
-using typename MutableBinaryTree<Data>::MutableBinaryTree;
+using typename TraversableContainer<Data>::TraverseFun;
+using typename MappableContainer<Data>::MapFun;
+
 
 protected:
 
@@ -52,8 +53,9 @@ protected:
 
     // ...
     Data value{};
-    BinaryTreeVec *tree = nullptr;
+    // unsigned long current;
     bool isDummy = false;
+    Vector<NodeVec*> *tree = nullptr;
 
   public:
 
@@ -63,6 +65,9 @@ protected:
     // Specific constructor
     NodeVec(const Data&, BinaryTreeVec *tree);
     NodeVec(Data&&, BinaryTreeVec *tree);
+
+    //! Copiato:
+    // NodeVec(const Data& value, unsigned long index, Vector<NodeVec*>* vec);
 
     // Constructor for Dummy Nodes
     NodeVec(BinaryTreeVec *tree); //???? Probly for dummy nodes
@@ -121,7 +126,9 @@ protected:
     
   };
 
-  NodeVec *nodes = nullptr;
+  // NodeVec *nodes = nullptr;
+  Vector<NodeVec*>* nodes = nullptr;
+
 
 public:
 
@@ -153,7 +160,7 @@ public:
 
   // Destructor
   // ~BinaryTreeVec() specifiers;
-  ~BinaryTreeVec() = default;
+  virtual ~BinaryTreeVec();
 
   /* ************************************************************************ */
 
@@ -200,7 +207,6 @@ public:
   // Specific member function (inherited from BreadthTraversableContainer)
   // type BreadthTraverse(arguments) specifiers; // Override BreadthTraversableContainer member
 
-  using typename TraversableContainer<Data>::TraverseFun;
   inline void BreadthTraverse(TraverseFun) const override;
 
   /* ************************************************************************ */
@@ -208,7 +214,6 @@ public:
   // Specific member function (inherited from BreadthMappableContainer)
   // type BreadthMap(arguments) specifiers; // Override BreadthMappableContainer member
 
-  using typename MappableContainer<Data>::MapFun;
   inline void BreadthMap(MapFun) override;
 
 protected:

@@ -39,13 +39,13 @@ typename BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk::operator=(c
             delete left;
         }
         if (node.HasLeftChild()) {
-            left = new NodeLnk(node.LeftChild()); //FIXME Forse non devo creare un nodo ma solo copiare il valore nel nodo già creato...
+            left = new NodeLnk(node.LeftChild());
         }
         if (HasRightChild()) {
             delete right;
         }
         if (node.HasRightChild()) {
-            right = new NodeLnk(node.RightChild()); //FIXME Forse non devo creare un nodo ma solo copiare il valore nel nodo già creato...
+            right = new NodeLnk(node.RightChild());
         }
     }
     return *this;
@@ -55,9 +55,16 @@ typename BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk::operator=(c
 template <typename Data>
 typename BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk::operator=(NodeLnk&& node) noexcept {
     if (this != &node) {
-        std::swap(value, node.value);
-        std::swap(left, node.left);
-        std::swap(right, node.right);
+
+        //todo ATTENTO!!! NECESSARIO PER IL MOVE ASSIGNMENT?
+
+        // std::swap(value, node.value);
+        // std::swap(left, node.left);
+        // std::swap(right, node.right);
+
+        value = std::move(node.value);
+        left = std::move(node.left);
+        right = std::move(node.right);
     }
     return *this;
 }
@@ -65,8 +72,12 @@ typename BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk::operator=(N
 // Destructor
 template <typename Data>
 BinaryTreeLnk<Data>::NodeLnk::~NodeLnk() {
-    delete left;
-    delete right;
+    if (HasLeftChild()) {
+        delete left;
+    }
+    if (HasRightChild()) {
+        delete right;
+    }
 }
 
 
@@ -141,32 +152,22 @@ bool BinaryTreeLnk<Data>::NodeLnk::HasRightChild() const noexcept {
 // Equal operator
 template <typename Data>
 bool BinaryTreeLnk<Data>::NodeLnk::operator==(const NodeLnk& node) const noexcept {
-    if (value != node.value) {
-        return false;
-    }
-
-    if (HasLeftChild() != node.HasLeftChild() || HasRightChild() != node.HasRightChild()) {
-        return false;
-    }
-
-    if (HasLeftChild() && LeftChild() != node.LeftChild()) {
-        return false;
-    }
-
-    if (HasRightChild() && RightChild() != node.RightChild()) {
-        return false;
-    }
-
-    return true;
+    return BinaryTree<Data>::Node::operator==(node);
 }
 
 // Not equal operator
 template <typename Data>
 bool BinaryTreeLnk<Data>::NodeLnk::operator!=(const NodeLnk& node) const noexcept {
+    //! return BinaryTreeNode<Data>::operator!=(node);
     return !(*this == node);
 }
 
-//! IsLeaf ereditated from BinaryTree<Data>::Node
+// IsLeaf "ereditated" from BinaryTree<Data>::Node
+template <typename Data>
+bool BinaryTreeLnk<Data>::NodeLnk::IsLeaf() const noexcept {
+    return BinaryTree<Data>::Node::IsLeaf();
+    //! È un barbatrucco per riciclare il metodo
+}
 
 /* ************************************************************************** */
 
@@ -174,22 +175,52 @@ bool BinaryTreeLnk<Data>::NodeLnk::operator!=(const NodeLnk& node) const noexcep
 
 // Specific constructors
 
-// TraversableContainer //! Posso pure fare la insert creando anche un albero degenere, volendo?
+// TraversableContainer //! ATTENZIONE!!
 template <typename Data>
 BinaryTreeLnk<Data>::BinaryTreeLnk(const TraversableContainer<Data>& container) {
-    container.Traverse([this](const Data& currData) { Insert(currData); });
+    size = container.Size();
+    QueueLst<NodeLnk**> queue;
+
+    if (size > 0) {
+        queue.Enqueue(&root);
+
+        container.Traverse([&queue](const Data& currData) {
+            if (!queue.Empty()) {
+                NodeLnk* &current = *queue.HeadNDequeue();
+
+                current = new NodeLnk(currData);
+                queue.Enqueue(&(current->left));
+                queue.Enqueue(&(current->right));
+            }
+        });
+    }
 }
 
-// MappeableContainer
+// MappeableContainer //! ATTENZIONE!!
 template <typename Data>
 BinaryTreeLnk<Data>::BinaryTreeLnk(MappableContainer<Data>&& container) {
-    container.Map([this](Data &currData) { Insert(std::move(currData)); });
+    size = container.Size();
+    QueueLst<NodeLnk**> queue;
+
+    if (size > 0) {
+        queue.Enqueue(&root);
+
+        container.Map([this, &queue](Data &currData) {
+            if (!queue.Empty()) {
+                NodeLnk* &current = *queue.HeadNDequeue();
+
+                current = new NodeLnk(std::move(currData));
+                queue.Enqueue(&((*current)->left));
+                queue.Enqueue(&((*current)->right));
+            }
+        });
+    }
 }
 
-// Copy constructor
+//! Copy constructor
 template <typename Data>
 BinaryTreeLnk<Data>::BinaryTreeLnk(const BinaryTreeLnk<Data>& tree) : BinaryTreeLnk() {
-    CopyTree(&root, tree.root);
+    root = CopyTree(tree.root);
     size = tree.size;
 }
 
@@ -206,18 +237,19 @@ BinaryTreeLnk<Data>::~BinaryTreeLnk() {
     Clear();
 }
 
-// Copy Assignment
+//! Copy Assignment 
 template <typename Data>
 BinaryTreeLnk<Data>& BinaryTreeLnk<Data>::operator=(const BinaryTreeLnk<Data>& tree) {
+    //FIXME Deve solo copiare i nodi, non la struttura dati?
     if (this != &tree) {
-        DeleteTree(root);
-        CopyTree(&root, tree.root);
+        Clear();
+        root = CopyTree(tree.root);
         size = tree.size;
     }
     return *this;
 }
 
-// Move Assignment
+//! Move Assignment
 template <typename Data>
 BinaryTreeLnk<Data>& BinaryTreeLnk<Data>::operator=(BinaryTreeLnk<Data>&& tree) noexcept {
     if (this != &tree) {
@@ -232,10 +264,11 @@ BinaryTreeLnk<Data>& BinaryTreeLnk<Data>::operator=(BinaryTreeLnk<Data>&& tree) 
 // Equal operator using the comparison operator of the Node class
 template <typename Data>
 bool BinaryTreeLnk<Data>::operator==(const BinaryTreeLnk<Data>& tree) const noexcept {
-    if (size != tree.size || Empty() != tree.Empty()){
+    if (size != tree.size){
         return false;
     }
-    return *root == *tree.root; //! Attenzione
+    //! this is a call to the Node::operator==
+    return (Root() == tree.Root()); 
 }
 
 // Not equal operator is the negation of the equal operator
@@ -273,39 +306,6 @@ void BinaryTreeLnk<Data>::Clear() {
 
 // Auxiliary member functions
 
-//! Insert Iterativo (BST)
-template <typename Data>
-void BinaryTreeLnk<Data>::Insert(const Data& data) {
-    if (Empty()) {
-        root = new NodeLnk(data);
-    } else {
-        lasd::QueueLst<NodeLnk*> queue;
-        queue.Enqueue(root);
-
-        while (!queue.Empty()) {
-            NodeLnk* current = queue.Front();
-            queue.Dequeue();
-
-            if (data < current->value) {
-                if (current->HasLeftChild()) {
-                    queue.Enqueue(current->left);
-                } else {
-                    current->left = new NodeLnk(data);
-                    break;
-                }
-            } else {
-                if (current->HasRightChild()) {
-                    queue.Enqueue(current->right);
-                } else {
-                    current->right = new NodeLnk(data);
-                    break;
-                }
-            }
-        }
-    }
-    size++;
-}
-
 // DeleteTree
 template <typename Data>
 void BinaryTreeLnk<Data>::DeleteTree(NodeLnk*& node) noexcept {
@@ -317,170 +317,18 @@ void BinaryTreeLnk<Data>::DeleteTree(NodeLnk*& node) noexcept {
     }
 }
 
-//! RecursiveCopy
+// RecursiveCopy
 template <typename Data>
-void BinaryTreeLnk<Data>::CopyTree(NodeLnk** node, const NodeLnk* other) {
-    if (other != nullptr) {
-        *node = new NodeLnk(other->value);
-        CopyTree(&(*node)->left, other->left);
-        CopyTree(&(*node)->right, other->right);
+BinaryTreeLnk<Data>::NodeLnk* BinaryTreeLnk<Data>::CopyTree(NodeLnk* node) {
+    if (node != nullptr) {
+        NodeLnk* newNode = new NodeLnk(node->value);
+        newNode->left = CopyTree(node->left);
+        newNode->right = CopyTree(node->right);
+        return newNode;
     }
+    return nullptr;
 }
 
-//todo IterativeCopy
-// template <typename Data>
-// void BinaryTreeLnk<Data>::CopyTree(NodeLnk** node, const NodeLnk* other) {
-//     if (other != nullptr) {
-//         *node = new NodeLnk(other->value);
-//         lasd::QueueLst<NodeLnk*> queue;
-//         queue.Enqueue(*node);
-
-//         while (!queue.Empty()) {
-//             NodeLnk* current = queue.Front();
-//             queue.Dequeue();
-
-//             if (other->HasLeftChild()) {
-//                 current->left = new NodeLnk(other->LeftChild());
-//                 queue.Enqueue(current->left);
-//             }
-
-//             if (other->HasRightChild()) {
-//                 current->right = new NodeLnk(other->RightChild());
-//                 queue.Enqueue(current->right);
-//             }
-//         }
-//     }
-// }
-
-
 // /* ************************************************************************** */
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// //TODO TUTTO DA RIFARE, AL MASSIMO POSSO RICICLARE PER BTLINK, MAYBE!
-// //! Node is not accessible from outside the class BinaryTree.
-
-// // Data Copy Constructor
-// template <typename Data>
-// BinaryTree<Data>::Node::Node(const Data& data) : value{data} {}
-
-// // Data Move constructor
-// template <typename Data>
-// BinaryTree<Data>::Node::Node(Data&& data) noexcept {
-//     std::swap(data, value);
-// }
-
-// // Copy constructor
-// template <typename Data>
-// BinaryTree<Data>::Node::Node(const Node& node) : value{node.value} {}
-
-// // Move constructor
-// template <typename Data>
-// BinaryTree<Data>::Node::Node(Node&& other) noexcept {
-//     std::swap(other.value, value);
-//     std::swap(other.left, left);
-//     std::swap(other.right, right);
-// }
-
-// // Destructor
-// template <typename Data>
-// BinaryTree<Data>::Node::~Node() {
-//     delete left;
-//     delete right;
-// }
-
-// // Comparison operators
-
-// //Equal operator
-// template <typename Data>
-// bool BinaryTree<Data>::Node::operator==(const Node& node) const noexcept {
-//     if (value != node.value) {
-//         return false;
-//     }
-
-//     if (HasLeftChild() != node.HasLeftChild() || HasRightChild() != node.HasRightChild()) {
-//         return false;
-//     }
-
-//     if (HasLeftChild() && LeftChild() != node.LeftChild()) {
-//         return false;
-//     }
-
-//     if (HasRightChild() && RightChild() != node.RightChild()) {
-//         return false;
-//     }
-
-//     return true;
-// }
-
-// //Not equal operator
-// template <typename Data>
-// bool BinaryTree<Data>::Node::operator!=(const Node& node) const noexcept {
-//     return !(*this == node);
-// }
-
-// /* ************************************************************************** */
-
-// // BinaryTree
-
-// // Constructor
-
-// // Copy constructor
-// template <typename Data>
-// BinaryTree<Data>::BinaryTree(const BinaryTree<Data>& tree) : BinaryTree() {
-//     container.Traverse([this](const Data &currData) { Insert(currData); });
-// }
-
-// // Move constructor
-// template <typename Data>
-// BinaryTree<Data>::BinaryTree(BinaryTree<Data>&& tree) noexcept {
-//     container.Map([this](Data &currData) { Insert(std::move(currData)); });
-// }
-
-
-
-/* ************************************************************************** */
+    
+} // namespace lasd

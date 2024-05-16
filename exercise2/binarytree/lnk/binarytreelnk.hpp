@@ -27,7 +27,7 @@ protected:
   // using BinaryTree<Data>::???;
   using typename BinaryTree<Data>::Node;
   using typename MutableBinaryTree<Data>::MutableNode;
-  using BinaryTree<Data>::size;
+  using Container::size;
 
   // ...
 
@@ -92,15 +92,17 @@ protected:
     virtual MutableNode & RightChild() override;
     virtual MutableNode & LeftChild() override;
 
-    //! inline bool IsLeaf() const noexcept override;   
-    using MutableBinaryTree<Data>::MutableNode::IsLeaf;
+    bool IsLeaf() const noexcept override;   
+    // using Node::IsLeaf; //FIXME Colpa sua????
 
   };
   
   NodeLnk* root = nullptr;
-  virtual void Insert(const Data& data);
+  
+  // Auxiliary member functions
+  protected:
   void DeleteTree(NodeLnk*&) noexcept;
-  void CopyTree(NodeLnk**, const NodeLnk*);
+  NodeLnk* CopyTree(NodeLnk*);
 
   // void Insert (const Data&, NodeLnk*&);
 

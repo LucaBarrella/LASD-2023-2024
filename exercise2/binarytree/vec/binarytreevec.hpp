@@ -70,7 +70,6 @@ protected:
     NodeVec(const Data&, BinaryTreeVec *tree);
     NodeVec(Data&&, BinaryTreeVec *tree);
 
-    //! Copiato:
     // NodeVec(const Data& value, unsigned long index, Vector<NodeVec*>* vec);
 
     // Constructor for Dummy Nodes

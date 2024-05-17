@@ -158,20 +158,14 @@ BinaryTreeVec<Data>::MutableNode & BinaryTreeVec<Data>::NodeVec::RightChild() {
 // Auxiliary functions
 template <typename Data>
 unsigned long BinaryTreeVec<Data>::NodeVec::index() const noexcept {
-    //! return (this - &(*tree->nodes[0])) / sizeof(NodeVec);
-    // return (this - &(*tree->nodes[0]));
 
-    //! this è un puntatore al nodo corrente, &(*tree->nodes[0]) è un puntatore al primo nodo nell'array, 
-    //! sizeof(NodeVec) è la dimensione di un nodo. 
-    //! Quindi, la differenza tra this e il puntatore al primo nodo, diviso per la dimensione di un nodo,
-    //! dovrebbe dare l'indice del nodo corrente.
+    //FIXME return (this - tree->nodes); NON FUNZIONANTE, AL MOMENTO USO QUESTO:
 
-    for (unsigned long i = 0; i < tree->nodes.Size(); i++) {
-        if (tree->nodes[i] == this) {
-            return i;
-        }
+    unsigned long i = 0;
+    while (tree->nodes[i] != this) {
+        i++;
     }
-    return std::numeric_limits<unsigned long>::max();
+    return i;     
 }
 
 /* ************************************************************************** */

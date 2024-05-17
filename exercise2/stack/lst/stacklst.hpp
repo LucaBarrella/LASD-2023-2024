@@ -47,11 +47,11 @@ public:
 
   // Copy constructor
   // StackLst(argument);
-    explicit StackLst(const StackLst<Data>&);
+    StackLst(const StackLst<Data>&);
 
   // Move constructor
   // StackLst(argument);
-    explicit StackLst(StackLst<Data>&&) noexcept;
+    StackLst(StackLst<Data>&&) noexcept;
 
   /* ************************************************************************ */
 

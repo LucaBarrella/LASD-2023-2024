@@ -59,7 +59,7 @@ public:
 /* ************************************************************************** */
 
 template <typename Data>
-class MutableIterator : public Iterator<Data>{
+class MutableIterator : public virtual Iterator<Data>{
   // Must extend Iterator<Data>
 
 private:
@@ -107,7 +107,7 @@ public:
 /* ************************************************************************** */
 
 template <typename Data>
-class ForwardIterator : public Iterator<Data>{
+class ForwardIterator : public virtual Iterator<Data>{
   // Must extend Iterator<Data>
 
 private:
@@ -154,7 +154,7 @@ public:
 /* ************************************************************************** */
 
 template <typename Data>
-class ResettableIterator : public Iterator<Data>{
+class ResettableIterator : public virtual Iterator<Data>{
   // Must extend Iterator<Data>
 
 private:

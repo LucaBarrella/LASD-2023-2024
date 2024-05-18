@@ -318,8 +318,8 @@ bool BinaryTreeVec<Data>::operator!=(const BinaryTreeVec<Data>& tree) const noex
 // Root const version
 template <typename Data>
 const typename BinaryTreeVec<Data>::Node& BinaryTreeVec<Data>::Root() const {
-    if (Size() == 0) {
-        throw std::length_error("Empty tree");
+    if (Empty()) {
+       throw std::length_error("Empty tree");
     }
     return *nodes[0];
 }
@@ -327,11 +327,10 @@ const typename BinaryTreeVec<Data>::Node& BinaryTreeVec<Data>::Root() const {
 // Root mutable version
 template <typename Data>
 typename BinaryTreeVec<Data>::MutableNode& BinaryTreeVec<Data>::Root() {
-    if (Size() == 0) {
+    if (Empty()) {
         throw std::length_error("Empty tree");
     }
     return *nodes[0];
-    // return *(nodes->operator[](0));
 }
 
 // Clear
@@ -354,58 +353,29 @@ void BinaryTreeVec<Data>::Clear() {
     this -> size = 0; //!
 }
 
-// BreadthTraverse
+// BreadthTraverse //todo controlla!
 template <typename Data>
 void BinaryTreeVec<Data>::BreadthTraverse(TraverseFun function) const {
-    // if (Size() == 0) {
-    //     throw std::length_error("Empty tree");
-    // }
-    // QueueVec<NodeVec*> queue(Size());
-    // queue.Enqueue(&Root());
-    // while (!queue.Empty()) {
-    //     NodeVec* node = queue.Dequeue();
-    //     functor(node->Element());
-    //     if (node->HasLeftChild()) {
-    //         queue.Enqueue(&node->LeftChild());
-    //     }
-    //     if (node->HasRightChild()) {
-    //         queue.Enqueue(&node->RightChild());
-    //     }
-    // }
-
+    if (Size() != 0) {
+     
     //! Poiché utilizzo un vector per memorizzare i nodi dell'albero per livelli,
     //! Posso semplicemente iterare attraverso il vector
-    for(unsigned long i = 0; i < Size(); i++) {
-        // if(nodes->operator[](i) != nullptr) {
-        //     // function(nodes[i]->Element());
-        //     function(nodes->operator[](i)->Element());
-        // }
-        if (nodes[i] != nullptr) {
-            function(nodes[i]->Element());
+        for(unsigned long i = 0; i < Size(); i++) {
+            // if(nodes->operator[](i) != nullptr) {
+            //     // function(nodes[i]->Element());
+            //     function(nodes->operator[](i)->Element());
+            // }
+            if (nodes[i] != nullptr) {
+                function(nodes[i]->Element());
+            }
         }
     }
 }
 
-// BreadthMap
+// BreadthMap //todo controlla!
 template <typename Data>
 void BinaryTreeVec<Data>::BreadthMap(MapFun function) {
-    if (Size() == 0) {
-
-    
-    //     throw std::length_error("Empty tree");
-    // }
-    // QueueVec<NodeVec*> queue(Size());
-    // queue.Enqueue(&Root());
-    // while (!queue.Empty()) {
-    //     NodeVec* node = queue.Dequeue();
-    //     node->Element() = functor(node->Element());
-    //     if (node->HasLeftChild()) {
-    //         queue.Enqueue(&node->LeftChild());
-    //     }
-    //     if (node->HasRightChild()) {
-    //         queue.Enqueue(&node->RightChild());
-    //     }
-    // }
+    if (Size() != 0) {
         for (unsigned long i = 0; i < Size(); i++) {
             // if (nodes->operator[](i) != nullptr) {
             //     function(nodes->operator[](i)->Element());
@@ -418,14 +388,6 @@ void BinaryTreeVec<Data>::BreadthMap(MapFun function) {
         }
     }
 }
-
-
-//! InitializeVector
-// template <typename Data>
-// void BinaryTreeVec<Data>::InitializeVector(unsigned long size) {
-// }
-
-
 
 /* ************************************************************************** */
 

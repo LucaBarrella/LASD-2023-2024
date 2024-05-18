@@ -236,7 +236,7 @@ public:
   // Specific member function (inherited from MappableContainer)
 
   // type Map(argument) specifiers; // Override MappableContainer member
-  inline void Map (const MapFun function) override; //! Check if it's correct!
+  inline void Map (const MapFun function) override;
 
 };
 
@@ -298,7 +298,7 @@ public:
   // Specific member function (inherited from MappableContainer)
 
   // type Map(argument) specifiers; // Override MappableContainer member
-  inline void Map (const MapFun function) override; //! Check if it's correct!
+  inline void Map (const MapFun function) override;
 
 };
 

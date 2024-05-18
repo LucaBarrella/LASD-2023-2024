@@ -82,30 +82,45 @@ bool BinaryTree<Data>::operator!=(const BinaryTree<Data>& tree) const noexcept {
 // Traverse
 template <typename Data>
 inline void BinaryTree<Data>::Traverse(TraverseFun function) const {
+    if (this->Empty()) {
+        return;
+    }
     PreOrderTraverse(function);
 }
 
 // PreOrderTraverse
 template <typename Data>
 inline void BinaryTree<Data>::PreOrderTraverse(TraverseFun function) const {
+    if (this->Empty()) {
+        return;
+    }
     PreOrderTraverse(&Root(), function);
 }
 
 // PostOrderTraverse
 template <typename Data>
 inline void BinaryTree<Data>::PostOrderTraverse(TraverseFun function) const {
+    if (this->Empty()) {
+        return;
+    }
     PostOrderTraverse(&Root(), function);
 }
 
 // InOrderTraverse
 template <typename Data>
 inline void BinaryTree<Data>::InOrderTraverse(TraverseFun function) const {
+    if (this->Empty()) {
+        return;
+    }
     InOrderTraverse(&Root(), function);
 }
 
 // BreadthTraverse
 template <typename Data>
 inline void BinaryTree<Data>::BreadthTraverse(TraverseFun function) const {
+    if (this->Empty()) {
+        return;
+    }
     BreadthTraverse(&Root(), function);
 }
 
@@ -208,24 +223,36 @@ inline void MutableBinaryTree<Data>::Map(MapFun function) {
 // PreOrderMap
 template <typename Data>
 inline void MutableBinaryTree<Data>::PreOrderMap(MapFun function) {
+    if (this->Empty()) {
+        return;
+    }
     PreOrderMap(&(Root()), function);
 }
 
 // PostOrderMap
 template <typename Data>
 inline void MutableBinaryTree<Data>::PostOrderMap(MapFun function) {
+    if (this->Empty()) {
+        return;
+    }
     PostOrderMap(&(Root()), function);
 }
 
 // InOrderMap
 template <typename Data>
 inline void MutableBinaryTree<Data>::InOrderMap(MapFun function) {
+    if (this->Empty()) {
+        return;
+    }
     InOrderMap(&(Root()), function);
 }
 
 // BreadthMap
 template <typename Data>
 inline void MutableBinaryTree<Data>::BreadthMap(MapFun function) {
+    if (this->Empty()) {
+        return;
+    }
     BreadthMap(&(Root()), function);
 }
 
@@ -234,7 +261,7 @@ inline void MutableBinaryTree<Data>::BreadthMap(MapFun function) {
 // PreOrderMap
 template <typename Data>
 void MutableBinaryTree<Data>::PreOrderMap(MutableNode* node, MapFun function) {
-    if (node == nullptr) {
+    if (node == nullptr || Empty()) {
         return;
     }
 

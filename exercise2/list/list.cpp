@@ -312,6 +312,7 @@ namespace lasd {
             if (currNode == tail) {
                 tail = prevNode;
             }
+            currNode->next = nullptr;
             delete currNode;
             size--;
             return true;

@@ -115,7 +115,7 @@ public:
   // type Size() specifiers; // Override Container member
     inline unsigned long Size() const noexcept override;
 
-  //! Resize is not contemplated?
+  // Resize is not contemplated?
     inline void Resize(unsigned long) override;
 
 

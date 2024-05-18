@@ -266,7 +266,12 @@ template <typename Data>
 bool BinaryTreeLnk<Data>::operator==(const BinaryTreeLnk<Data>& tree) const noexcept {
     if (size != tree.size){
         return false;
+    } 
+    
+    if (size == 0) {
+        return true;
     }
+    
     //! this is a call to the Node::operator==
     return (Root() == tree.Root()); 
 }
@@ -282,7 +287,7 @@ bool BinaryTreeLnk<Data>::operator!=(const BinaryTreeLnk<Data>& tree) const noex
 // Root const version
 template <typename Data>
 const typename BinaryTreeLnk<Data>::Node& BinaryTreeLnk<Data>::Root() const {
-    if (root == nullptr) {
+    if (Empty()) {
         throw std::length_error("Empty tree");
     }
     return *root;
@@ -291,7 +296,7 @@ const typename BinaryTreeLnk<Data>::Node& BinaryTreeLnk<Data>::Root() const {
 // Root mutable version
 template <typename Data>
 typename BinaryTreeLnk<Data>::MutableNode& BinaryTreeLnk<Data>::Root() {
-    if (root == nullptr) {
+    if (Empty()) {
         throw std::length_error("Empty tree");
     }
     return *root;

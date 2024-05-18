@@ -116,19 +116,19 @@ namespace lasd {
         /* ************************************************************************ */
 
         // Specific constructors
-        explicit SortableVector(const unsigned long);
+         SortableVector(const unsigned long);
 
-        explicit SortableVector(const TraversableContainer<Data> &);
+         SortableVector(const TraversableContainer<Data> &);
 
-        explicit SortableVector(MappableContainer<Data> &&);
+         SortableVector(MappableContainer<Data> &&);
 
         /* ************************************************************************ */
 
         // Copy constructor
-        inline explicit SortableVector(const SortableVector<Data> &container);
+        inline SortableVector(const SortableVector<Data> &container);
 
         // Move constructor
-        inline explicit SortableVector(SortableVector<Data> &&container) noexcept;
+        inline SortableVector(SortableVector<Data> &&container) noexcept;
 
         /* ************************************************************************ */
 

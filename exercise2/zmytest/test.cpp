@@ -47,22 +47,24 @@ void binaryTreeLinkedTest();
 void binaryTreeVectorTest();
 void binarySearchTreeLinkedTest();
 
-void mytest() {
-  // ...
-  srand(time(0));
-  cout << "Hello, World!" << endl;
+namespace lucaTest{
+  void mytest() {
+    // ...
+    srand(time(0));
+    cout << "Hello, World!" << endl;
 
-  iteratorTest();
-  binaryTreeLinkedTest();
-  binaryTreeVectorTest();
-  binarySearchTreeLinkedTest();
+    iteratorTest();
+    binaryTreeLinkedTest();
+    binaryTreeVectorTest();
+    binarySearchTreeLinkedTest();
 
-  std::cout << "\n\n\nI'm happy to see ya!\n\n\n" << std::endl;
+    std::cout << "\n\n\nI'm happy to see ya!\n\n\n" << std::endl;
 
-  if (numError == 0) {
-    std::cout << "All tests passed!\n" << std::endl;
-  } else {
-    std::cout << "Some tests failed!\n " <<  numTestexecuted << "/ " << numError << " errors found.\n" << std::endl;
+    if (numError == 0) {
+      std::cout << "All tests passed!\n" << std::endl;
+    } else {
+      std::cout << "Some tests failed!\n " <<  numTestexecuted << "/ " << numError << " errors found.\n" << std::endl;
+    }
   }
 }
 

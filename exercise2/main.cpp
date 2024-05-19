@@ -24,7 +24,7 @@ int main() {
                 lasdtest();
                 break;
             case 2:
-                mytest();
+                lucaTest::mytest();
                 break;
             case 3:
                 //fulltest();

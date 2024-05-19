@@ -62,7 +62,7 @@ void mytest() {
   if (numError == 0) {
     std::cout << "All tests passed!\n" << std::endl;
   } else {
-    std::cout << "Some tests failed!\n" << std::endl;
+    std::cout << "Some tests failed!\n " <<  numTestexecuted << "/ " << numError << " errors found.\n" << std::endl;
   }
 }
 
@@ -366,6 +366,29 @@ void mytest() {
 
       //Todo Se ho genio (e sopratutto tempo) faccio qualche altro test.
 
+      lasd::BTBreadthIterator<int> itr14(itr13);
+      itr14.Reset();
+      itr14.Reset();
+      itr14.Reset();
+      Terminated(testnum, testerr, itr14, false);
+      lasd::BinaryTreeLnk<int> btlnk2;
+      lasd::BTPreOrderIterator<int> itr15(btlnk2);
+      Terminated(testnum, testerr, itr15, true);
+      btlnk2 = l1;
+      itr15.Reset();
+      GetItrValue(testnum, testerr, itr15, false, 1);
+      GetItrValue(testnum, testerr, itr15, false, 2);
+      GetItrValue(testnum, testerr, itr15, false, 3);
+      GetItrValue(testnum, testerr, itr15, false, 4);
+  
+      
+
+
+
+
+
+
+
     } catch (...) {
       numTestexecuted++; numError++;
       cout << endl << "Unmanaged error! " << endl;
@@ -488,6 +511,52 @@ void mytest() {
       if (btlnk8.Root().LeftChild().Element() == 105) {std::cout << "Correct!" << std::endl;}
       else {std::cout << "Error!" << std::endl;}
       testnum+=2;
+
+      //analog test Double
+
+      lasd::BinaryTreeLnk<double> btlnk9;
+      lasd::List<double> l2;
+      for (double i = 0; i < 16; i++) { 
+        l2.InsertAtBack(i + 1.5);
+      }
+      btlnk9 = l2;
+      Exists(testnum, testerr, btlnk9, true, 1.5);
+      Exists(testnum, testerr, btlnk9, true, 16.5);
+      Exists(testnum, testerr, btlnk9, false, 17.5);
+      Exists(testnum, testerr, btlnk9, false, 0.5);
+      Exists(testnum, testerr, btlnk9, false, -1.5);
+      Exists(testnum, testerr, btlnk9, false, 100.5);
+      Exists(testnum, testerr, btlnk9, true, 8.5);
+      Exists(testnum, testerr, btlnk9, false, 104.5);
+      btlnk9.Root().LeftChild().LeftChild().Element() = double(104.5);
+      Exists(testnum, testerr, btlnk9, true, 104.5);
+      lasd::Vector<double> vectLeaf2(1);
+      vectLeaf2[0] = 104.5;
+      lasd::BinaryTreeLnk<double> btlnk10;
+      btlnk10 = vectLeaf2;
+      Exists(testnum, testerr, btlnk10, true, 104.5);
+      Exists(testnum, testerr, btlnk10, false, 105.5);
+      if (btlnk10.Root().Element() == 104.5) {std::cout << "Correct!" << std::endl;}
+      else {std::cout << "Error!" << std::endl;}
+      if (!btlnk10.Root().HasLeftChild()) {std::cout << "Correct!" << std::endl;}
+      else {std::cout << "Error!" << std::endl;}
+      if (!btlnk10.Root().HasRightChild()) {std::cout << "Correct!" << std::endl;}
+      else {std::cout << "Error!" << std::endl;}
+      if (btlnk10.Root().IsLeaf()) {std::cout << "Correct!" << std::endl;}
+      else {std::cout << "Error!" << std::endl;}
+
+      testnum+=4;
+
+      // test string
+      lasd::BinaryTreeLnk<std::string> btlnk11;
+      lasd::List<std::string> l3;
+      for (ulong i = 0; i < 16; i++) { 
+        l3.InsertAtBack(std::to_string(i + 1));
+      }
+      btlnk11 = l3;
+      // Exists(testnum, testerr, btlnk11, true, "1");
+      
+
       
     } catch (...) {
       numTestexecuted++; numError++;
@@ -589,5 +658,169 @@ void mytest() {
   }
   void binarySearchTreeLinkedTest(){
     //todo Fare ora!
+
+    lasd::BST<int> bst;
+    unsigned int testnum = 0;
+    unsigned int testerr = 0;
+    Empty(testnum, testerr, bst, true);
+    Size(testnum, testerr, bst, true, 0);
+    Min(testnum, testerr, bst, false, 0);
+    Max(testnum, testerr, bst, false, 0);
+    for (int i = 0; i < 16; i++) {
+      bst.Insert(i + 1);
+    }
+    for (int i = 0; i < 16; i++) {
+      Exists(testnum, testerr, bst, true, i + 1);
+    }
+    Exists(testnum, testerr, bst, false, 0);
+    Exists(testnum, testerr, bst, false, 17);
+    Min(testnum, testerr, bst, true, 1);
+    Max(testnum, testerr, bst, true, 16);
+    Size(testnum, testerr, bst, true, 16);
+    Fold(testnum, testerr, bst, true, &FoldAdd<int>, 0, 136);
+    FoldPreOrder(testnum, testerr, bst, true, &FoldAdd<int>, 0, 136);
+    FoldInOrder(testnum, testerr, bst, true, &FoldAdd<int>, 0, 136);
+    FoldPostOrder(testnum, testerr, bst, true, &FoldAdd<int>, 0, 136);
+    FoldBreadth(testnum, testerr, bst, true, &FoldAdd<int>, 0, 136);
+    Traverse(testnum, testerr, bst, true, &TraversePrint<int>);
+    TraversePreOrder(testnum, testerr, bst, true, &TraversePrint<int>);
+    TraverseInOrder(testnum, testerr, bst, true, &TraversePrint<int>);
+    TraversePostOrder(testnum, testerr, bst, true, &TraversePrint<int>);
+    TraverseBreadth(testnum, testerr, bst, true, &TraversePrint<int>);
+    for (int i = 0; i < 16; i++) {
+      bst.Remove(i + 1);
+    }
+    Empty(testnum, testerr, bst, true);
+    Size(testnum, testerr, bst, true, 0);
+    Min(testnum, testerr, bst, false, 0);
+    Max(testnum, testerr, bst, false, 0);
+    Fold(testnum, testerr, bst, true, &FoldAdd<int>, 0, 0);
+    FoldPreOrder(testnum, testerr, bst, true, &FoldAdd<int>, 0, 0);
+    FoldInOrder(testnum, testerr, bst, true, &FoldAdd<int>, 0, 0);
+    FoldPostOrder(testnum, testerr, bst, true, &FoldAdd<int>, 0, 0);
+    FoldBreadth(testnum, testerr, bst, true, &FoldAdd<int>, 0, 0);
+    Traverse(testnum, testerr, bst, true, &TraversePrint<int>);
+    TraversePreOrder(testnum, testerr, bst, true, &TraversePrint<int>);
+    TraverseInOrder(testnum, testerr, bst, true, &TraversePrint<int>);
+    TraversePostOrder(testnum, testerr, bst, true, &TraversePrint<int>);
+    TraverseBreadth(testnum, testerr, bst, true, &TraversePrint<int>);
+    Exists(testnum, testerr, bst, false, 0);
+    Exists(testnum, testerr, bst, false, 1);
+    Exists(testnum, testerr, bst, false, 16);
+    RemoveMin(testnum, testerr, bst, false);
+    RemoveMax(testnum, testerr, bst, false);
+    InsertC(testnum, testerr, bst, true, 1);
+    InsertC(testnum, testerr, bst, true, 16);
+    RemoveMin(testnum, testerr, bst, true);
+    RemoveMax(testnum, testerr, bst, true);
+
+    lasd::BST<int> bst2;
+    MaxNRemove(testnum, testerr, bst2, false, 0);
+    MinNRemove(testnum, testerr, bst2, false, 0);
+
+    bst.Clear();
+    Empty(testnum, testerr, bst, true);
+    Size(testnum, testerr, bst, true, 0);
+    Min(testnum, testerr, bst, false, 0);
+    Max(testnum, testerr, bst, false, 0);
+    for (int i = 0; i < 16; i++) {
+      bst.Insert(i + 1);
+    }
+    for (int i = 0; i < 16; i++) {
+      Exists(testnum, testerr, bst, true, i + 1);
+    }
+    Exists(testnum, testerr, bst, false, 0);
+    Exists(testnum, testerr, bst, false, 17);
+    Min(testnum, testerr, bst, true, 1);
+    Max(testnum, testerr, bst, true, 16);
+    Size(testnum, testerr, bst, true, 16);
+    Fold(testnum, testerr, bst, true, &FoldAdd<int>, 0, 136);
+    FoldPreOrder(testnum, testerr, bst, true, &FoldAdd<int>, 0, 136);
+    FoldInOrder(testnum, testerr, bst, true, &FoldAdd<int>, 0, 136);
+    FoldPostOrder(testnum, testerr, bst, true, &FoldAdd<int>, 0, 136);
+    FoldBreadth(testnum, testerr, bst, true, &FoldAdd<int>, 0, 136);
+    Traverse(testnum, testerr, bst, true, &TraversePrint<int>);
+    TraversePreOrder(testnum, testerr, bst, true, &TraversePrint<int>);
+    TraverseInOrder(testnum, testerr, bst, true, &TraversePrint<int>);
+    TraversePostOrder(testnum, testerr, bst, true, &TraversePrint<int>);
+    TraverseBreadth(testnum, testerr, bst, true, &TraversePrint<int>);
+    for (int i = 0; i < 16; i++) {
+      bst.Remove(i + 1);
+    }
+
+    lasd::BST<int> bst3;
+
+    // Additional tests
+    // Test inserting duplicate elements
+    bst3.Insert(5);
+    bst3.Insert(5);
+    Exists(testnum, testerr, bst3, true, 5);
+    Size(testnum, testerr, bst3, true, 1);
+
+    // Test removing non-existent elements
+    bst3.Remove(10);
+    Exists(testnum, testerr, bst3, false, 10);
+    Size(testnum, testerr, bst3, true, 1);
+
+    // Test removing root element
+    bst3.Remove(5);
+    Exists(testnum, testerr, bst3, false, 5);
+    Size(testnum, testerr, bst3, true, 0);
+
+    // Test inserting elements in descending order
+    for (int i = 16; i > 0; i--) {
+      bst3.Insert(i);
+    }
+    for (int i = 1; i <= 16; i++) {
+      Exists(testnum, testerr, bst3, true, i);
+    }
+    Size(testnum, testerr, bst3, true, 16);
+
+    // Test removing elements in descending order
+    for (int i = 16; i > 0; i--) {
+      bst3.Remove(i);
+    }
+    for (int i = 1; i <= 16; i++) {
+      Exists(testnum, testerr, bst3, false, i);
+    }
+    Size(testnum, testerr, bst3, true, 0);
+
+    // Test inserting elements in random order
+    std::vector<int> elements = {5, 2, 8, 1, 4, 7, 10, 3, 6, 9};
+    for (const auto& element : elements) {
+      bst3.Insert(element);
+    }
+    for (const auto& element : elements) {
+      Exists(testnum, testerr, bst3, true, element);
+    }
+    Size(testnum, testerr, bst3, true, elements.size());
+
+    // Test removing elements in random order
+    for (const auto& element : elements) {
+      bst3.Remove(element);
+    }
+    for (const auto& element : elements) {
+      Exists(testnum, testerr, bst3, false, element);
+    }
+    Size(testnum, testerr, bst3, true, 0);
+
+    // Test inserting elements in ascending order
+    for (int i = 1; i <= 16; i++) {
+      bst3.Insert(i);
+    }
+    for (int i = 1; i <= 16; i++) {
+      Exists(testnum, testerr, bst3, true, i);
+    }
+    Size(testnum, testerr, bst3, true, 16);
+
+    // Test removing elements in ascending order
+    for (int i = 1; i <= 16; i++) {
+      bst3.Remove(i);
+    }
+    for (int i = 1; i <= 16; i++) {
+      Exists(testnum, testerr, bst3, false, i);
+    }
+    Size(testnum, testerr, bst3, true, 0);
+
 
   }

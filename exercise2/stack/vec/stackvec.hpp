@@ -44,18 +44,18 @@ public:
 
   // Specific constructor
   // StackVec(argument) specifiers; // A stack obtained from a TraversableContainer
-    explicit StackVec(const TraversableContainer<Data>&);
+     StackVec(const TraversableContainer<Data>&);
   // StackVec(argument) specifiers; // A stack obtained from a MappableContainer
-    explicit StackVec(MappableContainer<Data>&&);
+     StackVec(MappableContainer<Data>&&);
   /* ************************************************************************ */
 
   // Copy constructor
   // StackVec(argument);
-    explicit StackVec(const StackVec<Data>&);
+     StackVec(const StackVec<Data>&);
 
   // Move constructor
   // StackVec(argument);
-    explicit StackVec(StackVec<Data>&&) noexcept;
+     StackVec(StackVec<Data>&&) noexcept;
 
   /* ************************************************************************ */
 

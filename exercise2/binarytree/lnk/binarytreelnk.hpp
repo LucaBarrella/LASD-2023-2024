@@ -93,7 +93,6 @@ protected:
     virtual MutableNode & LeftChild() override;
 
     bool IsLeaf() const noexcept override;   
-    // using Node::IsLeaf; //FIXME Colpa sua????
 
   };
   
@@ -108,7 +107,6 @@ protected:
 
 public:
 
-  //! Attento!!!
   using Container::Size;
   using Container::Empty; //! Sicuro che vada così?
 

@@ -49,8 +49,6 @@ public:
 
   protected:
 
-    // Data value{}; //! Suppongo non serva!
-
     // Comparison operators
     // type operator==(argument) specifiers; // Comparison of abstract types is possible, but is not visible.
     inline bool operator==(const Node& node) const noexcept;
@@ -352,7 +350,7 @@ public:
 
   // Specific constructors
   // BTPreOrderIterator(argument) specifiers; // An iterator over a given binary tree
-  explicit BTPreOrderIterator (const BinaryTree<Data>& tree);
+  BTPreOrderIterator (const BinaryTree<Data>& tree);
 
   /* ************************************************************************ */
 
@@ -437,17 +435,17 @@ public:
 
   // Specific constructors
   // BTPreOrderMutableIterator(argument) specifiers; // An iterator over a given mutable binary tree
-  explicit BTPreOrderMutableIterator (MutableBinaryTree<Data>& tree);
+  BTPreOrderMutableIterator (MutableBinaryTree<Data>& tree);
 
   /* ************************************************************************ */
 
   // Copy constructor
   // BTPreOrderMutableIterator(argument) specifiers;
-  explicit BTPreOrderMutableIterator(const BTPreOrderMutableIterator& iterator);
+  BTPreOrderMutableIterator(const BTPreOrderMutableIterator& iterator);
 
   // Move constructor
   // BTPreOrderMutableIterator(argument) specifiers;
-  explicit BTPreOrderMutableIterator(BTPreOrderMutableIterator&& iterator) noexcept;
+  BTPreOrderMutableIterator(BTPreOrderMutableIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
@@ -506,17 +504,17 @@ public:
 
   // Specific constructors
   // BTPostOrderIterator(argument) specifiers; // An iterator over a given binary tree
-  explicit BTPostOrderIterator (const BinaryTree<Data>& tree);
+  BTPostOrderIterator (const BinaryTree<Data>& tree);
 
   /* ************************************************************************ */
 
   // Copy constructor
   // BTPostOrderIterator(argument) specifiers;
-  explicit BTPostOrderIterator(const BTPostOrderIterator& iterator);
+  BTPostOrderIterator(const BTPostOrderIterator& iterator);
 
   // Move constructor
   // BTPostOrderIterator(argument) specifiers;
-  explicit BTPostOrderIterator(BTPostOrderIterator&& iterator) noexcept;
+  BTPostOrderIterator(BTPostOrderIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
@@ -588,7 +586,6 @@ private:
 
 protected:
 
-  //! Ha senso usare lo stack???
   using BTPostOrderIterator<Data>::stack;
 
   // ...
@@ -748,7 +745,6 @@ private:
 
 protected:
 
-  //! Ha senso usare lo stack???
   using BTInOrderIterator<Data>::stack;
 
   // ...
@@ -827,17 +823,17 @@ public:
 
   // Specific constructors
   // BTBreadthIterator(argument) specifiers; // An iterator over a given binary tree
-  explicit BTBreadthIterator (const BinaryTree<Data>& tree);
+  BTBreadthIterator (const BinaryTree<Data>& tree);
 
   /* ************************************************************************ */
 
   // Copy constructor
   // BTBreadthIterator(argument) specifiers;
-  explicit BTBreadthIterator(const BTBreadthIterator& iterator);
+  BTBreadthIterator(const BTBreadthIterator& iterator);
 
   // Move constructor
   // BTBreadthIterator(argument) specifiers;
-  explicit BTBreadthIterator(BTBreadthIterator&& iterator) noexcept;
+  BTBreadthIterator(BTBreadthIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 
@@ -904,7 +900,6 @@ private:
 
 protected:
 
-  //! Ha senso usare la coda???
   using BTBreadthIterator<Data>::queue;
 
   // ...
@@ -913,17 +908,17 @@ public:
 
   // Specific constructors
   // BTBreadthMutableIterator(argument) specifiers; // An iterator over a given mutable binary tree
-  explicit BTBreadthMutableIterator(MutableBinaryTree<Data>& tree);
+  BTBreadthMutableIterator(MutableBinaryTree<Data>& tree);
 
   /* ************************************************************************ */
 
   // Copy constructor
   // BTBreadthMutableIterator(argument) specifiers;
-  explicit BTBreadthMutableIterator(const BTBreadthMutableIterator& iterator);
+  BTBreadthMutableIterator(const BTBreadthMutableIterator& iterator);
 
   // Move constructor
   // BTBreadthMutableIterator(argument) specifiers;
-  explicit BTBreadthMutableIterator(BTBreadthMutableIterator&& iterator) noexcept;
+  BTBreadthMutableIterator(BTBreadthMutableIterator&& iterator) noexcept;
 
   /* ************************************************************************ */
 

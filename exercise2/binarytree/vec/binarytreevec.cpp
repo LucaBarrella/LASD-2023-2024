@@ -55,30 +55,26 @@ typename BinaryTreeVec<Data>::NodeVec& BinaryTreeVec<Data>::NodeVec::operator=(N
     return *this;
 }
 
-//! Comparison operators
+// Comparison operators
 template <typename Data>
 bool BinaryTreeVec<Data>::NodeVec::operator==(const NodeVec& node) const noexcept {
     return Node::operator==(node);
-    //FIXME return BinaryTree<Data>::Node::operator==(node);
 }
 
 template <typename Data>
 bool BinaryTreeVec<Data>::NodeVec::operator!=(const NodeVec& node) const noexcept {
     return Node::operator!=(node);
-    //FIXME return BinaryTree<Data>::Node::operator!=(node);
-
 }
 
 // Specific member functions
 
-//! Element const
+// Element const
 template <typename Data>
 const Data& BinaryTreeVec<Data>::NodeVec::Element() const noexcept {
-    // return tree->data[index()];
     return value;
 }
 
-//! Element mutable
+// Element mutable
 template <typename Data>
 Data& BinaryTreeVec<Data>::NodeVec::Element() noexcept {
     // return tree->data[index()];
@@ -95,23 +91,12 @@ bool BinaryTreeVec<Data>::NodeVec::IsLeaf() const noexcept {
 //! HasLeftChild
 template <typename Data>
 bool BinaryTreeVec<Data>::NodeVec::HasLeftChild() const noexcept {
-    // if (isDummy || left(index())->isDummy){
-    //     return false;
-    // }
-
     return left(index()) < tree->nodes.Size() && tree->nodes[left(index())] != nullptr;
-
-    // return left(index()) < tree->Size();
 }
 
 //! HasRightChild
 template <typename Data>
 bool BinaryTreeVec<Data>::NodeVec::HasRightChild() const noexcept {
-    // if (isDummy || right(index())->isDummy){
-    //     return false;
-    // }
-    // return right(index()) < tree->Size();
-
     return right(index()) < tree->nodes.Size() && tree->nodes[right(index())] != nullptr;
 }
 
@@ -131,7 +116,6 @@ BinaryTreeVec<Data>::MutableNode & BinaryTreeVec<Data>::NodeVec::LeftChild() {
     if (!HasLeftChild()) {
         throw std::out_of_range("No left child");
     }
-    // return tree->nodes[left(index())];
     return *tree->nodes[left(index())];
 }
 
@@ -172,7 +156,7 @@ unsigned long BinaryTreeVec<Data>::NodeVec::index() const noexcept {
 
 // BinaryTreeVec
 
-//! Constructors from TraverasableContainer
+// Constructors from TraverasableContainer
 template <typename Data>
 BinaryTreeVec<Data>::BinaryTreeVec(const TraversableContainer<Data>& container) {
     if (container.Size() > 0) {
@@ -180,7 +164,6 @@ BinaryTreeVec<Data>::BinaryTreeVec(const TraversableContainer<Data>& container) 
     
         unsigned long index = 0;
         container.Traverse([this, &index](const Data& data) {
-            // nodes[index++] = NodeVec(data, this);
             this->nodes[index++] = new NodeVec(data, this);
         });
     }
@@ -233,55 +216,17 @@ BinaryTreeVec<Data>::~BinaryTreeVec() {
 // Copy Assignment
 template <typename Data>
 BinaryTreeVec<Data>& BinaryTreeVec<Data>::operator=(const BinaryTreeVec<Data>& tree) {
-    // if (this != &tree) {
-    //     Clear();
-    //     nodes.Resize(tree.Size());
-    //     for (unsigned long i = 0; i < tree.Size(); i++) {
-    //         nodes[i] = new NodeVec(tree.nodes[i]->Element(), this, tree.nodes[i]->isDummy);
-    //     }
-    // }
-    Clear();
-    nodes.Resize(tree.Size());
-    this -> size = tree.Size(); //!
-
-
-    for (unsigned long i = 0; i < this->Size(); i++) { //!
-        this->nodes[i] = new NodeVec(tree.nodes[i]->Element(), this);
+    if (this != &tree) {
+        BinaryTreeVec<Data> temp(tree); // Using the copy constructor
+        std::swap(*this, temp);
+        // the memory will be freed by the destructor of temp
     }
-
-    //todo better implemntation????
-    // BinaryTreeVec<Data> *temp = new BinaryTreeVec<Data>(tree);
-    // std::swap(*this, *temp);
-    // delete temp;
-
     return *this;
 }
 
 // Move Assignment
 template <typename Data>
 BinaryTreeVec<Data>& BinaryTreeVec<Data>::operator=(BinaryTreeVec<Data>&& tree) noexcept {
-    // std::swap(nodes, tree.nodes);
-    // for (unsigned long i = 0; i < tree.Size(); i++) {
-    //     nodes[i]->tree = this;
-    // }
-
-
-    // std::swap(size, tree.size);
-    // std::swap(nodes, tree.nodes);
-
-    // for (unsigned long i = 0; i < this->Size(); i++) { //!
-    //     nodes[i]->tree = this;
-    // }
-
-    // for (unsigned long i = 0; i < tree.Size(); i++) { //!
-    //     tree.nodes[i]->tree = &tree;
-    // }
-
-    // return *this;
-
-
-
-
     std::swap(this->nodes, tree.nodes);
     std::swap(this->size, tree.size);
     for(ulong i=0; i<this->Size(); i++) nodes[i]->tree = this;
@@ -294,17 +239,14 @@ BinaryTreeVec<Data>& BinaryTreeVec<Data>::operator=(BinaryTreeVec<Data>&& tree) 
 // Equality Operator
 template <typename Data>
 bool BinaryTreeVec<Data>::operator==(const BinaryTreeVec<Data>& tree) const noexcept {
-    // if (Size() != tree.Size()) {
-    //     return false;
-    // }
-    // for (unsigned long i = 0; i < Size(); i++) {
-    //     if (nodes[i]->Element() != tree.nodes[i]->Element()) {
-    //         return false;
-    //     }
-    // }
-    // return true;
-
-    return MutableBinaryTree<Data>::operator==(tree);
+    if (size != tree.size){
+        return false;
+    } 
+    
+    if (size == 0) {
+        return true;
+    }
+    return BinaryTree<Data>::operator==(tree);
 }
 
 // Inequality Operator
@@ -336,13 +278,6 @@ typename BinaryTreeVec<Data>::MutableNode& BinaryTreeVec<Data>::Root() {
 // Clear
 template <typename Data>
 void BinaryTreeVec<Data>::Clear() {
-    // if (Size() > 0) {
-    //     for (unsigned long i = 0; i < Size(); i++) {
-    //         delete nodes[i];
-    //     }
-    //     nodes.Clear();
-    // }
-
     for (unsigned long i = 0; i < nodes.Size(); i++) { //!
         if (nodes[i] != nullptr) {
             delete nodes[i];
@@ -358,13 +293,8 @@ template <typename Data>
 void BinaryTreeVec<Data>::BreadthTraverse(TraverseFun function) const {
     if (Size() != 0) {
      
-    //! Poiché utilizzo un vector per memorizzare i nodi dell'albero per livelli,
     //! Posso semplicemente iterare attraverso il vector
         for(unsigned long i = 0; i < Size(); i++) {
-            // if(nodes->operator[](i) != nullptr) {
-            //     // function(nodes[i]->Element());
-            //     function(nodes->operator[](i)->Element());
-            // }
             if (nodes[i] != nullptr) {
                 function(nodes[i]->Element());
             }
@@ -377,11 +307,6 @@ template <typename Data>
 void BinaryTreeVec<Data>::BreadthMap(MapFun function) {
     if (Size() != 0) {
         for (unsigned long i = 0; i < Size(); i++) {
-            // if (nodes->operator[](i) != nullptr) {
-            //     function(nodes->operator[](i)->Element());
-            //     //function(nodes->operator[](i)->Element());
-            // }
-
             if (nodes[i] != nullptr) {
                 function(nodes[i]->Element());
             }

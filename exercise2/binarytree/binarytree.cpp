@@ -38,12 +38,6 @@ bool BinaryTree<Data>::Node::operator!=(const Node& node) const noexcept {
 }
 // Specific member functions
 
-//! Element NOT NEEDDED
-// template <typename Data>
-// const Data& BinaryTree<Data>::Node::Element() const noexcept {
-//     return value;
-// }
-
 // IsLeaf
 template <typename Data>
 bool BinaryTree<Data>::Node::IsLeaf() const noexcept {
@@ -187,7 +181,7 @@ void BinaryTree<Data>::BreadthTraverse(const Node* node, TraverseFun function) c
     if (node == nullptr) {
         return;
     }
-    // lasd::QueueLst<Node*> queue; //!Deve essere const perchè il nodo è const?
+    // lasd::QueueLst<Node*> queue; //?Deve essere const perchè il nodo è const?
     lasd::QueueLst<const Node*> queue;
     queue.Enqueue(node);
 
@@ -342,9 +336,8 @@ void MutableBinaryTree<Data>::BreadthMap(MutableNode* node, MapFun function) {
 template <typename Data>
 BTPreOrderIterator<Data>::BTPreOrderIterator(const BinaryTree<Data>& tree) {
     if (!tree.Empty()) {
-        //todo Fab suggerisce di fare Root() che ritorna un puntatore a Node e poi fare il push del puntatore su stack
-        stack.Push(root = &tree.Root()); //! Attenzione potrebbe causare problemi
-        // root = &tree.Root();
+        root = &tree.Root(); //! Grossi problemi in caso di modifica!
+        stack.Push(&tree.Root()); //! Attenzione potrebbe causare problemi!
     }   
 }
 
@@ -398,7 +391,7 @@ template <typename Data>
 const Data& BTPreOrderIterator<Data>::operator*() const {
     if (!stack.Empty()) {
         return stack.Top()->Element();
-    }else {
+    } else {
         throw std::out_of_range("Iterator is terminated");
     }
 }
@@ -439,7 +432,9 @@ void BTPreOrderIterator<Data>::Reset() noexcept {
     if (!stack.Empty()) {
         stack.Clear();
     }
-    stack.Push(root);
+    if (root != nullptr) {
+        stack.Push(root);
+    }
 }
 
 /* ************************************************************************** */

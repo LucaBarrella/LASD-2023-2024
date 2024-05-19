@@ -44,20 +44,20 @@ public:
 
   // Specific constructor
   // QueueVec(argument) specifiers; // A stack obtained from a TraversableContainer
-    explicit QueueVec(const TraversableContainer<Data>&);
+    QueueVec(const TraversableContainer<Data>&);
 
     // QueueVec(argument) specifiers; // A stack obtained from a MappableContainer
-    explicit QueueVec(MappableContainer<Data>&&);
+    QueueVec(MappableContainer<Data>&&);
 
   /* ************************************************************************ */
 
   // Copy constructor
   // QueueVec(argument);
-    explicit QueueVec(const QueueVec<Data>&);
+    QueueVec(const QueueVec<Data>&);
 
   // Move constructor
   // QueueVec(argument);
-    explicit QueueVec(QueueVec<Data>&&) noexcept;
+    QueueVec(QueueVec<Data>&&) noexcept;
 
   /* ************************************************************************ */
 

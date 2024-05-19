@@ -207,11 +207,14 @@ BinaryTreeLnk<Data>::BinaryTreeLnk(MappableContainer<Data>&& container) {
 
         container.Map([this, &queue](Data &currData) {
             if (!queue.Empty()) {
-                NodeLnk* &current = *queue.HeadNDequeue();
+                NodeLnk** currentPtr = queue.HeadNDequeue();
+                NodeLnk* current = new NodeLnk(std::move(currData));
+                *currentPtr = current;
 
-                current = new NodeLnk(std::move(currData));
-                queue.Enqueue(&((*current)->left));
-                queue.Enqueue(&((*current)->right));
+                if (current != nullptr) {
+                    queue.Enqueue(&(current->left));
+                    queue.Enqueue(&(current->right));
+                }
             }
         });
     }
@@ -240,7 +243,7 @@ BinaryTreeLnk<Data>::~BinaryTreeLnk() {
 //! Copy Assignment 
 template <typename Data>
 BinaryTreeLnk<Data>& BinaryTreeLnk<Data>::operator=(const BinaryTreeLnk<Data>& tree) {
-    //FIXME Deve solo copiare i nodi, non la struttura dati?
+    //? Deve solo copiare i nodi, non la struttura dati?
     if (this != &tree) {
         Clear();
         root = CopyTree(tree.root);
@@ -272,8 +275,7 @@ bool BinaryTreeLnk<Data>::operator==(const BinaryTreeLnk<Data>& tree) const noex
         return true;
     }
     
-    //! this is a call to the Node::operator==
-    return (Root() == tree.Root()); 
+    return BinaryTree<Data>::operator==(tree);
 }
 
 // Not equal operator is the negation of the equal operator

@@ -42,6 +42,7 @@ unsigned long numError = 0;
 using namespace std;
 
 /* ************************************************************************** */
+//todo INSERIRE TUTTI I TEST DELLE STRUTTURE DATI PRECEDENTI! (Perchè ho la 104 e li ho tolti).
 void iteratorTest();
 void binaryTreeLinkedTest();
 void binaryTreeVectorTest();
@@ -53,10 +54,13 @@ namespace lucaTest{
     srand(time(0));
     cout << "Hello, World!" << endl;
 
+    //todo INSERIRE TEST DELLE STRUTTURE DATI PRECEDENTI! (Perchè ho la 104 e li ho tolti).
+
     iteratorTest();
     binaryTreeLinkedTest();
     binaryTreeVectorTest();
     binarySearchTreeLinkedTest();
+
 
     std::cout << "\n\n\nI'm happy to see ya!\n\n\n" << std::endl;
 
@@ -69,7 +73,7 @@ namespace lucaTest{
 }
 
 /* ************************************************************************** */
-
+  //todo INSERIRE TUTTI I TEST DELLE STRUTTURE DATI PRECEDENTI! (Perchè ho la 104 e li ho tolti).
   void iteratorTest() {
     std::cout << "Testing iterator" << std::endl;
 

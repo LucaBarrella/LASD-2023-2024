@@ -34,11 +34,8 @@ protected:
   using typename BinaryTreeLnk<Data>::NodeLnk;
 
 
-//   //! Copyed from Luca's code
   using typename BinaryTree<Data>::Node;
   using typename MutableBinaryTree<Data>::MutableNode;
-// //!   using BinaryTreeLnk<Data>::size;
-
 
   // ...
 

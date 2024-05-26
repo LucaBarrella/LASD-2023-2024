@@ -577,9 +577,14 @@ namespace lucaTest{
     EnqueueC(testnum, testerr, q7, 2);
     HeadNDequeue(testnum, testerr, q7, true, 1);
     HeadNDequeue(testnum, testerr, q7, true, 2);
-    Dequeue(testnum, testerr, q6, true);
-
-    
+    while (!q7.Empty()) {
+      Dequeue(testnum, testerr, q7, true);
+    }
+    Dequeue(testnum, testerr, q7, false);
+    Head(testnum, testerr, q7, false, 1);
+    EnqueueC(testnum, testerr, q7, 1);
+    Head(testnum, testerr, q7, true, 1);
+    HeadNDequeue(testnum, testerr, q7, true, 1);
   }
 
   void iteratorTest() {

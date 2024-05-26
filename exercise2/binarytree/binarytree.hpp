@@ -210,7 +210,7 @@ protected:
 
 public:
 
-  struct MutableNode : public Node { //! Vedi se è giusto metter public
+  struct MutableNode : public Node {
     // Must extend Node
 
     // friend class MutableBinaryTree<Data>;
@@ -348,7 +348,7 @@ protected:
   // ...
   const typename BinaryTree<Data>::Node * root = nullptr;
   //const typename BinaryTree<Data>::Node * current = nullptr; //! Non serve?
-  StackLst<const typename BinaryTree<Data>::Node *> stack; //! Perchè deve essere const typename?
+  StackLst<const typename BinaryTree<Data>::Node *> stack;
 
 public:
 
@@ -432,7 +432,6 @@ private:
 protected:
 
   // ...
-  //! Ha senso usare lo stack???
   using BTPreOrderIterator<Data>::stack;
 
 public:

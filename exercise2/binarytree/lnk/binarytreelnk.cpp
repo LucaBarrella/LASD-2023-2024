@@ -56,7 +56,7 @@ template <typename Data>
 typename BinaryTreeLnk<Data>::NodeLnk& BinaryTreeLnk<Data>::NodeLnk::operator=(NodeLnk&& node) noexcept {
     if (this != &node) {
 
-        //todo ATTENTO!!! NECESSARIO PER IL MOVE ASSIGNMENT?
+        //todo meglio usando std::swap o std::move?
 
         // std::swap(value, node.value);
         // std::swap(left, node.left);
@@ -244,7 +244,6 @@ BinaryTreeLnk<Data>::~BinaryTreeLnk() {
 //! Copy Assignment 
 template <typename Data>
 BinaryTreeLnk<Data>& BinaryTreeLnk<Data>::operator=(const BinaryTreeLnk<Data>& tree) {
-    //? Deve solo copiare i nodi, non la struttura dati?
     if (this != &tree) {
         Clear();
         root = CopyTree(tree.root);

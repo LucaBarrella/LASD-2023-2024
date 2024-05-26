@@ -39,8 +39,6 @@ protected:
 
   protected:
     
-    // friend class BinaryTreeLnk<Data>; // ! WRONG!
- 
     // ...
 
   public:

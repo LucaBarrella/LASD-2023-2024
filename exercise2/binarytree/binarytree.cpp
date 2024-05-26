@@ -175,13 +175,13 @@ void BinaryTree<Data>::InOrderTraverse(const Node* node, TraverseFun function) c
     }
 }
 
-// BreadthTraversal
+// BreadthTraverse
 template <typename Data>
 void BinaryTree<Data>::BreadthTraverse(const Node* node, TraverseFun function) const {
     if (node == nullptr) {
         return;
     }
-    // lasd::QueueLst<Node*> queue; //?Deve essere const perchè il nodo è const?
+    // lasd::QueueLst<Node*> queue;
     lasd::QueueLst<const Node*> queue;
     queue.Enqueue(node);
 
@@ -592,7 +592,7 @@ BTPostOrderIterator<Data>& BTPostOrderIterator<Data>::operator++() {
     return *this;
 }
 
-// Reset //! Check, it's probably ok!
+// Reset
 template <typename Data>
 void BTPostOrderIterator<Data>::Reset() noexcept {
     if (!stack.Empty()) {
@@ -604,7 +604,7 @@ void BTPostOrderIterator<Data>::Reset() noexcept {
 
 // Auxiliary function
 
-//todo getLeftMostLeaf change name
+//todo getLeftMostLeaf non mi convince il nome, cambiare.
 template <typename Data>
 void BTPostOrderIterator<Data>::getLeftMostLeaf() {
     const typename BinaryTree<Data>::Node* current = stack.Top();

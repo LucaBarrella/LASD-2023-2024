@@ -54,10 +54,6 @@ protected:
 
     // ...
     Data value{};
-    // unsigned long current;
-    // bool isDummy = false;
-    // Vector<NodeVec*> *tree = nullptr; //todo Da verificare
-    // Vector<NodeVec<Data>*>* tree = nullptr;
     BinaryTreeVec<Data> *tree = nullptr;
 
 
@@ -69,11 +65,6 @@ protected:
     // Specific constructor
     NodeVec(const Data&, BinaryTreeVec *tree);
     NodeVec(Data&&, BinaryTreeVec *tree);
-
-    // NodeVec(const Data& value, unsigned long index, Vector<NodeVec*>* vec);
-
-    // Constructor for Dummy Nodes
-    // NodeVec(BinaryTreeVec *tree); //???? Probly for dummy nodes
 
     // Copy Assignment
     NodeVec& operator=(const NodeVec&);

@@ -34,10 +34,8 @@ protected:
   using typename BinaryTreeLnk<Data>::NodeLnk;
 
 
-//   //! Copyed from Luca's code
   using typename BinaryTree<Data>::Node;
   using typename MutableBinaryTree<Data>::MutableNode;
-// //!   using BinaryTreeLnk<Data>::size;
 
 
   // ...
@@ -149,20 +147,20 @@ public:
   // Specific member functions (inherited from DictionaryContainer)
 
   // type Insert(argument) specifiers; // Override DictionaryContainer member (Copy of the value)
-  bool Insert(const Data&) override;
+  inline bool Insert(const Data&) override;
 
   // type Insert(argument) specifiers; // Override DictionaryContainer member (Move of the value)
-  bool Insert(Data&&) noexcept override;
+  inline bool Insert(Data&&) noexcept override;
 
   // type Remove(argument) specifiers; // Override DictionaryContainer member
-  bool Remove(const Data&) override;
+  inline bool Remove(const Data&) override;
 
 //   /* ************************************************************************ */
 
   // Specific member functions (inherited from TestableContainer)
 
   // type Exists(argument) specifiers; // Override TestableContainer member
-  bool Exists(const Data&) const noexcept override;
+  inline bool Exists(const Data&) const noexcept override;
 
 //   /* ************************************************************************ */
 

@@ -237,12 +237,15 @@ public:
     // Specific member functions
 
     // type Element() specifiers; // Mutable access to the element (concrete function should not throw exceptions)
+    using Node::Element;
     virtual Data& Element() noexcept = 0;
 
     // type LeftChild() specifiers; // (concrete function must throw std::out_of_range when not existent)
+    using Node::LeftChild;
     virtual MutableNode& LeftChild() = 0;
 
     // type RightChild() specifiers; // (concrete function must throw std::out_of_range when not existent)
+    using Node::RightChild;
     virtual MutableNode& RightChild() = 0;
     
   };
@@ -268,6 +271,7 @@ public:
   // Specific member functions
 
   // type Root() specifiers; // (concrete function must throw std::length_error when empty)
+  using BinaryTree<Data>::Root;
   
   virtual MutableNode& Root() = 0;
 

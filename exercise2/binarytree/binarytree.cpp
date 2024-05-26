@@ -734,7 +734,7 @@ bool BTInOrderIterator<Data>::operator!=(const BTInOrderIterator<Data>& iterator
 // Operator*
 template <typename Data>
 const Data& BTInOrderIterator<Data>::operator*() const {
-    if (!stack.Empty()) {
+    if (!Terminated()) {
         return stack.Top()->Element();
     }else {
         throw std::out_of_range("Iterator is terminated");

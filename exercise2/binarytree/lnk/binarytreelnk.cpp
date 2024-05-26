@@ -152,6 +152,7 @@ bool BinaryTreeLnk<Data>::NodeLnk::HasRightChild() const noexcept {
 // Equal operator
 template <typename Data>
 bool BinaryTreeLnk<Data>::NodeLnk::operator==(const NodeLnk& node) const noexcept {
+    // return Node::operator==(node); forse è questo?
     return BinaryTree<Data>::Node::operator==(node);
 }
 

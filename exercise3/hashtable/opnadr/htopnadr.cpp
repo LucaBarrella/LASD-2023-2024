@@ -94,14 +94,11 @@ HashTableOpnAdr<Data>& HashTableOpnAdr<Data>::operator=(HashTableOpnAdr<Data>&& 
 // Comparison Operator
 
 // Equality Operator
-template <typename Data>
-
-
-
+//todo implemntare as soon as possible.
 
 
 
 
 /* ************************************************************************** */
 
-}
+} // namespace lasd

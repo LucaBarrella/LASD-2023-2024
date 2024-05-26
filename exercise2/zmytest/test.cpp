@@ -42,6 +42,20 @@ unsigned long numError = 0;
 using namespace std;
 
 /* ************************************************************************** */
+//!NOTE(05/26/2024) I had forgotten to add the test for the first library, so I added it here.
+
+//todo add the test for the first library:
+void traversableTest();
+void dictionaryTest();
+void mappableTest();
+void linearTest();
+void vectorTest();
+void listTest();
+void stackVecTest();
+void queueVecTest();
+void stackLstTest();
+void queueLstTest();
+//test for the second library
 void iteratorTest();
 void binaryTreeLinkedTest();
 void binaryTreeVectorTest();
@@ -52,6 +66,22 @@ namespace lucaTest{
     // ...
     srand(time(0));
     cout << "Hello, World!" << endl;
+
+    //!NOTE(05/26/2024) I had forgotten to add the test for the first library, so I added it here.
+    //! test for the first library:
+
+    traversableTest();
+    dictionaryTest();
+    mappableTest();
+    linearTest();
+    vectorTest();
+    listTest();
+    stackVecTest();
+    queueVecTest();
+    stackLstTest();
+    queueLstTest();
+
+    //! test for the second library:
 
     iteratorTest();
     binaryTreeLinkedTest();
@@ -69,6 +99,488 @@ namespace lucaTest{
 }
 
 /* ************************************************************************** */
+  void traversableTest(){
+    unsigned int testnum = 0;
+    unsigned int testerr = 0;
+
+    lasd::Vector<int> v1(16);
+    lasd::List<int> l1;
+
+    SetAt(testnum, testerr, v1, true, 0, 1);
+    SetAt(testnum, testerr, v1, true, 1, 2);
+    SetAt(testnum, testerr, v1, true, 2, 3);
+    SetAt(testnum, testerr, v1, true, 3, 4);
+    SetAt(testnum, testerr, v1, true, 4, 5);
+    InsertAtBack(testnum, testerr, l1, true, 1);
+    InsertAtBack(testnum, testerr, l1, true, 2);
+    InsertAtBack(testnum, testerr, l1, true, 3);
+    Traverse(testnum, testerr, v1, true, &TraversePrint<int>);
+    TraversePreOrder(testnum, testerr, v1, true, &TraversePrint<int>);
+    TraversePostOrder(testnum, testerr, v1, true, &TraversePrint<int>);
+    Fold(testnum, testerr, v1, true, &FoldAdd<int>, 0, 15);
+    FoldPreOrder(testnum, testerr, v1, true, &FoldAdd<int>, 0, 15);
+    FoldPostOrder(testnum, testerr, v1, true, &FoldAdd<int>, 0, 15);
+
+    v1.Clear();
+    l1.Clear();
+    Empty(testnum, testerr, v1, true);
+    Empty(testnum, testerr, l1, true);
+    Size(testnum, testerr, v1, true, 0);
+    Size(testnum, testerr, l1, true, 0);
+    Traverse(testnum, testerr, v1, true, &TraversePrint<int>);
+    TraversePreOrder(testnum, testerr, v1, true, &TraversePrint<int>);
+    TraversePostOrder(testnum, testerr, v1, true, &TraversePrint<int>);
+    Fold(testnum, testerr, v1, true, &FoldAdd<int>, 0, 0);
+    FoldPreOrder(testnum, testerr, v1, true, &FoldAdd<int>, 0, 0);
+    FoldPostOrder(testnum, testerr, v1, true, &FoldAdd<int>, 0, 0);
+  } 
+
+  void dictionaryTest(){
+    unsigned int testnum = 0;
+    unsigned int testerr = 0;
+
+    lasd::List<int> l1;
+
+    InsertC(testnum, testerr, l1, true, 1);
+    InsertC(testnum, testerr, l1, true, 2);
+    InsertC(testnum, testerr, l1, true, 3);
+    InsertC(testnum, testerr, l1, false, 3);
+    InsertC(testnum, testerr, l1, false, 2);
+    InsertC(testnum, testerr, l1, false, 1);
+    Remove(testnum, testerr, l1, true, 1);
+    Remove(testnum, testerr, l1, true, 2);
+    Remove(testnum, testerr, l1, true, 3);
+    Remove(testnum, testerr, l1, false, 3);
+    Remove(testnum, testerr, l1, false, 2);
+    Remove(testnum, testerr, l1, false, 1);
+    InsertAtFront(testnum, testerr, l1, true, 1);
+    InsertAtFront(testnum, testerr, l1, true, 2);
+    InsertAtFront(testnum, testerr, l1, true, 3);
+    InsertAtBack(testnum, testerr, l1, true, 4);
+    InsertAtBack(testnum, testerr, l1, true, 5);
+    InsertAtBack(testnum, testerr, l1, true, 6);
+    Size(testnum, testerr, l1, true, 6);
+    lasd::Vector<int> v1(3);
+    SetAt(testnum, testerr, v1, true, 0, 1);
+    SetAt(testnum, testerr, v1, true, 1, 2);
+    SetAt(testnum, testerr, v1, true, 2, 3);
+    InsertAllC(testnum, testerr, l1, false, v1);
+    RemoveAll(testnum, testerr, l1, true, v1);
+    Exists(testnum, testerr, l1, false, 1);
+    Exists(testnum, testerr, l1, false, 2);
+    Exists(testnum, testerr, l1, false, 3);
+    Exists(testnum, testerr, l1, true, 4);
+    InsertAllC(testnum, testerr, l1, true, v1);
+    l1.Clear();
+    InsertSomeC(testnum, testerr, l1, true, v1);
+    Remove(testnum, testerr, l1, true, 1);
+    Remove(testnum, testerr, l1, true, 2);
+    Remove(testnum, testerr, l1, true, 3);
+    Remove(testnum, testerr, l1, false, 3);
+    InsertAllC(testnum, testerr, l1, true, v1);
+    RemoveSome(testnum, testerr, l1, true, v1);
+  }
+
+  void mappableTest(){
+    unsigned int testnum = 0;
+    unsigned int testerr = 0;
+
+    lasd::Vector<int> v1(10);
+    lasd::List<int> l1;
+
+    MapPreOrder(testnum, testerr, v1, true, &MapIncrement<int>);
+    MapPreOrder(testnum, testerr, l1, true, &MapIncrement<int>);
+    MapPostOrder(testnum, testerr, v1, true, &MapIncrement<int>);
+    MapPostOrder(testnum, testerr, l1, true, &MapIncrement<int>);
+
+    v1.Resize(16);
+    Size(testnum, testerr, v1, true, 16);
+    SetAt(testnum, testerr, v1, true, 0, 1);
+    SetAt(testnum, testerr, v1, true, 1, 2);
+    SetAt(testnum, testerr, v1, true, 2, 3);
+    SetAt(testnum, testerr, v1, true, 3, 4);
+    SetAt(testnum, testerr, v1, true, 4, 5);
+    Map(testnum, testerr, v1, true, &MapIncrement<int>);
+    MapPreOrder(testnum, testerr, v1, true, &MapIncrement<int>);
+    MapPostOrder(testnum, testerr, v1, true, &MapIncrement<int>);
+    v1.Clear();
+    Size(testnum, testerr, v1, true, 0);
+    Empty(testnum, testerr, v1, true);
+    for (ulong i = 0; i < 16; i++) { 
+      l1.InsertAtBack(i + 1);
+    }
+    Map(testnum, testerr, l1, true, &MapIncrement<int>);
+    MapPreOrder(testnum, testerr, l1, true, &MapIncrement<int>);
+    MapPostOrder(testnum, testerr, l1, true, &MapIncrement<int>);
+
+
+    //todo aggiungere altri test appena possibile
+  }
+
+  void linearTest(){
+    unsigned int testnum = 0;
+    unsigned int testerr = 0;
+
+    lasd::Vector<int> v1;
+    lasd::List<int> l1;
+
+    v1.Resize(16);
+    EqualLinear(testnum, testerr, v1, l1, false);
+
+    l1.Clear();
+    v1.Clear();
+    v1.Resize(16);
+    
+    for (ulong i = 0; i < v1.Size(); i++) {
+      v1[i] = i + 1;
+    }
+
+    for (ulong i = 0; i < v1.Size(); i++) { 
+      l1.InsertAtBack(v1[i]);
+    }
+
+    EqualLinear(testnum, testerr, v1, l1, true);
+    GetFront(testnum, testerr, v1, true, 1);
+    GetFront(testnum, testerr, l1, true, 1);
+    GetBack(testnum, testerr, v1, true, 16);
+    GetBack(testnum, testerr, l1, true, 16);
+    InsertAtFront(testnum, testerr, l1, true, 0);
+    InsertAtBack(testnum, testerr, l1, true, 17);
+    Exists(testnum, testerr, l1, true, 0);
+    Exists(testnum, testerr, l1, true, 17);
+    FrontNRemove(testnum, testerr, l1, true, 0);
+    Remove(testnum, testerr, l1, true, 17);
+    Exists(testnum, testerr, l1, false, 0);
+    Exists(testnum, testerr, l1, false, 17);
+  }
+
+  void vectorTest(){
+    unsigned int testnum = 0;
+    unsigned int testerr = 0;
+
+    lasd::Vector<int> v1(16);
+    lasd::Vector<int> v2(16);
+    lasd::Vector<int> v3(16);
+
+    for (ulong i = 0; i < v1.Size(); i++) { 
+      v1[i] = i + 1;
+    }
+
+    for (ulong i = 0; i < v2.Size(); i++) { 
+      v2[i] = i + 1;
+    }
+
+    for (ulong i = 0; i < v3.Size(); i++) { 
+      v3[i] = i + 2;
+    }
+
+    lasd::Vector<int> v4(v1);
+    lasd::Vector<int> v5(std::move(v1));
+
+    Size(testnum, testerr, v1, true, 0);
+    Size(testnum, testerr, v2, true, 16);
+    Size(testnum, testerr, v3, true, 16);
+    Size(testnum, testerr, v4, true, 16);
+    Size(testnum, testerr, v5, true, 16);
+    Empty(testnum, testerr, v1, true);
+    Empty(testnum, testerr, v2, false);
+    Empty(testnum, testerr, v3, false);
+    Empty(testnum, testerr, v4, false);
+    Empty(testnum, testerr, v5, false);
+    GetFront(testnum, testerr, v2, true, 1);
+    GetBack(testnum, testerr, v2, true, 16);
+    SetAt(testnum, testerr, v2, true, 0, 0);
+    SetAt(testnum, testerr, v2, true, 15, 17);
+    GetAt(testnum, testerr, v2, true, 0, 0);
+    GetAt(testnum, testerr, v2, true, 15, 17);
+
+    EqualLinear(testnum, testerr, v2, v3, false);
+    EqualLinear(testnum, testerr, v2, v4, false);
+
+    v1 = v2;
+    EqualLinear(testnum, testerr, v1, v2, true);
+    v1 = std::move(v2);
+    EqualLinear(testnum, testerr, v1, v2, true);
+
+    lasd::SortableVector<int> sv1;
+
+    Empty(testnum, testerr, sv1, true);
+    Size(testnum, testerr, sv1, true, 0);
+    sv1 = v1;
+    Size(testnum, testerr, sv1, true, 16);
+    sv1.Sort();
+    EqualLinear(testnum, testerr, sv1, v1, true);
+
+    sv1.Resize(0);
+    Empty(testnum, testerr, sv1, true);
+    lasd::List<int> l1;
+    for (ulong i = 16; i > 0; --i) { 
+      l1.InsertAtBack(i);
+    }
+    lasd::SortableVector<int> sv2(l1);
+    lasd::SortableVector<int> sv3(16);
+    for (ulong i = 0; i < sv3.Size(); i++) { 
+      sv3[i] = i + 1;
+    }
+    EqualLinear(testnum, testerr, sv2, sv3, false);
+    sv2.Sort();
+    EqualLinear(testnum, testerr, sv2, sv3, true);
+
+  }
+
+  void listTest(){
+    unsigned int testnum = 0;
+    unsigned int testerr = 0;
+
+    lasd::List<int> l1;
+    lasd::List<int> l2{l1};
+    EqualLinear(testnum, testerr, l1, l2, true);
+    lasd::List<int> l3{std::move(l1)};
+    EqualLinear(testnum, testerr, l1, l3, true);
+
+    Remove(testnum, testerr, l1, false, 1);
+    Remove(testnum, testerr, l1, false, 2);
+    for (ulong i = 0; i < 16; i++) { 
+      l1.InsertAtBack(i + 1);
+    }
+    Remove(testnum, testerr, l1, true, 1);
+    Remove(testnum, testerr, l1, true, 2);
+    Remove(testnum, testerr, l1, true, 3);
+    l1.Clear();
+    Empty(testnum, testerr, l1, true);
+    InsertAtFront(testnum, testerr, l1, true, 1);
+    InsertAtFront(testnum, testerr, l1, true, 2);
+    InsertAtFront(testnum, testerr, l1, true, 3);
+    InsertAtBack(testnum, testerr, l1, true, 4);
+    InsertAtBack(testnum, testerr, l1, true, 5);
+    Exists(testnum, testerr, l1, true, 1);
+    Exists(testnum, testerr, l1, true, 2);
+    Exists(testnum, testerr, l1, true, 3);
+    Exists(testnum, testerr, l1, true, 4);
+    Exists(testnum, testerr, l1, true, 5);
+    Exists(testnum, testerr, l1, false, 6);
+    FrontNRemove(testnum, testerr, l1, true, 3);
+    FrontNRemove(testnum, testerr, l1, true, 2);
+    Remove(testnum, testerr, l1, true, 4);
+    Exists(testnum, testerr, l1, true, 5);
+    l1.Clear();
+    for (ulong i = 0; i < 16; i++) { 
+      l1.InsertAtBack(i + 1);
+    }
+    Remove(testnum, testerr, l1, true, 8);
+    Exists(testnum, testerr, l1, false, 8);
+    Exists(testnum, testerr, l1, true, 9);
+    Exists(testnum, testerr, l1, true, 7);
+
+  }
+
+  void stackVecTest(){
+    unsigned int testnum = 0;
+    unsigned int testerr = 0;
+
+    lasd::StackVec<string> s1;
+    string str2 = "Hello";
+    string str3 = "World";
+    string str4 = "!";
+    string str5 = "I'm";
+    string str6 = "Luca";
+    string str7 = "!";
+    Size(testnum, testerr, s1, true, 0);
+    Empty(testnum, testerr, s1, true);
+
+    PushM(testnum, testerr, s1, str2);
+    Size(testnum, testerr, s1, true, 1);
+    PushM(testnum, testerr, s1, str3);
+    Size(testnum, testerr, s1, true, 2);
+    PushM(testnum, testerr, s1, str4);
+    Size(testnum, testerr, s1, true, 3);
+    PushC(testnum, testerr, s1, str5);
+    Size(testnum, testerr, s1, true, 4);
+    PushC(testnum, testerr, s1, str6);
+    PushC(testnum, testerr, s1, str7);
+    Size(testnum, testerr, s1, true, 6);
+    Empty(testnum, testerr, s1, false);
+
+    Pop(testnum, testerr, s1, true);
+    Size(testnum, testerr, s1, true, 5);
+    Top(testnum, testerr, s1, true, str6);
+    Pop(testnum, testerr, s1, true);
+    Size(testnum, testerr, s1, true, 4);
+    TopNPop(testnum, testerr, s1, true, str5);
+    Size(testnum, testerr, s1, true, 3);
+
+    lasd::StackVec<string> s2(s1);
+    EqualStack(testnum, testerr, s1, s2, true);
+    lasd::StackVec<string> s3(std::move(s1));
+    EqualStack(testnum, testerr, s1, s3, false);
+    lasd::StackVec<string> s4;
+    s4 = s2;
+    EqualStack(testnum, testerr, s2, s4, true);
+    lasd::StackVec<string> s5;
+    s5 = std::move(s2);
+    EqualStack(testnum, testerr, s2, s5, false);
+
+  }
+
+  void queueVecTest(){
+    unsigned int testnum = 0;
+    unsigned int testerr = 0;
+
+    lasd::QueueVec<string> q1;
+    string str2 = "Hello";
+    string str3 = "World";
+    string str4 = "!";
+    string str5 = "I'm";
+    string str6 = "Luca";
+    string str7 = "!";
+    Size(testnum, testerr, q1, true, 0);
+    Empty(testnum, testerr, q1, true);
+    Dequeue(testnum, testerr, q1, false);
+    EnqueueM(testnum, testerr, q1, str2);
+    Size(testnum, testerr, q1, true, 1);
+    EnqueueM(testnum, testerr, q1, str3);
+    Size(testnum, testerr, q1, true, 2);
+    EnqueueM(testnum, testerr, q1, str4);
+    Size(testnum, testerr, q1, true, 3);
+    EnqueueC(testnum, testerr, q1, str5);
+    Size(testnum, testerr, q1, true, 4);
+    EnqueueC(testnum, testerr, q1, str6);
+    EnqueueC(testnum, testerr, q1, str7);
+    Size(testnum, testerr, q1, true, 6);
+    
+    Head(testnum, testerr, q1, true, str2);
+    Dequeue(testnum, testerr, q1, true);
+    Size(testnum, testerr, q1, true, 5);
+    HeadNDequeue(testnum, testerr, q1, true, str3);
+    Size(testnum, testerr, q1, true, 4);
+    lasd::QueueVec<string> q2(q1);
+    EqualQueue(testnum, testerr, q1, q2, true);
+    lasd::QueueVec<string> q3(std::move(q1));
+    EqualQueue(testnum, testerr, q1, q3, false);
+
+    lasd::List<string> l1;
+    lasd::Vector<string> v1(16);
+    for (ulong i = 0; i < 16; i++) { 
+      l1.InsertAtBack(to_string(i + 1));
+    }
+    for (ulong i = 0; i < 16; i++) { 
+      v1[i] = to_string(i + 1);
+    }
+    lasd::QueueVec<string> q4(l1);
+    lasd::QueueVec<string> q5(v1);
+    EqualQueue(testnum, testerr, q4, q5, true);
+    q5 = std::move(l1);
+    EqualQueue(testnum, testerr, q4, q5, true);
+    lasd::QueueVec<string> q6{std::move(v1)};
+    EqualQueue(testnum, testerr, q4, q6, true);
+
+  }
+
+  void stackLstTest(){
+    unsigned int testnum = 0;
+    unsigned int testerr = 0;
+
+    lasd::StackLst<string> s1;
+    string str2 = "Hello";
+    string str3 = "World";
+    string str4 = "!";
+    string str5 = "I'm";
+    string str6 = "Luca";
+    string str7 = "!";
+    Size(testnum, testerr, s1, true, 0);
+    Empty(testnum, testerr, s1, true);
+
+    PushM(testnum, testerr, s1, str2);
+    Size(testnum, testerr, s1, true, 1);
+    PushM(testnum, testerr, s1, str3);
+    Size(testnum, testerr, s1, true, 2);
+    PushM(testnum, testerr, s1, str4);
+    Size(testnum, testerr, s1, true, 3);
+    PushC(testnum, testerr, s1, str5);
+    Size(testnum, testerr, s1, true, 4);
+    PushC(testnum, testerr, s1, str6);
+    PushC(testnum, testerr, s1, str7);
+    Size(testnum, testerr, s1, true, 6);
+    Empty(testnum, testerr, s1, false);
+
+    Pop(testnum, testerr, s1, true);
+    Size(testnum, testerr, s1, true, 5);
+    Top(testnum, testerr, s1, true, str6);
+    Pop(testnum, testerr, s1, true);
+    Size(testnum, testerr, s1, true, 4);
+    TopNPop(testnum, testerr, s1, true, str5);
+    Size(testnum, testerr, s1, true, 3);
+
+    lasd::StackLst<string> s2(s1);
+    EqualStack(testnum, testerr, s1, s2, true);
+    lasd::StackLst<string> s3(std::move(s1));
+    EqualStack(testnum, testerr, s1, s3, false);
+    lasd::StackLst<string> s4;
+    s4 = s2;
+    EqualStack(testnum, testerr, s2, s4, true);
+  }
+
+  void queueLstTest(){
+    unsigned int testnum = 0;
+    unsigned int testerr = 0;
+
+    lasd::QueueLst<string> q1;
+    string str2 = "Hello";
+    string str3 = "World";
+    string str4 = "!";
+    string str5 = "I'm";
+    string str6 = "Luca";
+    string str7 = "!";
+    Size(testnum, testerr, q1, true, 0);
+    Empty(testnum, testerr, q1, true);
+    Dequeue(testnum, testerr, q1, false);
+    EnqueueM(testnum, testerr, q1, str2);
+    Size(testnum, testerr, q1, true, 1);
+    EnqueueM(testnum, testerr, q1, str3);
+    Size(testnum, testerr, q1, true, 2);
+    EnqueueM(testnum, testerr, q1, str4);
+    Size(testnum, testerr, q1, true, 3);
+    EnqueueC(testnum, testerr, q1, str5);
+    Size(testnum, testerr, q1, true, 4);
+    EnqueueC(testnum, testerr, q1, str6);
+    EnqueueC(testnum, testerr, q1, str7);
+
+    lasd:: QueueLst<string> q2(q1);
+    EqualQueue(testnum, testerr, q1, q2, true);
+    lasd:: QueueLst<string> q3(std::move(q2));
+    EqualQueue(testnum, testerr, q1, q3, true);
+    HeadNDequeue(testnum, testerr, q1, true, str2);
+    Size(testnum, testerr, q1, true, 5);
+    Head(testnum, testerr, q1, true, str3);
+    Dequeue(testnum, testerr, q1, true);
+    Size(testnum, testerr, q1, true, 4);
+
+    lasd::List<string> l1;
+    lasd::Vector<string> v1(16);
+    for (ulong i = 0; i < 16; i++) { 
+      l1.InsertAtBack(to_string(i + 1));
+    }
+    for (ulong i = 0; i < 16; i++) { 
+      v1[i] = to_string(i + 1);
+    }
+    lasd::QueueLst<string> q4(l1);
+    lasd::QueueLst<string> q5(v1);
+    EqualQueue(testnum, testerr, q4, q5, true);
+    q5 = std::move(l1);
+    EqualQueue(testnum, testerr, q4, q5, true);
+    q5 = v1;
+    EqualQueue(testnum, testerr, q4, q5, true);
+    lasd::QueueLst<string> q6{std::move(v1)};
+    EqualQueue(testnum, testerr, q4, q6, true);
+    lasd::QueueLst<int> q7;
+    EnqueueC(testnum, testerr, q7, 1);
+    EnqueueC(testnum, testerr, q7, 2);
+    HeadNDequeue(testnum, testerr, q7, true, 1);
+    HeadNDequeue(testnum, testerr, q7, true, 2);
+    Dequeue(testnum, testerr, q6, true);
+
+    
+  }
 
   void iteratorTest() {
     std::cout << "Testing iterator" << std::endl;
@@ -565,6 +1077,7 @@ namespace lucaTest{
       cout << endl << "Unmanaged error! " << endl;
     }
   }
+  
   void binaryTreeVectorTest(){
     lasd::Vector<int> v1(16);
     for (ulong i = 0; i < v1.Size(); i++) { 
@@ -643,7 +1156,8 @@ namespace lucaTest{
       EqualBT(testnum, testerr, btvec8, btvec9); //! Perché nel move assigment io faccio lo swap dei dati, quindi i due oggetti sono uguali
 
       lasd::BinaryTreeVec<int> btvec10 (btvec8);
-      btvec8 = std::move(btvec8);
+      EqualBT(testnum, testerr, btvec8, btvec10);
+      btvec8 = std::move(btvec10);
       EqualBT(testnum, testerr, btvec8, btvec10);
 
 
@@ -658,6 +1172,7 @@ namespace lucaTest{
     
     
   }
+  
   void binarySearchTreeLinkedTest(){
     //todo Fare ora!
 
@@ -824,5 +1339,56 @@ namespace lucaTest{
     }
     Size(testnum, testerr, bst3, true, 0);
 
-    
+    // Other tests:
+
+    lasd::BST<int> bst5;
+    bst5.Insert(5);
+    bst5.Insert(3);
+    bst5.Insert(8);
+    HasLeftChild<int>(testnum, testerr, bst5.Root(), true);  
+    HasRightChild<int>(testnum, testerr, bst5.Root(), true);
+    HasLeftChild<int>(testnum, testerr, bst5.Root().LeftChild(), false);
+    HasRightChild<int>(testnum, testerr, bst5.Root().RightChild(), false);
+    bst5.Insert(2);
+    HasLeftChild<int>(testnum, testerr, bst5.Root().LeftChild(), true);
+    bst5.Insert(4);
+    HasRightChild<int>(testnum, testerr, bst5.Root().LeftChild(), true);
+    bst5.Insert(7);
+    HasLeftChild<int>(testnum, testerr, bst5.Root().RightChild(), true);
+    bst5.Insert(9);
+    HasRightChild<int>(testnum, testerr, bst5.Root().RightChild(), true);
+    Min(testnum, testerr, bst5, false, 12);
+    Max(testnum, testerr, bst5, false, 4);
+    Min(testnum, testerr, bst5, true, 2);
+    Max(testnum, testerr, bst5, true, 9);
+    RemoveMin(testnum, testerr, bst5, true);
+    Exists(testnum, testerr, bst5, false, 2);
+    RemoveMax(testnum, testerr, bst5, true);
+    Exists(testnum, testerr, bst5, false, 9);
+    RemoveMin(testnum, testerr, bst5, true);
+    Exists(testnum, testerr, bst5, false, 3);
+    RemoveMax(testnum, testerr, bst5, true);
+    Exists(testnum, testerr, bst5, false, 8);
+    RemoveMin(testnum, testerr, bst5, true);
+    Exists(testnum, testerr, bst5, false, 4);
+    RemoveMax(testnum, testerr, bst5, true);
+    Exists(testnum, testerr, bst5, false, 7);
+    bst5.Clear();
+    bst.Insert(5);
+    bst.Insert(3);
+    Exists(testnum, testerr, bst, true, 3);
+    Exists(testnum, testerr, bst, true, 5);
+    Predecessor(testnum, testerr, bst, true, 5, 3);
+    PredecessorNRemove(testnum, testerr, bst, true, 5, 3);
+    Exists(testnum, testerr, bst, false, 3);
+    Root(testnum, testerr, bst, true, 5);
+    bst.Clear();
+    bst.Insert(5);
+    bst.Insert(3);
+    bst.Insert(8);
+    Successor(testnum, testerr, bst, true, 5, 8);
+    SuccessorNRemove(testnum, testerr, bst, true, 5, 8);
+    Exists(testnum, testerr, bst, false, 8);
+    Root(testnum, testerr, bst, true, 5);
+    Max(testnum, testerr, bst, true, 5);
   }

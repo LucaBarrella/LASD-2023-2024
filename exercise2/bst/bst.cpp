@@ -45,23 +45,22 @@ bool BST<Data>::operator==(const BST<Data>& binarySearchTree) const noexcept {
     if (Size() != binarySearchTree.Size()) {
         return false;
     } 
-    else {
-        if (Size() == 0) {
-            return true;
-        }
     
-        BTInOrderIterator<Data> it1(*this);
-        BTInOrderIterator<Data> it2(binarySearchTree);
-        while (!it1.Terminated() && !it2.Terminated()) {
-            if (*it1 != *it2) {
-                return false;
-            }
-            ++it1;
-            ++it2;
-        }
-        // Check if both iterators have terminated, if not, trees are not equal
-        return it1.Terminated() && it2.Terminated();
+    if (Size() == 0) {
+        return true;
     }
+
+    BTInOrderIterator<Data> it1(*this);
+    BTInOrderIterator<Data> it2(binarySearchTree);
+    while (!it1.Terminated() && !it2.Terminated()) {
+        if (*it1 != *it2) {
+            return false;
+        }
+        ++it1;
+        ++it2;
+    }
+    // Check if both iterators have terminated, if not, trees are not equal
+    return it1.Terminated() && it2.Terminated();
 }
 
 // Inequality operator
@@ -73,7 +72,7 @@ bool BST<Data>::operator!=(const BST<Data>& binarySearchTree) const noexcept {
 // Min
 template <typename Data>
 const Data& BST<Data>::Min() const {
-    if (Empty()) { 
+    if (Empty()) {  // If the tree's size is 0, is empty, for this reason we throw an exception
         throw std::length_error("Empty tree");
     }
     return FindPointerToMin(root)->Element();

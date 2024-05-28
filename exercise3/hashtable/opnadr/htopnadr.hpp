@@ -7,6 +7,11 @@
 #include "../hashtable.hpp"
 // #include ...
 
+#define DEFAULT_TABLE_SIZE 128 //todo oppure richiamo table.Size()?
+#define RESIZE_FACTOR 2
+#define SHRINK_FACTOR 0.25
+#define LOAD_FACTOR 0.75
+
 /* ************************************************************************** */
 
 namespace lasd {
@@ -29,8 +34,8 @@ protected:
   using HashTable<Data>::HashKey;
   using HashTable<Data>::tableSize; //todo remove and use a macro
 
-  Data* table = nullptr;
-  Status* tableStatus = nullptr;
+  Data* table = nullptr; //todo perchè non direttamente un vector?
+  Status* tableStatus = nullptr; //todo perchè non direttamente un vector di flag?
 
   // ...
 
@@ -38,7 +43,7 @@ public:
 
   // Default constructor
   // HashTableOpnAdr() specifiers;
-  HashTableOpnAdr() = default;
+  HashTableOpnAdr();
 
   /* ************************************************************************ */
 
@@ -104,14 +109,14 @@ public:
   inline bool Insert(Data&& value) override;
 
   // type Remove(argument) specifiers; // Override DictionaryContainer member
-  inline bool Remove(const KeyType& key) override;
+  inline bool Remove(const Data& value) override;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from TestableContainer)
 
   // type Exists(argument) specifiers; // Override TestableContainer member
-  inline bool Exists(const KeyType& key) const noexcept override;
+  inline bool Exists(const Data& value) const noexcept override;
 
   /* ************************************************************************ */
 
@@ -135,13 +140,15 @@ protected:
   unsigned long HashKey(const Data&, unsigned long) const noexcept;
 
   // type Find(argument) specifiers;
-  bool Find(unsigned long&, unsigned long&, const Data&) const noexcept;
+  bool Find(const Data&, unsigned long&, unsigned long&) const noexcept;
 
   // type FindEmpty(argument) specifiers;
   unsigned long FindEmpty(const Data&, unsigned long&) const noexcept;
 
   // type Remove(argument) specifiers;
   bool Remove(unsigned long&, const Data&) noexcept;
+
+  // bool FullTable() const noexcept;
 
 };
 

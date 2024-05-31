@@ -118,7 +118,7 @@ HashTableClsAdr<Data>& HashTableClsAdr<Data>::operator=(HashTableClsAdr<Data>&& 
 // Comparison operators
 template <typename Data>
 inline bool HashTableClsAdr<Data>::operator==(const HashTableClsAdr<Data>& ht) const noexcept {
-    if (size != ht.size) {
+    if (size != ht.size || table.Size() != ht.table.Size()) { //todo Ha senso ritornare false se le dimensioni delle due tabelle sono diverse?
         return false;
     }
     for (unsigned long i = 0; i < table.Size(); ++i) {

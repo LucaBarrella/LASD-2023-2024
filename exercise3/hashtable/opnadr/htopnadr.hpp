@@ -7,10 +7,10 @@
 #include "../hashtable.hpp"
 // #include ...
 
-#define DEFAULT_TABLE_SIZE 128 //todo oppure richiamo table.Size()?
+#define DEFAULT_TABLE_SIZE 127 //todo oppure richiamo table.Size()? //messo 127, fare lo stesso in htclosed
 #define RESIZE_FACTOR 2
-#define SHRINK_FACTOR 0.25
-#define LOAD_FACTOR 0.75
+#define SHRINK_FACTOR 0.125
+#define LOAD_FACTOR 0.50
 
 /* ************************************************************************** */
 
@@ -25,17 +25,25 @@ class HashTableOpnAdr : virtual public HashTable<Data>{
 private:
 
   // ...
-  enum Status {EMPTY, OCCUPIED, DELETED};
+  enum Status {Empty, Occupied, Deleted};
 
 protected:
 
   // using HashTable<Data>::???;
   using HashTable<Data>::size;
   using HashTable<Data>::HashKey;
-  using HashTable<Data>::tableSize; //todo remove and use a macro
+  // using HashTable<Data>::tableSize; //todo remove and use a macro
 
-  Data* table = nullptr; //todo perchè non direttamente un vector?
-  Status* tableStatus = nullptr; //todo perchè non direttamente un vector di flag?
+  // Data* table = nullptr; //todo perchè non direttamente un vector?
+  // Status* tableStatus = nullptr; //todo perchè non direttamente un vector di flag?
+
+  Vector<Data> table;
+  Vector<Status> tableStatus;
+
+  using DictionaryContainer<Data>::Insert;
+  using DictionaryContainer<Data>::Remove;
+  using DictionaryContainer<Data>::InsertAll;
+  using DictionaryContainer<Data>::RemoveAll;
 
   // ...
 
@@ -77,7 +85,11 @@ public:
 
   // Destructor
   // ~HashTableOpnAdr() specifiers;
-  ~HashTableOpnAdr(); //todo controllare!
+  // ~HashTableOpnAdr() = default; //todo controllare!
+  ~HashTableOpnAdr() {
+    // The static vector is automatically deallocated
+    size = 0;
+  }
 
   /* ************************************************************************ */
 
@@ -137,18 +149,26 @@ protected:
   // Auxiliary member functions
 
   // type HashKey(argument) specifiers;
-  unsigned long HashKey(const Data&, unsigned long) const noexcept;
+  unsigned long HashKey(const Data& value, unsigned long& tempIndex) const noexcept;
 
   // type Find(argument) specifiers;
-  bool Find(const Data&, unsigned long&, unsigned long&) const noexcept;
+  inline bool Find(const Data& value, unsigned long& index, unsigned long& tempIndex) const noexcept;
 
   // type FindEmpty(argument) specifiers;
   unsigned long FindEmpty(const Data&, unsigned long&) const noexcept;
 
   // type Remove(argument) specifiers;
-  bool Remove(unsigned long&, const Data&) noexcept;
+  inline bool Remove(const Data&, unsigned long&) noexcept;
 
   // bool FullTable() const noexcept;
+
+  //todo CHECK isPrime e nextPrime:
+  //BUG CONTROLLA (fake check per farmi controllare, sincero).
+  // type isPrime(argument) specifiers;
+  inline bool isPrime(unsigned long num) const noexcept;
+
+  // type nextPrime(argument) specifiers;
+  unsigned long nextPrime(unsigned long num) const noexcept;
 
 };
 

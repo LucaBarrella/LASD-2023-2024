@@ -938,7 +938,7 @@ BTBreadthIterator<Data>& BTBreadthIterator<Data>::operator++() {
 // Reset
 template <typename Data>
 void BTBreadthIterator<Data>::Reset() noexcept {
-    if (queue.Empty()) {
+    if (!queue.Empty()) {
         queue.Clear();
     }
     queue.Enqueue(root);

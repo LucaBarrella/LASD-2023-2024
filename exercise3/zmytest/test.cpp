@@ -102,7 +102,7 @@ namespace lucaTest{
 
     //! test for the third library:
 
-    hashTableTest();
+    // hashTableTest();
     hashTableClosedAddressingTest();
     hashTableOpenAddressingTest();
 
@@ -1430,6 +1430,7 @@ namespace lucaTest{
     }
     for (ulong i = 0; i < v1.Size(); i++) { 
       ht.Insert(v1[i]);
+      Size(testnum, testerr, ht, true, i + 1);
     }
 
     Size(testnum, testerr, ht, true, 16);
@@ -1482,6 +1483,8 @@ namespace lucaTest{
     std::cerr << "ERR: Size: " << ht5.Size() << std::endl;
     Size(testnum, testerr, ht5, true, 16);
 
+    Size(testnum, testerr, ht, true, 17);
+
 
 
     // FIXME Remove non funziona
@@ -1492,6 +1495,8 @@ namespace lucaTest{
 
       //BUG Problema a decrementare il size in maniera corretta!
     }
+    Exists(testnum, testerr, ht, true, 100);
+    Remove(testnum, testerr, ht, true, 100);
 
     Empty(testnum, testerr, ht, true);
     Size(testnum, testerr, ht, true, 0);
@@ -1569,4 +1574,89 @@ namespace lucaTest{
 
   void hashTableClosedAddressingTest(){}
   
-  void hashTableOpenAddressingTest(){}
+  void hashTableOpenAddressingTest(){
+    std::cout << "\nTesting HashTableClsdAdr<int>\n" << std::endl;
+    unsigned int testnum = 0;
+    unsigned int testerr = 0;
+
+    lasd::HashTableOpnAdr<int> ht(125);
+    Size(testnum, testerr, ht, true, 0);
+    Empty(testnum, testerr, ht, true);
+    Exists(testnum, testerr, ht, false, 0);
+    Remove(testnum, testerr, ht, false, 0);
+    Size(testnum, testerr, ht, true, 0);
+    InsertC(testnum, testerr, ht, true, 1);
+    InsertC(testnum, testerr, ht, false, 1);
+    Size(testnum, testerr, ht, true, 1);
+    Exists(testnum, testerr, ht, true, 1);
+    Remove(testnum, testerr, ht, true, 1);
+    Empty(testnum, testerr, ht, true);
+    InsertC(testnum, testerr, ht, true, 1);
+    Exists(testnum, testerr, ht, true, 1);
+    InsertC(testnum, testerr, ht, true, 2);
+    Exists(testnum, testerr, ht, true, 2);
+    InsertC(testnum, testerr, ht, true, 3);
+    Exists(testnum, testerr, ht, true, 3);
+    Size (testnum, testerr, ht, true, 3);
+    InsertC(testnum, testerr, ht, false, 3);
+    InsertC(testnum, testerr, ht, false, 2);
+    ht.Clear();
+    Empty(testnum, testerr, ht, true);
+
+    lasd::HashTableOpnAdr<int> ht2(17);
+    lasd::Vector<int> v1(16);
+    for (ulong i = 0; i < v1.Size(); i++) { 
+      v1[i] = i + 1;
+    }
+    for (ulong i = 0; i < v1.Size(); i++) { 
+      InsertC(testnum, testerr, ht2, true, v1[i]);
+      Size(testnum, testerr, ht2, true, i + 1);
+    }
+
+    InsertC(testnum, testerr, ht2, true, 0);
+    InsertC(testnum, testerr, ht2, true, 17);
+    InsertC(testnum, testerr, ht2, true, 100);
+    Size(testnum, testerr, ht2, true, 19);
+
+    lasd::Vector<int> v2(65);
+    for (ulong i = 0; i < v2.Size(); i++) { 
+      v2[i] = i + 1;
+    }
+
+    ht2.Clear();
+
+    for (ulong i = 0; i < v2.Size(); i++) { 
+      InsertC(testnum, testerr, ht2, true, v2[i]);
+      // Exists(testnum, testerr, ht2, true, v2[i]);
+      Size(testnum, testerr, ht2, true, i + 1);
+    }
+
+    for (ulong i = 0; i < v2.Size(); i++) { 
+      Exists(testnum, testerr, ht2, true, v2[i]);
+    }
+    Size (testnum, testerr, ht2, true, 65);
+    
+    Remove(testnum, testerr, ht2, true, 1024);
+    Exists(testnum, testerr, ht2, false, 1024);
+    Size(testnum, testerr, ht2, true, 1023);
+    Remove (testnum, testerr, ht2, true, 1); //BUG Errore qui!
+    Exists(testnum, testerr, ht2, false, 1); //BUG Errore qui!
+    Exists(testnum, testerr, ht2, false, 444);
+    InsertC(testnum, testerr, ht2, true, 444);
+    Exists(testnum, testerr, ht2, true, 444);
+
+    for (ulong i = 0; i < v2.Size(); i++) { 
+      Remove(testnum, testerr, ht2, true, v2[i]);
+      Exists(testnum, testerr, ht2, false, v2[i]);
+      Size(testnum, testerr, ht2, true, v2.Size() - i - 1);
+    }
+
+    Empty(testnum, testerr, ht2, true);
+    Size(testnum, testerr, ht2, true, 0);
+    EqualHT(testnum, testerr, ht2, ht);
+
+
+
+
+    
+  }

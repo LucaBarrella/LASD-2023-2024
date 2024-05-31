@@ -6,10 +6,10 @@
 
 #include "../hashtable.hpp"
 // #include ...
-
-#define DEFAULT_TABLE_SIZE 127 //todo oppure richiamo table.Size()? //messo 127, fare lo stesso in htclosed
+// todo cambiare nome alle macro
+#define DEFAULT_TABLE_SIZE 128 //todo oppure richiamo table.Size()? //messo 127, fare lo stesso in htclosed
 #define RESIZE_FACTOR 2
-#define SHRINK_FACTOR 0.125
+#define HASHTABLE_SHRINK_FACTOR 0.125
 #define LOAD_FACTOR 0.50
 
 /* ************************************************************************** */
@@ -40,8 +40,8 @@ protected:
   Vector<Data> table;
   Vector<Status> tableStatus;
 
-  using DictionaryContainer<Data>::Insert;
-  using DictionaryContainer<Data>::Remove;
+  using DictionaryContainer<Data>::InsertSome;
+  using DictionaryContainer<Data>::RemoveSome;
   using DictionaryContainer<Data>::InsertAll;
   using DictionaryContainer<Data>::RemoveAll;
 
@@ -152,23 +152,14 @@ protected:
   unsigned long HashKey(const Data& value, unsigned long& tempIndex) const noexcept;
 
   // type Find(argument) specifiers;
-  inline bool Find(const Data& value, unsigned long& index, unsigned long& tempIndex) const noexcept;
+  // inline bool Find(const Data& value, unsigned long& index, unsigned long& tempIndex) const noexcept;
+  inline bool Find(unsigned long&, unsigned long&, const Data&) const noexcept;
 
   // type FindEmpty(argument) specifiers;
   unsigned long FindEmpty(const Data&, unsigned long&) const noexcept;
 
   // type Remove(argument) specifiers;
   inline bool Remove(const Data&, unsigned long&) noexcept;
-
-  // bool FullTable() const noexcept;
-
-  //todo CHECK isPrime e nextPrime:
-  //BUG CONTROLLA (fake check per farmi controllare, sincero).
-  // type isPrime(argument) specifiers;
-  inline bool isPrime(unsigned long num) const noexcept;
-
-  // type nextPrime(argument) specifiers;
-  unsigned long nextPrime(unsigned long num) const noexcept;
 
 };
 

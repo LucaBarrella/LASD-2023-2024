@@ -132,7 +132,7 @@ const Data& BST<Data>::Predecessor(const Data& data) const {
     }
     NodeLnk* const * tmp = FindPointerToPredecessor(root, data);
     if (tmp == nullptr) {
-        throw std::out_of_range("Data not found");
+        throw std::length_error("Data not found");
     }
     return (*tmp)->Element();
 }
@@ -145,7 +145,7 @@ Data BST<Data>::PredecessorNRemove(const Data& data) {
     }
     NodeLnk **tmp = FindPointerToPredecessor(root, data);
     if (tmp == nullptr) { //! ATTENZIONE
-        throw std::out_of_range("Data not found");
+        throw std::length_error("Data not found");
     }
     return DataNDelete(Detach(*tmp));
 }

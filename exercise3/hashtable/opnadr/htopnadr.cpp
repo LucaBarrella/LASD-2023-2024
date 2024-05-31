@@ -8,7 +8,6 @@ template <typename Data>
 HashTableOpnAdr<Data>::HashTableOpnAdr() {
     table = Vector<Data>(DEFAULT_TABLE_SIZE);
     tableStatus = Vector<Status>(DEFAULT_TABLE_SIZE);
-    size = 0;
 }
 
 // Specific Constructor
@@ -17,14 +16,13 @@ HashTableOpnAdr<Data>::HashTableOpnAdr() {
 template <typename Data>
 HashTableOpnAdr<Data>::HashTableOpnAdr(const unsigned long insertedSize) {
     //! Otherwise, a not prime number will cause a bad performance during the quadratic probing.
-    unsigned long newSize = nextPrime(insertedSize);
+    unsigned long newSize = insertedSize;
     if (insertedSize < DEFAULT_TABLE_SIZE) {
         newSize = DEFAULT_TABLE_SIZE;
     }
-       
+    
     table = Vector<Data>(newSize);
     tableStatus = Vector<Status>(newSize);
-    size = 0;
 }
 
 // Copy Constructor
@@ -134,7 +132,7 @@ inline bool HashTableOpnAdr<Data>::Insert(const Data& value) {
         table[index] = value;
         tableStatus[index] = Occupied;
         size++;
-        return !(Remove(value, ++tempIndex));
+        return !Remove(value, ++tempIndex);
     }
     return false;
 }
@@ -157,6 +155,7 @@ inline bool HashTableOpnAdr<Data>::Insert(Data&& value) {
         return !Remove(value, ++tempIndex);
     }
     return false;
+
 }
 
 // Remove
@@ -166,35 +165,33 @@ inline bool HashTableOpnAdr<Data>::Remove(const Data& value) {
     return Remove(value, tempIndex);
 }
 
-//! Exists
+// Exists
 template <typename Data>
 inline bool HashTableOpnAdr<Data>::Exists(const Data& value) const noexcept {
     //TODO IN VIA IPOETICA, LASCIARE INDEX A QUALSIASI VALORE È FARE L'HASHING IN Find direttamente.
     unsigned long tempIndex = 0;
     unsigned long index = HashKey(Hashable<Data>()(value));
-    return Find(value, index, tempIndex);
+    // return Find(value, index, tempIndex);
+    return Find(index, tempIndex, value);
 }
 
 // Resize
 template <typename Data>
-void HashTableOpnAdr<Data>::Resize(const unsigned long insertedSize) {
-    //TODO CHECK:
-    // Round the newSize to the next prime number
-    unsigned long newSize = nextPrime(insertedSize);
+void HashTableOpnAdr<Data>::Resize(const unsigned long newSize) {
+    Vector<Data> oldTable = std::move(table);
+    Vector<Status> oldTableStatus = std::move(tableStatus);
 
-    // Use the copy constructor to create a new table
-    HashTableOpnAdr<Data> newTable(newSize);
+    table = Vector<Data>(newSize);
+    tableStatus = Vector<Status>(newSize);
+    size = 0; // Reset the size
 
-    // Use the insert function to copy all the elements from the old table to the new one
-    for(unsigned long i = 0; i < table.Size(); i++) {
-        if(tableStatus[i] == Occupied) {
-            newTable.Insert(table[i]);
+    for (unsigned long i = 0; i < oldTable.Size(); i++) {
+        if (oldTableStatus[i] == Occupied) {
+            Insert(std::move(oldTable[i]));
         }
     }
-
-    // Swap the new table with the old one
-    *this = std::move(newTable);
 }
+
 
 // Clear
 template <typename Data>
@@ -207,54 +204,59 @@ void HashTableOpnAdr<Data>::Clear() {
 
 //! HashKey
 template <typename Data>
-unsigned long HashTableOpnAdr<Data>::HashKey(const Data& value, unsigned long& numberOfCollisions) const noexcept{
+unsigned long HashTableOpnAdr<Data>::HashKey(const Data& value, unsigned long& tempIndex) const noexcept{
     unsigned long index = HashKey(Hashable<Data>()(value));
     //TODO: CHECK, IN CASE IMPROVE IT
-    // return (index+ table.Size() +((tempIndex*tempIndex) + tempIndex)/2) % table.Size();
-    return (index + (numberOfCollisions * numberOfCollisions)) % table.Size(); //! Classic Quadratic probing
-}
+    return (index+ table.Size() +((tempIndex*tempIndex) + tempIndex)/2) % table.Size();
+    // return (index + (numberOfCollisions * numberOfCollisions)) % table.Size(); //! Classic Quadratic probing
 
+}
+//todo CHECK:
 //! Find
 template <typename Data>
-inline bool HashTableOpnAdr<Data>::Find(const Data& element, ulong& index, ulong& prob_index) const noexcept {
-    ulong tmp_index = HashKey(element, prob_index);
-    ulong jumps = 0;
-    do{
-        if(jumps == table.Size() - 1) {
-            return false;
+inline bool HashTableOpnAdr<Data>::Find(unsigned long& index, unsigned long& probing, const Data& value) const noexcept {
+    unsigned long currentIndex = HashKey(value, probing);
+    unsigned long attempts = 0;
+    
+    while (attempts < table.Size()) {
+        if (tableStatus[currentIndex] == Empty) {
+            return false; // Element not found
         }
-        if((table[tmp_index] == element) && (tableStatus[tmp_index] == Occupied)) {
-            index = tmp_index;
+
+        if (tableStatus[currentIndex] == Occupied && table[currentIndex] == value) {
+            index = currentIndex; // Element found
             return true;
         }
-        tmp_index = HashKey(element, ++prob_index);
-        jumps++;
-    } while((!tableStatus[tmp_index]) == Empty);
-    return false;
+
+        currentIndex = HashKey(value, ++probing);
+        attempts++;
+    }
+
+    return false; // Element not found after checking entire table
 }
+
 
 // FindEmpty
 template <typename Data>
 unsigned long HashTableOpnAdr<Data>::FindEmpty(const Data& value, unsigned long& index) const noexcept {
-    index = 0; //! Useless, but sugar don't ruin the drink
     unsigned long tempIndex = HashKey(value, index);
-    while (tableStatus[tempIndex] == Occupied) {
+    while (tableStatus[tempIndex] == Occupied && table[tempIndex] != value) {
         tempIndex = HashKey(value, ++index);
     }
     return tempIndex;
 }
 
-// Remove (protected)
+//! Remove (protected)
 template <typename Data>
 inline bool HashTableOpnAdr<Data>::Remove(const Data& value, unsigned long& index) noexcept{
     unsigned long tempIndex = 0;
-    if (Find(value, index, tempIndex)) {
-        tableStatus[index] = Deleted;
+    if (Find(tempIndex, index, value)) { //!Find(value, index, tempIndex)
+        tableStatus[tempIndex] = Deleted;
         size--;
         index = 0;
         
         // Check the load factor
-        if (size < table.Size() * SHRINK_FACTOR && table.Size() > DEFAULT_TABLE_SIZE) { //! 1/8 is the minimum load factor
+        if (size < table.Size() * HASHTABLE_SHRINK_FACTOR && table.Size() > DEFAULT_TABLE_SIZE) { //! 1/8 is the minimum load factor
             Resize(table.Size() / RESIZE_FACTOR);
         }
         return true;
@@ -263,39 +265,6 @@ inline bool HashTableOpnAdr<Data>::Remove(const Data& value, unsigned long& inde
     return false;
 }
 
-
-// todo CHECK:
-
-// NextPrime
-//! It's a function that returns the next prime number after the given number, it's essential for the table size.
-template <typename Data>
-unsigned long HashTableOpnAdr<Data>::nextPrime(unsigned long num) const noexcept {
-    while (!isPrime(num)) {
-        num++;
-    }
-    return num;
-}
-
-// isPrime
-//! Supplmentary function for the nextPrime function.
-template <typename Data>
-inline bool HashTableOpnAdr<Data>::isPrime(unsigned long num) const noexcept {
-    if (num <= 1) {
-        return false;
-    }
-    if (num <= 3) {
-        return true;
-    }
-    if (num % 2 == 0 || num % 3 == 0) {
-        return false;
-    }
-    for (unsigned long i = 5; i * i <= num; i += 6) {
-        if (num % i == 0 || num % (i + 2) == 0) {
-            return false;
-        }
-    }
-    return true;
-}
 /* ************************************************************************** */
 
 } // namespace lasd

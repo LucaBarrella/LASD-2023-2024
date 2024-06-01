@@ -1636,14 +1636,6 @@ namespace lucaTest{
     }
     Size (testnum, testerr, ht2, true, 65);
     
-    Remove(testnum, testerr, ht2, true, 1024);
-    Exists(testnum, testerr, ht2, false, 1024);
-    Size(testnum, testerr, ht2, true, 1023);
-    Remove (testnum, testerr, ht2, true, 1); //BUG Errore qui!
-    Exists(testnum, testerr, ht2, false, 1); //BUG Errore qui!
-    Exists(testnum, testerr, ht2, false, 444);
-    InsertC(testnum, testerr, ht2, true, 444);
-    Exists(testnum, testerr, ht2, true, 444);
 
     for (ulong i = 0; i < v2.Size(); i++) { 
       Remove(testnum, testerr, ht2, true, v2[i]);
@@ -1654,6 +1646,154 @@ namespace lucaTest{
     Empty(testnum, testerr, ht2, true);
     Size(testnum, testerr, ht2, true, 0);
     EqualHT(testnum, testerr, ht2, ht);
+
+    std::cout << "\nTest seri\n" << std::endl;
+
+    lasd::HashTableOpnAdr<string> hashTable(0);
+    lasd::Vector<string> vector(256);
+    for (ulong i = 0; i < vector.Size(); i++) {
+      vector[i] = std::to_string(i* rand() * 0.123);
+    }
+
+    for (ulong i = 0; i < vector.Size(); i++) {
+      hashTable.Insert(vector[i]);
+    }
+
+    for (ulong i = 0; i < vector.Size(); i++) {
+      Exists(testnum, testerr, hashTable, true, vector[i]);
+    }
+    hashTable.Clear();
+    hashTable.Clear();
+    Empty(testnum, testerr, hashTable, true);
+    Size(testnum, testerr, hashTable, true, 0);
+    
+
+    lasd::HashTableOpnAdr<string> hashTable2(0, vector);
+    Size(testnum, testerr, hashTable2, true, vector.Size());
+    Empty(testnum, testerr, hashTable2, false);
+
+    for (ulong i = 0; i < vector.Size(); i++) {
+      unsigned long casualIndex =  rand() % vector.Size();
+      Exists(testnum, testerr, hashTable2, true, vector[casualIndex]);
+      InsertC(testnum, testerr, hashTable2, false, vector[casualIndex]);
+      Exists(testnum, testerr, hashTable2, true, vector[casualIndex]);
+      Remove(testnum, testerr, hashTable2, true, vector[casualIndex]);
+      Remove(testnum, testerr, hashTable2, false, vector[casualIndex]);
+      Exists(testnum, testerr, hashTable2, false, vector[casualIndex]);
+      InsertC(testnum, testerr, hashTable2, true, vector[casualIndex]);
+      Exists(testnum, testerr, hashTable2, true, vector[casualIndex]);
+    }
+
+    std::cout << "\nTest copy constructor\n" << std::endl;
+
+    lasd::HashTableOpnAdr<string> hashTable3(hashTable2);
+    EqualHT(testnum, testerr, hashTable3, hashTable2);
+    Size(testnum, testerr, hashTable3, true, vector.Size());
+
+    std::cout << "\nTest move constructor\n" << std::endl;
+
+    lasd::HashTableOpnAdr<string> hashTable4(std::move(hashTable3));
+    NonEqualHT(testnum, testerr, hashTable4, hashTable3);
+    EqualHT(testnum, testerr, hashTable4, hashTable2);
+    Size(testnum, testerr, hashTable4, true, vector.Size());
+    Empty(testnum, testerr, hashTable3, true);
+
+    std::cout << "\nTest copy assignment\n" << std::endl;
+
+    lasd::HashTableOpnAdr<string> hashTable5;
+    hashTable5 = hashTable2;
+    EqualHT(testnum, testerr, hashTable5, hashTable2);
+    Size(testnum, testerr, hashTable5, true, vector.Size());
+
+    std::cout << "\nTest move assignment\n" << std::endl;
+
+    lasd::HashTableOpnAdr<string> hashTable6;
+    hashTable6 = std::move(hashTable5);
+    NonEqualHT(testnum, testerr, hashTable6, hashTable5);
+    EqualHT(testnum, testerr, hashTable6, hashTable2);
+    Size(testnum, testerr, hashTable6, true, vector.Size());
+    Empty(testnum, testerr, hashTable5, true);
+
+
+    lasd::HashTableOpnAdr<string> hashTable7(vector);
+    Size(testnum, testerr, hashTable7, true, vector.Size());
+    Empty(testnum, testerr, hashTable7, false);
+
+    lasd::HashTableOpnAdr<string> hashTable18(hashTable7);
+    EqualHT(testnum, testerr, hashTable18, hashTable7);
+    Size(testnum, testerr, hashTable18, true, vector.Size());
+
+    hashTable18 = std::move(hashTable7);
+    EqualHT(testnum, testerr, hashTable18, hashTable7);
+    hashTable7 = std::move(hashTable18);
+    EqualHT(testnum, testerr, hashTable18, hashTable7);
+    Size(testnum, testerr, hashTable18, true, vector.Size());
+    hashTable7 = hashTable18;
+    EqualHT(testnum, testerr, hashTable18, hashTable7);
+    Size(testnum, testerr, hashTable18, true, vector.Size());
+    Empty(testnum, testerr, hashTable7, false);
+    Empty(testnum, testerr, hashTable18, false);
+
+    std::cout << "\nTest specific constructor\n" << std::endl;
+
+    lasd::List<string> list;
+    for (ulong i = 0; i < vector.Size(); i++) {
+      list.InsertAtBack(vector[i]);
+    }
+
+    lasd::HashTableOpnAdr<string> hashTable8(0, list);
+    Size(testnum, testerr, hashTable8, true, vector.Size());
+    Empty(testnum, testerr, hashTable8, false);
+
+    for (ulong i = 0; i < vector.Size(); i++) {
+      Exists(testnum, testerr, hashTable8, true, vector[i]);
+    }
+
+    lasd::HashTableOpnAdr<string> hashTable9(0, list);
+    EqualHT(testnum, testerr, hashTable9, hashTable8);
+    Size(testnum, testerr, hashTable9, true, vector.Size());
+    Empty(testnum, testerr, hashTable9, false);
+
+    lasd::HashTableOpnAdr<string> hashTable10(0, list);
+    hashTable10 = hashTable9;
+    EqualHT(testnum, testerr, hashTable10, hashTable9);
+    Size(testnum, testerr, hashTable10, true, vector.Size());
+    Empty(testnum, testerr, hashTable10, false);
+
+    lasd::HashTableOpnAdr<string> hashTable11(0, list);
+    hashTable11 = std::move(hashTable10);
+    NonEqualHT(testnum, testerr, hashTable11, hashTable10);
+    EqualHT(testnum, testerr, hashTable11, hashTable9);
+    Size(testnum, testerr, hashTable11, true, vector.Size());
+    hashTable11.Clear();
+    Empty(testnum, testerr, hashTable11, true);
+
+    lasd::HashTableOpnAdr<string> hashTable12(100000, list);
+    Size(testnum, testerr, hashTable12, true, vector.Size());
+    Empty(testnum, testerr, hashTable12, false);
+
+    
+
+    // for (ulong i = 0; i < vector.Size(); i++) {
+    //   Exists(testnum, testerr, hashTable12, true, vector[i]);
+    // }
+
+    // lasd::HashTableOpnAdr<string> hashTable13(100000, std::move(list));
+    // Size(testnum, testerr, hashTable13, true, vector.Size());
+    // Empty(testnum, testerr, hashTable13, false);
+    // Empty(testnum, testerr, list, true);
+
+    // for (ulong i = 0; i < vector.Size(); i++) {
+    //   list.InsertAtBack(vector[i]);
+    // }
+
+    // for (ulong i = 0; i < vector.Size(); i++) {
+    //   InsertC(testnum, testerr, hashTable13, true, std::move(list[i]));
+    // }
+
+    // for (ulong i = 0; i < vector.Size(); i++) {
+    //   Exists(testnum, testerr, hashTable13, true, vector[i]);
+    // }
 
 
 

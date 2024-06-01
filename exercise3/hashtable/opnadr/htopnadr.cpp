@@ -8,6 +8,7 @@ template <typename Data>
 HashTableOpnAdr<Data>::HashTableOpnAdr() {
     table = Vector<Data>(DEFAULT_TABLE_SIZE);
     tableStatus = Vector<Status>(DEFAULT_TABLE_SIZE);
+    this->size = 0;
 }
 
 // Specific Constructor
@@ -23,6 +24,7 @@ HashTableOpnAdr<Data>::HashTableOpnAdr(const unsigned long insertedSize) {
     
     table = Vector<Data>(newSize);
     tableStatus = Vector<Status>(newSize);
+    this->size = 0;
 }
 
 // Copy Constructor
@@ -69,11 +71,21 @@ HashTableOpnAdr<Data>::HashTableOpnAdr(const unsigned long size, MappableContain
 template <typename Data>
 HashTableOpnAdr<Data>& HashTableOpnAdr<Data>::operator=(const HashTableOpnAdr<Data>& ht) {
     if(this != &ht) {
-        HashTableOpnAdr<Data> tmp(ht);
-        std::swap(table, tmp.table);
-        std::swap(tableStatus, tmp.tableStatus);
-        std::swap(size, tmp.size);
+    //     HashTableOpnAdr<Data> newTable(ht);
+    //     std::swap(table, newTable.table);
+    //     std::swap(tableStatus, newTable.tableStatus);
+    //     std::swap(this->size, newTable.size);
+    // }
+    Clear();
+    // HashTable<Data>::operator=(ht);
+
+    for (unsigned long i = 0; i < ht.table.Size(); i++) {
+        if (ht.tableStatus[i] == Occupied) {
+            Insert(ht.table[i]);
+        }
     }
+    }
+
     return *this;
 }
 
@@ -208,8 +220,8 @@ unsigned long HashTableOpnAdr<Data>::HashKey(const Data& value, unsigned long& t
     unsigned long index = HashKey(Hashable<Data>()(value));
     //TODO: CHECK, IN CASE IMPROVE IT
     return (index+ table.Size() +((tempIndex*tempIndex) + tempIndex)/2) % table.Size();
-    // return (index + (numberOfCollisions * numberOfCollisions)) % table.Size(); //! Classic Quadratic probing
-
+    // return (((a * index) + b* (tempIndex*tempIndex)) % prime) % table.Size();
+    // return ((a * index + b) + (tempIndex * tempIndex)) % table.Size();
 }
 //todo CHECK:
 //! Find

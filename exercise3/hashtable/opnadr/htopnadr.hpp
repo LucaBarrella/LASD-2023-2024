@@ -32,6 +32,10 @@ protected:
   // using HashTable<Data>::???;
   using HashTable<Data>::size;
   using HashTable<Data>::HashKey;
+  using HashTable<Data>::a;
+  using HashTable<Data>::b;
+  using HashTable<Data>::prime;
+  
   // using HashTable<Data>::tableSize; //todo remove and use a macro
 
   // Data* table = nullptr; //todo perchè non direttamente un vector?
@@ -86,10 +90,7 @@ public:
   // Destructor
   // ~HashTableOpnAdr() specifiers;
   // ~HashTableOpnAdr() = default; //todo controllare!
-  ~HashTableOpnAdr() {
-    // The static vector is automatically deallocated
-    size = 0;
-  }
+  ~HashTableOpnAdr() = default;
 
   /* ************************************************************************ */
 

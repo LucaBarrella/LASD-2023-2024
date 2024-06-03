@@ -7,6 +7,7 @@
 #include "../hashtable.hpp"
 #include "../../bst/bst.hpp"
 #include "../../vector/vector.hpp"
+#define DEFAULT_TABLE_SIZE 128
 // #include ...
 
 /* ************************************************************************** */
@@ -27,21 +28,18 @@ protected:
 
   // using HashTable<Data>::???;
   using HashTable<Data>::size;
-  using HashTable<Data>::tableSize;
-
-  using HashTable<Data>::a; //? Not Needed??
-  using HashTable<Data>::b; //? Not Needed?
-  using HashTable<Data>::prime; //? Not Needed?
-  using HashTable<Data>::hash; //? Not Needed?
   using HashTable<Data>::HashKey;
+  using HashTable<Data>::GetTableSize;
+  using HashTable<Data>::AdjustTableSize;
   Vector<BST<Data>> table; //! Oppure convine usare un puntatore a un vettore di BST?
+
+  // type getTableSize() specifiers;
+  unsigned long GetTableSize() const noexcept override;
 
 public:
 
   using DictionaryContainer<Data>::InsertAll;
-  using DictionaryContainer<Data>::InsertSome; //? Not Needed?
-  using DictionaryContainer<Data>::RemoveAll;
-  using DictionaryContainer<Data>::RemoveSome; //? Not Needed?
+  
 
   // ...
 

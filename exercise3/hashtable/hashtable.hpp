@@ -9,7 +9,7 @@
 /* ************************************************************************** */
 
 #include "../container/dictionary.hpp"
-
+#define DEFAULT_TABLE_SIZE 128
 /* ************************************************************************** */
 
 namespace lasd {
@@ -53,24 +53,15 @@ protected:
   std::uniform_int_distribution<unsigned long> distributionB = std::uniform_int_distribution<unsigned long>(0, prime - 1);
 
   // template <typename Data>
-  static const Hashable<Data> hash; //todo perché fare sta stronzata?
+  static const Hashable<Data> hash; 
 
-  unsigned long tableSize = 128; //! Default table size is 128
-
-  
-
-  //todo Note:
-  // Questo è un numero primo di Mersenne e ha la proprietà che la divisione 
-  // per questo numero può essere implementata come operazioni di shift e 
-  // addizione, che sono molto efficienti.
-
-  
+  // unsigned long tableSize = DEFAULT_TABLE_SIZE; //! Default table size is 128
 
   // ...
 
-public:
+protected:
 
-  // Constructor //! Suggerito da Agostino
+  // Constructor
   HashTable();
 
   // Copy constructor
@@ -86,19 +77,17 @@ public:
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument); // Copy assignment of abstract types should not be possible. //! MA IL PROF LO FA, PERCHÈ?
+  // type operator=(argument); // Copy assignment of abstract types should not be possible.
   // HashTable& operator=(const HashTable&) = delete;
-  protected:
   HashTable& operator=(const HashTable&);
 
 
   // Move assignment
-  // type operator=(argument); // Move assignment of abstract types should not be possible. //! MA IL PROF LO FA, PERCHÈ?
+  // type operator=(argument); // Move assignment of abstract types should not be possible.
   // HashTable& operator=(HashTable&&) = delete;
   HashTable& operator=(HashTable&&) noexcept;
 
   /* ************************************************************************ */
-  //todo Comparison operators
   public:
   // type operator==(argument) specifiers; // Comparison of abstract hashtable is possible but not required.
   // bool operator==(const HashTable&) const noexcept; //! Cause it's extremlly expensive to compare two hash tables
@@ -114,9 +103,12 @@ protected:
   // Auxiliary member functions
 
   // type HashKey(argument) specifiers;
-  //! unsigned long HashKey(const Data&) const noexcept; Copilot and Agostino
   virtual unsigned long HashKey(const Data& data) const noexcept;
   virtual unsigned long HashKey(unsigned long key) const noexcept;
+
+  void AdjustTableSize(unsigned long &size) const noexcept;
+
+  virtual unsigned long GetTableSize() const noexcept = 0;
 
 };
 

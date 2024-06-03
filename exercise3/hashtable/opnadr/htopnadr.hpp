@@ -6,8 +6,7 @@
 
 #include "../hashtable.hpp"
 // #include ...
-// todo cambiare nome alle macro
-#define DEFAULT_TABLE_SIZE 128 //todo oppure richiamo table.Size()? //messo 127, fare lo stesso in htclosed
+#define DEFAULT_TABLE_SIZE 128
 #define RESIZE_FACTOR 2
 #define HASHTABLE_SHRINK_FACTOR 0.125
 #define LOAD_FACTOR 0.50
@@ -32,22 +31,13 @@ protected:
   // using HashTable<Data>::???;
   using HashTable<Data>::size;
   using HashTable<Data>::HashKey;
-  using HashTable<Data>::a;
-  using HashTable<Data>::b;
-  using HashTable<Data>::prime;
-  
-  // using HashTable<Data>::tableSize; //todo remove and use a macro
-
-  // Data* table = nullptr; //todo perchè non direttamente un vector?
-  // Status* tableStatus = nullptr; //todo perchè non direttamente un vector di flag?
+  using HashTable<Data>::AdjustTableSize;
+  using HashTable<Data>::GetTableSize;
 
   Vector<Data> table;
   Vector<Status> tableStatus;
 
-  using DictionaryContainer<Data>::InsertSome;
-  using DictionaryContainer<Data>::RemoveSome;
   using DictionaryContainer<Data>::InsertAll;
-  using DictionaryContainer<Data>::RemoveAll;
 
   // ...
 
@@ -89,7 +79,6 @@ public:
 
   // Destructor
   // ~HashTableOpnAdr() specifiers;
-  // ~HashTableOpnAdr() = default; //todo controllare!
   ~HashTableOpnAdr() = default;
 
   /* ************************************************************************ */
@@ -161,6 +150,9 @@ protected:
 
   // type Remove(argument) specifiers;
   inline bool Remove(const Data&, unsigned long&) noexcept;
+
+  // type GetTableSize() specifiers;
+  unsigned long GetTableSize() const noexcept override;
 
 };
 

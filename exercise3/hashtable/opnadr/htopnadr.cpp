@@ -3,7 +3,7 @@ namespace lasd {
 
 /* ************************************************************************** */
 
-// Default Constructor
+// Default constructor  
 template <typename Data>
 HashTableOpnAdr<Data>::HashTableOpnAdr() {
     table = Vector<Data>(DEFAULT_TABLE_SIZE);
@@ -11,36 +11,30 @@ HashTableOpnAdr<Data>::HashTableOpnAdr() {
     this->size = 0;
 }
 
-// Specific Constructor
+// Specific constructor
 
 // Constructor with size
 template <typename Data>
 HashTableOpnAdr<Data>::HashTableOpnAdr(const unsigned long insertedSize) {
-    //! Otherwise, a not prime number will cause a bad performance during the quadratic probing.
     unsigned long newSize = insertedSize;
-    if (insertedSize < DEFAULT_TABLE_SIZE) {
-        newSize = DEFAULT_TABLE_SIZE;
-    }
-    
+    AdjustTableSize(newSize);
     table = Vector<Data>(newSize);
     tableStatus = Vector<Status>(newSize);
     this->size = 0;
 }
 
-// Copy Constructor
+// Copy constructor
 template <typename Data>
-HashTableOpnAdr<Data>::HashTableOpnAdr(const HashTableOpnAdr<Data>& ht) {
-    table = ht.table;
-    tableStatus = ht.tableStatus;
-    size = ht.size;
+HashTableOpnAdr<Data>::HashTableOpnAdr(const HashTableOpnAdr<Data>& hashTable): HashTable<Data>(hashTable) {
+    table = hashTable.table;
+    tableStatus = hashTable.tableStatus;
 }
 
-// Move Constructor
+// Move constructor
 template <typename Data>
-HashTableOpnAdr<Data>::HashTableOpnAdr(HashTableOpnAdr<Data>&& ht) noexcept {
-    std::swap(table, ht.table);
-    std::swap(tableStatus, ht.tableStatus);
-    std::swap(size, ht.size);
+HashTableOpnAdr<Data>::HashTableOpnAdr(HashTableOpnAdr<Data>&& hashTable) noexcept : HashTable<Data>(std::move(hashTable)) {
+    Swap(table, hashTable.table);
+    Swap(tableStatus, hashTable.tableStatus);
 }
 
 // Constructor obtained from a TraversableContainer
@@ -49,7 +43,7 @@ HashTableOpnAdr<Data>::HashTableOpnAdr(const TraversableContainer<Data>& contain
     InsertAll(container);
 }
 
-// Constructor obtained from a TraversableContainer with a specified size
+// Constructor obtained from a TraversableContainer with specific size
 template <typename Data>
 HashTableOpnAdr<Data>::HashTableOpnAdr(const unsigned long size, const TraversableContainer<Data>& container) : HashTableOpnAdr(size) {
     InsertAll(container);
@@ -61,7 +55,7 @@ HashTableOpnAdr<Data>::HashTableOpnAdr(MappableContainer<Data>&& container) : Ha
     InsertAll(std::move(container));
 }
 
-// Constructor obtained from a MappableContainer with a specified size
+// Constructor obtained from a MappableContainer with specific size
 template <typename Data>
 HashTableOpnAdr<Data>::HashTableOpnAdr(const unsigned long size, MappableContainer<Data>&& container) : HashTableOpnAdr(size) {
     InsertAll(std::move(container));
@@ -69,39 +63,23 @@ HashTableOpnAdr<Data>::HashTableOpnAdr(const unsigned long size, MappableContain
 
 // Copy Assignment
 template <typename Data>
-HashTableOpnAdr<Data>& HashTableOpnAdr<Data>::operator=(const HashTableOpnAdr<Data>& ht) {
-    if(this != &ht) {
-    //     HashTableOpnAdr<Data> newTable(ht);
-    //     std::swap(table, newTable.table);
-    //     std::swap(tableStatus, newTable.tableStatus);
-    //     std::swap(this->size, newTable.size);
-    // }
-    Clear();
-    // HashTable<Data>::operator=(ht);
-
-    for (unsigned long i = 0; i < ht.table.Size(); i++) {
-        if (ht.tableStatus[i] == Occupied) {
-            Insert(ht.table[i]);
-        }
-    }
-    }
-
+HashTableOpnAdr<Data>& HashTableOpnAdr<Data>::operator=(const HashTableOpnAdr<Data>& hashTable) {
+    HashTable<Data>::operator=(hashTable);
+    table = hashTable.table;
+    tableStatus = hashTable.tableStatus;
     return *this;
 }
 
-//! Move Assignment
+// Move Assignment
 template <typename Data>
-HashTableOpnAdr<Data>& HashTableOpnAdr<Data>::operator=(HashTableOpnAdr<Data>&& ht) noexcept {
-    //todo: Attento a leak di memoria!
-    if(this != &ht) {
-        std::swap(table, ht.table);
-        std::swap(tableStatus, ht.tableStatus);
-        std::swap(size, ht.size);
-    }
+HashTableOpnAdr<Data>& HashTableOpnAdr<Data>::operator=(HashTableOpnAdr<Data>&& hashTable) noexcept {
+    HashTable<Data>::operator=(std::move(hashTable));
+    std::swap(table, hashTable.table);
+    std::swap(tableStatus, hashTable.tableStatus);
     return *this;
 }
 
-// Comparison Operator
+// Comparison operators
 
 // Equality Operator
 template <typename Data>
@@ -127,9 +105,9 @@ inline bool HashTableOpnAdr<Data>::operator!=(const HashTableOpnAdr<Data>& ht) c
     return !(*this == ht);
 }
 
-// Specific Member Functions
+// Specific member functions
 
-// Insert copy
+// Insert Copy
 template <typename Data>
 inline bool HashTableOpnAdr<Data>::Insert(const Data& value) {
     // Check the load factor
@@ -149,7 +127,7 @@ inline bool HashTableOpnAdr<Data>::Insert(const Data& value) {
     return false;
 }
 
-// Insert move
+// Insert Move
 template <typename Data>
 inline bool HashTableOpnAdr<Data>::Insert(Data&& value) {
     // Check the load factor
@@ -167,7 +145,6 @@ inline bool HashTableOpnAdr<Data>::Insert(Data&& value) {
         return !Remove(value, ++tempIndex);
     }
     return false;
-
 }
 
 // Remove
@@ -180,57 +157,57 @@ inline bool HashTableOpnAdr<Data>::Remove(const Data& value) {
 // Exists
 template <typename Data>
 inline bool HashTableOpnAdr<Data>::Exists(const Data& value) const noexcept {
-    //TODO IN VIA IPOETICA, LASCIARE INDEX A QUALSIASI VALORE È FARE L'HASHING IN Find direttamente.
     unsigned long tempIndex = 0;
     unsigned long index = HashKey(Hashable<Data>()(value));
-    // return Find(value, index, tempIndex);
     return Find(index, tempIndex, value);
 }
 
 // Resize
 template <typename Data>
-void HashTableOpnAdr<Data>::Resize(const unsigned long newSize) {
+void HashTableOpnAdr<Data>::Resize(const unsigned long insertedSize) {
     Vector<Data> oldTable = std::move(table);
     Vector<Status> oldTableStatus = std::move(tableStatus);
 
+    unsigned long newSize = insertedSize;
+    AdjustTableSize(newSize);
     table = Vector<Data>(newSize);
     tableStatus = Vector<Status>(newSize);
-    size = 0; // Reset the size
+    size = 0;
 
-    for (unsigned long i = 0; i < oldTable.Size(); i++) {
-        if (oldTableStatus[i] == Occupied) {
+    for(unsigned long i = 0; i < oldTable.Size(); i++) {
+        if(oldTableStatus[i] == Occupied) {
             Insert(std::move(oldTable[i]));
         }
     }
 }
 
-
 // Clear
 template <typename Data>
-void HashTableOpnAdr<Data>::Clear() {   
-    HashTableOpnAdr<Data> newTable(DEFAULT_TABLE_SIZE);
-    *this = std::move(newTable);
+void HashTableOpnAdr<Data>::Clear() {
+    table.Clear();
+    tableStatus.Clear();
+    size = 0;
 }
 
 // Auxiliary Member Functions
 
-//! HashKey
+// HashKey
 template <typename Data>
 unsigned long HashTableOpnAdr<Data>::HashKey(const Data& value, unsigned long& tempIndex) const noexcept{
     unsigned long index = HashKey(Hashable<Data>()(value));
-    //TODO: CHECK, IN CASE IMPROVE IT
-    return (index+ table.Size() +((tempIndex*tempIndex) + tempIndex)/2) % table.Size();
-    // return (((a * index) + b* (tempIndex*tempIndex)) % prime) % table.Size();
-    // return ((a * index + b) + (tempIndex * tempIndex)) % table.Size();
+
+    // return (index + tempIndex) % GetTableSize();
+    return (index + (tempIndex * tempIndex)) % GetTableSize();
+
 }
-//todo CHECK:
-//! Find
+
+// Find
 template <typename Data>
 inline bool HashTableOpnAdr<Data>::Find(unsigned long& index, unsigned long& probing, const Data& value) const noexcept {
     unsigned long currentIndex = HashKey(value, probing);
     unsigned long attempts = 0;
-    
-    while (attempts < table.Size()) {
+
+    while (attempts < GetTableSize()) {
         if (tableStatus[currentIndex] == Empty) {
             return false; // Element not found
         }
@@ -244,9 +221,9 @@ inline bool HashTableOpnAdr<Data>::Find(unsigned long& index, unsigned long& pro
         attempts++;
     }
 
-    return false; // Element not found after checking entire table
-}
+    return false;
 
+}
 
 // FindEmpty
 template <typename Data>
@@ -258,11 +235,11 @@ unsigned long HashTableOpnAdr<Data>::FindEmpty(const Data& value, unsigned long&
     return tempIndex;
 }
 
-//! Remove (protected)
+// Remove (protected)
 template <typename Data>
 inline bool HashTableOpnAdr<Data>::Remove(const Data& value, unsigned long& index) noexcept{
     unsigned long tempIndex = 0;
-    if (Find(tempIndex, index, value)) { //!Find(value, index, tempIndex)
+    if (Find(tempIndex, index, value)) {
         tableStatus[tempIndex] = Deleted;
         size--;
         index = 0;
@@ -277,6 +254,14 @@ inline bool HashTableOpnAdr<Data>::Remove(const Data& value, unsigned long& inde
     return false;
 }
 
+// GetTableSize
+template <typename Data>
+unsigned long HashTableOpnAdr<Data>::GetTableSize() const noexcept {
+    return table.Size();
+}
+
+
+
 /* ************************************************************************** */
 
-} // namespace lasd
+}

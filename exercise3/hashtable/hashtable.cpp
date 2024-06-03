@@ -51,8 +51,6 @@ public:
 // Default constructor
 template <typename Data> //FIXME ERROR
 HashTable<Data>::HashTable() {
-    // a = distributionA (& urng: generator);
-    // b = distributionB (& urng: generator);
     a = distributionA(generator);
     b = distributionB(generator);
 }
@@ -61,7 +59,7 @@ HashTable<Data>::HashTable() {
 template <typename Data>
 HashTable<Data>::HashTable(const HashTable<Data>& hashTable) {
     size = hashTable.size;
-    tableSize = hashTable.tableSize;
+    // tableSize = hashTable.tableSize;
     a = hashTable.a;
     b = hashTable.b;
 }
@@ -70,28 +68,25 @@ HashTable<Data>::HashTable(const HashTable<Data>& hashTable) {
 template <typename Data>
 HashTable<Data>::HashTable(HashTable<Data>&& hashTable) noexcept {
     std::swap(size, hashTable.size);
-    std::swap(tableSize, hashTable.tableSize);
     std::swap(a, hashTable.a);
     std::swap(b, hashTable.b);
 }
 
-// Copy assignment //! ERROR
+// Copy assignment
 template <typename Data>
 HashTable<Data>& HashTable<Data>::operator=(const HashTable<Data>& hashTable) {
-    size = hashTable.size;
-    tableSize = hashTable.tableSize;
     a = hashTable.a;
     b = hashTable.b;
+    size = hashTable.size;
     return *this;
 }
 
-// Move assignment //! ERROR
+// Move assignment
 template <typename Data>
 HashTable<Data>& HashTable<Data>::operator=(HashTable<Data>&& hashTable) noexcept {
-    std::swap(size, hashTable.size);
-    std::swap(tableSize, hashTable.tableSize);
     std::swap(a, hashTable.a);
     std::swap(b, hashTable.b);
+    std::swap(size, hashTable.size);
     return *this;
 }
 
@@ -104,7 +99,17 @@ unsigned long HashTable<Data>::HashKey(const Data& data) const noexcept {
 
 template <typename Data>
 unsigned long HashTable<Data>::HashKey(unsigned long key) const noexcept {
-    return (((a * key + b) % prime) % tableSize);
+    return (((a * key + b) % prime) % GetTableSize());
+}
+
+// AdjustTableSize
+template <typename Data>
+void HashTable<Data>::AdjustTableSize(unsigned long &newTableSize) const noexcept {
+    if (newTableSize < DEFAULT_TABLE_SIZE) {
+        newTableSize = DEFAULT_TABLE_SIZE;
+    }
+
+    newTableSize = pow(2, ceil(log2(newTableSize)));
 }
 
 /* ************************************************************************** */
